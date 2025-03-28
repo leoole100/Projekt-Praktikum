@@ -24,5 +24,7 @@ __pycache__
 
 **/literature
 
+*.FCBak
+
 # libreoffice locks
 *.~lock.*

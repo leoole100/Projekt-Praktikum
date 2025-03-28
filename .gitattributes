@@ -3,3 +3,4 @@
 *.jpg binary
 *.svg binary
 *.pickle binary
+*FCStd binary
