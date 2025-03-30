@@ -1,41 +1,39 @@
 """
 This makes the lab-notebook located at "../notebook" computable by extracting referenced notebooks.
+This assumes, that the post frontmatter contains a section with a list called measurements, and each measurement has one define path.
 """
 #%%
 import frontmatter
 from glob import glob
+from pathlib import Path
 
 class Post(dict):
     def __init__(self, path: str):
         super().__init__()
-        self.path = path
+        self.path = Path(path)
         metadata = frontmatter.load(self.path).metadata
         self.update(metadata)
 
     @property
     def content(self)->str: return frontmatter.load(self.path).content
 
-
-def get_posts(path:str = "../notebook") -> list[Post]:
+def posts(path:str = "../notebook") -> list[Post]:
     paths = glob(path+"/**.md", recursive=True)
     files = [Post(p) for p in paths]
     return files
 
-from measurement import Measurement
-# get all measurements from entry
-def get_measurements(post: Post):
+# get measurements from one entry
+def get_measurements(post: Post) -> list[dict]:
     measurements = post.get("measurements", [])
     for m in measurements:
-        m.update({
-            "post": post
-        })
-        m = Measurement(m)
+        m.update({"post": post})
     return measurements
 
-def measurements(posts: list[Post]|None = None) -> list[Measurement]:
-    if posts is None:
-        posts = get_posts()
-    return [m for i in posts for m in get_measurements(i)]
+# get measurements from all entries
+def measurements(p: list[Post]|None = None) -> list[dict]:
+    if p is None:
+        p = posts()
+    return [m for i in p for m in get_measurements(i)]
 
 if __name__ == "__main__":
     measurements = measurements()
