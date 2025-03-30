@@ -1,1 +1,1 @@
-# Angular Reflection Spectroscopy of a Butterflies wing  
+# Angle-Resolved Spectroscopy of Morpho Wings
