@@ -4,3 +4,4 @@
 *.svg binary
 *.pickle binary
 *FCStd binary
+/data/** binary
