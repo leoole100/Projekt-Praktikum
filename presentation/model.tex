@@ -8,38 +8,35 @@
 \end{frame}
 
 \begin{frame}{Absorption}
-	only a fraction $A$ is absorbed into a volume given by the laser radius $r\approx \SI{200}{um}$ and the optical depth $d\approx \SI{250}{nm}$:
+	only a fraction $A=1$ is absorbed into a volume given by the laser radius $r\approx \SI{200}{um}$ and the optical depth $d\approx \SI{250}{nm}$:
 	$$V=\pi r^2 \cdot d$$
 	$$S = \frac{P}{V}\; A$$
 	with $[S] = W/m^3$  
 \end{frame}
 
-\begin{frame}{Diffusion}
-	% A region $V$ with surface area $A$
-	Diffusion is ignored for now
-
-	TODO: ADD radiative cooling
-\end{frame}
-
 \begin{frame}{e$^-$ Gas}
 	The temperature change due to absorption can be calculated with the molar Volume $V_m = M / \rho$ and  the specific heat capacity $c_e= 1/M \; dQ/dT$.\\
-	The lattice relaxation time $g$ is 100s of \si{fs}.\\
-	Diffusion is neglected with $\tau_e\approx\infty$ for now.
+	The lattice relaxation time $g\approx\SI{300}{fs}$. \customcite{stange_hot_2015}\\
+	Diffusion is neglected.
+	Radiative cooling is also ignored.
 	\begin{align*}
 		\frac{dT_e}{dt}
 		&= \frac{V_m}{c_e(T)}S\\
 		&- \frac{T_e - T_l}{g}\\ 
-		&- \frac{T_e - T_\text{Room}}{\tau_e}
+		&\textcolor{seegrau}{- \frac{T_e - T_\text{Room}}{\tau_e}}
 	\end{align*}
 \end{frame}
 
 \begin{frame}{Lattice Temperature}
-	For the lattice it is similar with the diffusion $\tau_l\approx$:
-	\begin{align*}
-		\frac{dT_l}{dt}
-		&= \frac{T_e - T_l}{g}\\ 
-		&- \frac{T_e - T_\text{Room}}{\tau_l}
-	\end{align*}
+	For now the lattice temperature is assumed to be constant.
+	\textcolor{seegrau}{
+		For the lattice it is similar with the diffusion $\tau_l\approx$:
+		\begin{align*}
+			\frac{dT_l}{dt}
+			&= \frac{T_e - T_l}{g}\\ 
+			&- \frac{T_e - T_\text{Room}}{\tau_l}
+		\end{align*}
+	}
 \end{frame}
 
 \begin{frame}
