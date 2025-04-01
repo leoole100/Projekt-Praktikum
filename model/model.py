@@ -1,14 +1,13 @@
 #%%
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib as mpl
-mpl.rcParams['axes.formatter.useoffset'] = False
+plt.style.use("../style.mplstyle")
 from math import pi
 
 # %%
 
 class Model():
-    t = np.linspace(0, 3000e-15, 1000)	# s
+    t = np.linspace(0, 1500e-15, 1000)	# s
     dt = t[1]-t[0]
 
     # Laser Pulse
@@ -47,10 +46,11 @@ if __name__ == "__main__":
     m()
     # plot
     fig, ax = plt.subplots(2, 1, sharex=True)
-    ax[0].plot(m.t/1e-15, m.S / 1e6)
+    t=(m.t-m.t0)/1e-15
+    ax[0].plot(t, m.S / 1e6)
     ax[0].set_ylabel("Laser Power / MW")
-    ax[1].plot(m.t/1e-15, m.T_e, label="$T_e$")
-    ax[1].plot(m.t/1e-15, m.T_l, "--", label="$T_l$")
+    ax[1].plot(t, m.T_e, label="$T_e$")
+    ax[1].plot(t, m.T_l, "--", label="$T_l$")
     ax[1].legend()
     ax[1].set_ylabel("T / K")
     ax[1].set_xlabel("t / ps")

@@ -1,0 +1,18 @@
+axes.formatter.useoffset: False
+axes.ticklabel_format.style: plain
+
+axes.grid: True
+grid.color: lightgray
+grid.linestyle: -
+grid.linewidth: 0.5
+
+xtick.direction: in
+ytick.direction: in
+
+# xtick.major.size: 0
+# ytick.major.size: 0
+# xtick.minor.size: 0
+# ytick.minor.size: 0
+
+figure.subplot.hspace: 0.05
+figure.subplot.wspace: 0.05
