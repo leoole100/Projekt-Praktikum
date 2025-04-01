@@ -7,6 +7,8 @@ from model import Model
 
 # %%
 m = Model()
+m.sigma = 50e-15/2.33
+m.t = np.linspace(-100, 100, 1000)*1e-15
 m()
 
 h = 6.626e-34	# J/Hz
@@ -17,9 +19,9 @@ def B(l, T):
 	return 1/l**5 * 1/(np.exp(h*c/(l*kB*T))-1)
 
 
-l = np.linspace(400, 2000, 100)*1e-9
+l = np.linspace(200, 2500, 100)*1e-9
 b = B(l[:, None], m.T_e[None, :])
-t = (m.t-m.t0)*1e15
+t = m.t*1e15
 
 fig, ax = plt.subplots(2,2, gridspec_kw={
 	'height_ratios': [1, 2],
@@ -27,17 +29,21 @@ fig, ax = plt.subplots(2,2, gridspec_kw={
 })
 
 ax[0,0].plot(t, m.T_e)
-ax[0,0].set_ylabel("$T_e$ (k)")
+ax[0,0].set_ylabel(r"$T_e$ (k)")
 
 ax[1,0].contourf((m.t-m.t0)*1e15, l/1e-9, b, vmin=0)
 ax[1,0].sharex(ax[0,0])
-ax[1,0].set_ylabel("$\lambda$ (nm)")
+ax[1,0].set_ylabel(r"$\lambda$ (nm)")
 ax[1,0].set_xlabel("t (fs)")
 
+def norm(a): return a/a.max()
 
-ax[1,1].plot(b.sum(axis=1), l)
-ax[1,1].set_xticks([])
-ax[1,1].set_xlabel("summed counts")
+ax[1,1].plot(norm(b.mean(axis=1)), l, label="mean")
+# ax[1,1].plot(norm(B(l, m.T_e.max())), l, label="max T")
+# ax[1,1].legend()
+ax[1,1].set_xlabel("counts")
+ax[1,1].set_ylim(l.min(), l.max())
+
 
 ax[0,1].axis("off")
 for a in ax.flatten(): a.label_outer()

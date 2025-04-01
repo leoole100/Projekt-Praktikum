@@ -1,5 +1,4 @@
 axes.formatter.useoffset: False
-axes.ticklabel_format.style: plain
 
 axes.grid: True
 grid.color: lightgray

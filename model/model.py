@@ -7,16 +7,14 @@ from math import pi
 # %%
 
 class Model():
-    t = np.linspace(0, 1500e-15, 1000)	# s
+    t = np.linspace(-500, 1500, 1000)*1e-15	# s
     dt = t[1]-t[0]
 
     # Laser Pulse
     E = 12e-6		    # pulse energy (J)
-    # sigma = 250e-15     # pulse width (s)
     sigma = 250e-15/2.33# FWHM (s)
-    t0 = 5*sigma        # center of pulse (s)
-    S = np.exp(-((t - t0)**2) / (2 * sigma**2))  # laser source array
-    S = E*S/np.sum(S*dt)# normalisation
+    t0 = 0        # center of pulse (s)
+    S = None
     r = 200e-6          # laser spot radius (m)
     d = 200e-9          # optical depth (m)
     V = pi*r**2*d
@@ -35,6 +33,8 @@ class Model():
 
     # 2.88ms
     def __call__(self, *args, **kwds):
+        self.S = np.exp(-((self.t - self.t0)**2) / (2 * self.sigma**2))  # laser source array
+        self.S = self.E*self.S/np.sum(self.S*self.dt)# normalisation
         # Time evolution
         for n in range(len(self.t) - 1):
             self.T_e[n+1] = self.T_e[n]
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     m()
     # plot
     fig, ax = plt.subplots(2, 1, sharex=True)
-    t=(m.t-m.t0)/1e-15
+    t=m.t/1e-15
     ax[0].plot(t, m.S / 1e6)
     ax[0].set_ylabel("Laser Power / MW")
     ax[1].plot(t, m.T_e, label="$T_e$")
