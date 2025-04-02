@@ -11,64 +11,42 @@ h = 6.626e-34   # Planck constant (J·s)
 c = 300e6       # Speed of light (m/s)
 kB = 1.381e-23  # Boltzmann constant (J/K)
 
-def B(l, T): 
-    """Spectral radiance (Planck-like) as function of wavelength and temperature."""
-    return 2*h*c**2 / l**5 / (np.exp(h * c / (l * kB * T)) - 1)
+class Streak:
+    def __init__(self, model:Model):
+        self.model = model
+        self.model.t = np.linspace(-3*s.model.sigma, .7*(s.model.sigma+s.model.g), 1000)
+        self.l = np.linspace(100, 1700, 100)*1e-9
 
-def norm(a): 
-    """Normalize array to its maximum."""
-    return a / a.max()
+    def __call__(self):
+        self.model()
+        self.t = self.model.t
+        self.T_e = self.model.T_e
+        self.S =self.model.S
+        self.b = self._compute_b(self.l, self.T_e)
 
-def streak(model:Model, l = np.linspace(100, 2000, 100) * 1e-9):
-    if model.t is None or model.T_e is None: m()
+    def _compute_b(self, l, T_e):
+        return 2*h*c**2 / l[:, None]**5 / (
+            np.exp(h * c / (l[:, None] * kB * T_e[None, :])) - 1
+        )
 
-    return B(l[:, None], model.T_e[None, :])  # shape: (λ, t)
+    @property
+    def sum(self):
+        return self.b.sum(axis=1)
 
-def plot_streak(model:Model, l = np.linspace(100, 2000, 100) * 1e-9):
-    """
-    Create a streak plot from a Model instance.
-    
-    Returns:
-        fig (matplotlib.figure.Figure): The generated figure object.
-    """
-    b = streak(model, l)
-    t = model.t * 1e15                     # time (fs)
+if __name__=="__main__":
+    s = Streak(Model())
+    s.model.fwhm = 10e-15
+    s()
 
-    fig, ax = plt.subplots(2, 2, gridspec_kw={
-        'height_ratios': [1, 3],
-        'width_ratios': [3, 1]
-    })
-
-    # Top left: Temperature vs time
-    ax[0, 0].plot(t, model.T_e / 1e3)
-    ax[0, 0].set_ylabel(r"$T_e$ (kK)")
-
-    # Bottom left: Spectrogram
-    ax[1, 0].contourf(t, l / 1e-9, b, vmin=0)
-    ax[1, 0].set_ylabel(r"$\lambda$ (nm)")
-    ax[1, 0].set_xlabel("t (fs)")
-
-    # Bottom right: Time-averaged spectrum
-    ax[1, 1].plot(norm(b.mean(axis=1)), l, label="mean")
-    ax[1, 1].set_xlabel("summed")
-    ax[1, 1].set_ylim(l.min(), l.max())
-
-    # Top right: blank
-    ax[0, 1].axis("off")
-
-    for a in ax.flatten():
-        a.label_outer()
-
-    plt.tight_layout()
-    return fig
-
-if __name__ == "__main__":
-    m = Model()
-    m.fwhm = 10e-15
-    m.t = np.linspace(-3 * m.sigma, .5 * (m.sigma + m.g), 1000)
-    m()
-    fig = plot_streak(m)
-    fig.savefig("figures/streak view.pdf")
+    # Plot example
+    fig, ax = plt.subplots(2, 1, sharex=True)
+    ax[0].plot(s.t/1e-15, s.T_e/1e3)
+    ax[0].set_ylabel("T (10³ K)")
+    ax[1].contourf(s.t/1e-15, s.l/1e-9, s.b)
+    ax[1].set_xlabel("t (fs)")
+    ax[1].set_ylabel("λ (nm)")
+    plt.savefig("./figures/streak view.pdf")
     plt.show()
+
 
 # %%
