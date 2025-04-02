@@ -8,12 +8,13 @@ grid.linewidth: 0.5
 xtick.direction: in
 ytick.direction: in
 
-# xtick.major.size: 0
-# ytick.major.size: 0
-# xtick.minor.size: 0
-# ytick.minor.size: 0
+xtick.major.size: 0
+ytick.major.size: 0
+xtick.minor.size: 0
+ytick.minor.size: 0
 
 figure.subplot.hspace: 0.05
 figure.subplot.wspace: 0.05
 
 figure.figsize: 5, 3
+figure.constrained_layout.use: True

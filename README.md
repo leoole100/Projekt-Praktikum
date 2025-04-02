@@ -1,6 +1,5 @@
 # TODO
 - Laser / Spektrometer Bedienung
-- Modell: qualitativ & quantitativ
 - Zugang Dateiserver
 - wavelength calibration
 - intensity calibration to white light source measured with ocean optics

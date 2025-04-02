@@ -23,33 +23,34 @@
 		\frac{dT_e}{dt}
 		&= \frac{V_m}{c_e(T)}S\\
 		&- \frac{T_e - T_l}{g}\\ 
-		&\textcolor{seegrau}{- \frac{T_e - T_\text{Room}}{\tau_e}}
+		% &\textcolor{seegrau}{- \frac{T_e - T_\text{Room}}{\tau_e}}
 	\end{align*}
 \end{frame}
 
-\begin{frame}{Lattice Temperature}
-	For now the lattice temperature is assumed to be constant.
-	\textcolor{seegrau}{
-		For the lattice it is similar with the diffusion $\tau_l\approx$:
-		\begin{align*}
-			\frac{dT_l}{dt}
-			&= \frac{T_e - T_l}{g}\\ 
-			&- \frac{T_e - T_\text{Room}}{\tau_l}
-		\end{align*}
-	}
-\end{frame}
+% \begin{frame}{Lattice Temperature}
+% 	For now the lattice temperature is assumed to be constant.
+% 	\textcolor{seegrau}{
+% 		For the lattice it is similar with the diffusion $\tau_l\approx$:
+% 		\begin{align*}
+% 			\frac{dT_l}{dt}
+% 			&= \frac{T_e - T_l}{g}\\ 
+% 			&- \frac{T_e - T_\text{Room}}{\tau_l}
+% 		\end{align*}
+% 	}
+% \end{frame}
 
 \begin{frame}
 	\centering
-	\includegraphics[width=.8\textwidth]{../model/figures/temperature profile.pdf}
+	\includegraphics{../model/figures/temperature profile.pdf}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Validation}
+	\vfill
 	\begin{columns}
-		\column{.5\textwidth}
-		\includegraphics[width=\textwidth]{../model/figures/temperature stange_hot_2015.pdf}
+		\column{.4\textwidth}
+		\includegraphics{../model/figures/temperature stange_hot_2015.pdf}
 
-		\column{.5\textwidth}
+		\column{.55\textwidth}
 		\includegraphics[width=\textwidth]{./figures/stange_hot_2015.png}
 	\end{columns}
 	\customcite[Fig. 4]{stange_hot_2015}
@@ -57,5 +58,5 @@
 
 \begin{frame}
 	\centering
-	\includegraphics[width=.8\textwidth]{../model/figures/steak view.pdf}
+	\includegraphics{../model/figures/streak view.pdf}
 \end{frame}
