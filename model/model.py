@@ -49,7 +49,6 @@ class Model():
             self.T_e[n+1] = self.T_e[n]
             self.T_e[n+1] += self.dt*self.Vm/self.c_e(self.T_e[n]) * self.S[n] / self.V   # Laser Heating
             self.T_e[n+1] += -self.dt* (self.T_e[n] - self.T_room)/self.g   # cooling
-            self.T_e[n+1] += -self.dt* (self.T_e[n] - self.T_room)/7e-12   # cooling
         return self
 
     @property
