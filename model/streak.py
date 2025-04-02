@@ -15,7 +15,7 @@ class Streak:
     def __init__(self, model=Model()):
         self.model = model
         self.model.t = np.linspace(-3*self.model.sigma, .7*(self.model.sigma+self.model.g), 1000)
-        self.l = np.linspace(100, 1700, 100)*1e-9
+        self.l = np.linspace(100, 2000, 100)*1e-9
 
     def __call__(self):
         self.model()
@@ -35,17 +35,20 @@ class Streak:
         return self.b.sum(axis=1)
 
 if __name__=="__main__":
-    s = Streak(Model())
-    s.model.fwhm = 10e-15
+    m = Model()
+    m.fwhm = 10e-15
+    s = Streak(m)
     s()
 
     # Plot example
-    fig, ax = plt.subplots(2, 1, sharex=True)
-    ax[0].plot(s.t/1e-15, s.T_e/1e3)
-    ax[0].set_ylabel("T (10³ K)")
-    ax[1].contourf(s.t/1e-15, s.l/1e-9, s.b)
-    ax[1].set_xlabel("t (fs)")
-    ax[1].set_ylabel("λ (nm)")
+    fig, ax = plt.subplots(1, 2, sharey=True)
+    ax[0].invert_yaxis()
+    ax[1].invert_xaxis()
+    ax[0].plot(s.T_e/1e3, s.t/1e-15)
+    ax[0].set_xlabel("T (10³ K)")
+    ax[1].contourf(s.l/1e-9, s.t/1e-15, s.b.T)
+    ax[0].set_ylabel("t (fs)")
+    ax[1].set_xlabel("λ (nm)")
     plt.savefig("./figures/streak view.pdf")
     plt.show()
 

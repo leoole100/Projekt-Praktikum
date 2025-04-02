@@ -22,7 +22,7 @@ class Model():
         self.Vm = self.M / self.rho # Molar volume (m³/mol)
 
         # Coupling and environment
-        self.g = 300e-15            # Electron-lattice coupling time (s)
+        self.g = 0.3e-12            # Electron-lattice coupling time (s)
         self.T_room = 300           # Ambient temperature (K)
 
         # Time vector
@@ -49,6 +49,7 @@ class Model():
             self.T_e[n+1] = self.T_e[n]
             self.T_e[n+1] += self.dt*self.Vm/self.c_e(self.T_e[n]) * self.S[n] / self.V   # Laser Heating
             self.T_e[n+1] += -self.dt* (self.T_e[n] - self.T_room)/self.g   # cooling
+            self.T_e[n+1] += -self.dt* (self.T_e[n] - self.T_room)/7e-12   # cooling
         return self
 
     @property
@@ -84,10 +85,12 @@ if __name__ == "__main__":
     m = Model()
     m.fluence = 14  #J/m²
     m.fwhm = 30e-15
+    m.t = np.linspace(-0.1,1, 1000)*1e-12
     m()
     plt.figure(figsize=(2.5, 1.85))
     plt.plot(m.t/1e-12, m.T_e/1e3)
     plt.xlabel("t (ps)")
     plt.ylabel(r"$T_e$ (10³ K)")
+    plt.xlim(-.1, 1)
     plt.savefig("figures/temperature stange_hot_2015.pdf")
 # %%
