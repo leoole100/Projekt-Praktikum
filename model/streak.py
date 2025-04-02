@@ -12,9 +12,9 @@ c = 300e6       # Speed of light (m/s)
 kB = 1.381e-23  # Boltzmann constant (J/K)
 
 class Streak:
-    def __init__(self, model:Model):
+    def __init__(self, model=Model()):
         self.model = model
-        self.model.t = np.linspace(-3*s.model.sigma, .7*(s.model.sigma+s.model.g), 1000)
+        self.model.t = np.linspace(-3*self.model.sigma, .7*(self.model.sigma+self.model.g), 1000)
         self.l = np.linspace(100, 1700, 100)*1e-9
 
     def __call__(self):
@@ -23,6 +23,7 @@ class Streak:
         self.T_e = self.model.T_e
         self.S =self.model.S
         self.b = self._compute_b(self.l, self.T_e)
+        return self
 
     def _compute_b(self, l, T_e):
         return 2*h*c**2 / l[:, None]**5 / (

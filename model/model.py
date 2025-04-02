@@ -44,11 +44,12 @@ class Model():
         self.S = self.source_function(self.t) # laser source array
         self.S = self.E*self.S/np.sum(self.S*self.dt)       # normalisation
 
-    # Time evolution
+        # Time evolution
         for n in range(len(self.t) - 1):
             self.T_e[n+1] = self.T_e[n]
             self.T_e[n+1] += self.dt*self.Vm/self.c_e(self.T_e[n]) * self.S[n] / self.V   # Laser Heating
             self.T_e[n+1] += -self.dt* (self.T_e[n] - self.T_room)/self.g   # cooling
+        return self
 
     @property
     def fluence(self):
