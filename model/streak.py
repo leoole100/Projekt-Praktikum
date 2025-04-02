@@ -2,13 +2,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
 plt.style.use("../style.mplstyle")
-from math import pi
 from model import Model
 
 # %%
 m = Model()
-m.sigma = 50e-15/2.33
-m.t = np.linspace(-100, 100, 1000)*1e-15
+m.fwhm = 50e-15
+m.t = np.linspace(-3*m.sigma, 1*(m.sigma+m.g), 1000)
 m()
 
 h = 6.626e-34	# J/Hz
@@ -24,14 +23,14 @@ b = B(l[:, None], m.T_e[None, :])
 t = m.t*1e15
 
 fig, ax = plt.subplots(2,2, gridspec_kw={
-	'height_ratios': [1, 2],
-	'width_ratios': [2, 1]
+	'height_ratios': [1, 3],
+	'width_ratios': [3, 1]
 })
 
 ax[0,0].plot(t, m.T_e)
 ax[0,0].set_ylabel(r"$T_e$ (k)")
 
-ax[1,0].contourf((m.t-m.t0)*1e15, l/1e-9, b, vmin=0)
+ax[1,0].contourf(m.t*1e15, l/1e-9, b, vmin=0)
 ax[1,0].sharex(ax[0,0])
 ax[1,0].set_ylabel(r"$\lambda$ (nm)")
 ax[1,0].set_xlabel("t (fs)")
@@ -41,7 +40,7 @@ def norm(a): return a/a.max()
 ax[1,1].plot(norm(b.mean(axis=1)), l, label="mean")
 # ax[1,1].plot(norm(B(l, m.T_e.max())), l, label="max T")
 # ax[1,1].legend()
-ax[1,1].set_xlabel("counts")
+ax[1,1].set_xlabel("summed")
 ax[1,1].set_ylim(l.min(), l.max())
 
 
