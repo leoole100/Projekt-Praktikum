@@ -19,6 +19,11 @@ def norm(a):
     """Normalize array to its maximum."""
     return a / a.max()
 
+def streak(model:Model, l = np.linspace(100, 2000, 100) * 1e-9):
+    if model.t is None or model.T_e is None: m()
+
+    return B(l[:, None], model.T_e[None, :])  # shape: (λ, t)
+
 def plot_streak(model:Model, l = np.linspace(100, 2000, 100) * 1e-9):
     """
     Create a streak plot from a Model instance.
@@ -26,9 +31,7 @@ def plot_streak(model:Model, l = np.linspace(100, 2000, 100) * 1e-9):
     Returns:
         fig (matplotlib.figure.Figure): The generated figure object.
     """
-    if model.t is None or model.T_e is None: m()
-
-    b = B(l[:, None], model.T_e[None, :])  # shape: (λ, t)
+    b = streak(model, l)
     t = model.t * 1e15                     # time (fs)
 
     fig, ax = plt.subplots(2, 2, gridspec_kw={
