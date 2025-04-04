@@ -22,6 +22,7 @@ spectrum = spectrum.sel(wavelength=slice(220, 1200))
 # spectrum["wavelength"] = spectrum["wavelength"]/1.92
 
 norm = lambda a: a/a.sel(wavelength=slice(400, 600)).max()
+norm = lambda a: a
 eff = norm(spectrum)/norm(reference).interp(wavelength=spectrum.wavelength)
 
 # import the camera curve
@@ -31,6 +32,7 @@ norm(reference).plot(label="Ocean Optics")
 norm(spectrum).plot(label="Andor Solis")
 plt.legend()
 plt.xlabel(r"$\lambda$ (nm)")
+plt.yscale("log")
 plt.savefig("figures/efficiency_spectrum.pdf")
 plt.show()
 
@@ -47,7 +49,7 @@ man.plot(label="Camera", color="C2", ax=ax2)
 (eff*100).plot(color="C1", ax=ax2)
 ax2.set_ylabel("Efficiency (%)")
 ax2.set_xlabel(r"$\lambda$ (nm)")
-ax2.set_ylim(0, 100)
+ax2.set_ylim(0, 200)
 ax2.legend()
 ax1.label_outer()
 

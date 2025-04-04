@@ -22,3 +22,4 @@ figure.constrained_layout.use: True
 # image.cmap: inferno
 
 legend.frameon: False
+legend.facecolor: white
