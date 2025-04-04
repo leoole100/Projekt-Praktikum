@@ -5,8 +5,8 @@ grid.color: lightgray
 grid.linestyle: -
 grid.linewidth: 0.5
 
-xtick.direction: in
-ytick.direction: in
+# xtick.direction: in
+# ytick.direction: in
 
 xtick.major.size: 0
 ytick.major.size: 0
@@ -20,3 +20,5 @@ figure.figsize: 5, 3
 figure.constrained_layout.use: True
 
 # image.cmap: inferno
+
+legend.frameon: False

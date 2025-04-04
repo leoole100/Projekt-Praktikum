@@ -1,5 +1,6 @@
 #%%
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 plt.style.use("../style.mplstyle")
 from model import Model
@@ -46,7 +47,7 @@ if __name__=="__main__":
     ax[1].invert_xaxis()
     ax[0].plot(s.T_e/1e3, s.t/1e-15)
     ax[0].set_xlabel("T (10³ K)")
-    ax[1].contourf(s.l/1e-9, s.t/1e-15, s.b.T)
+    ax[1].contourf(s.l/1e-9, s.t/1e-15, s.b.T, cmap='gray_r', vmin=0)
     ax[0].set_ylabel("t (fs)")
     ax[1].set_xlabel("λ (nm)")
     plt.savefig("./figures/streak view.pdf")
