@@ -1,16 +1,3 @@
-Data from USB2F012961_15-34-57-676.txt Node
-Date: Fri Apr 04 15:34:57 CEST 2025
-User: AGBaum-Andor
-Spectrometer: USB2+F01296
-Trigger mode: 4
-Integration Time (sec): 2.000000E0
-Scans to average: 8
-Electric dark correction enabled: true
-Nonlinearity correction enabled: false
-Boxcar width: 0
-XAxis mode: Wavelengths
-Number of Pixels in Spectrum: 2048
->>>>>Begin Spectral Data<<<<<
 464.603	-379.48
 464.985	-379.48
 465.366	-379.48

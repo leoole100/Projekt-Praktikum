@@ -3,12 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use("../style.mplstyle")
 import xarray as xr
+from glob import glob
 
 import os
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
+
 
 # %%
 def to_xarray(a):
@@ -54,4 +56,25 @@ ax2.legend()
 ax1.label_outer()
 
 fig.savefig("figures/efficiency.pdf")
+
 # %%
+
+paths = list(sorted(glob("../measurement/2025-04-04/004*")))[:-1]
+references = [to_xarray(np.loadtxt(p)) for p in paths]
+spectrum = to_xarray(np.loadtxt("../measurement/2025-04-04/004e.asc"))
+spectrum -= spectrum.min()
+
+def scale(target, reference):
+	t, r = target.interp(wavelength=reference.wavelength), reference
+	scale = (r * t).sum() / (t**2).sum()
+	return target*scale
+
+for r,p in zip(references,paths): 
+	scale(r, spectrum).plot(label=p.rsplit("/",1)[1][3:-4])
+spectrum.plot(color="k")
+plt.ylim(1e2, None)
+plt.xlim(None, 1250)
+plt.yscale("log")
+plt.legend()
+
+plt.gcf().savefig("figures/efficiency_different.pdf")
