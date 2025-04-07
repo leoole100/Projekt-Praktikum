@@ -57,6 +57,16 @@ ax1.label_outer()
 
 fig.savefig("figures/efficiency.pdf")
 
+#%%
+man.plot(label="Camera")
+def blaze(l, lc=500, k=.75): # https://adsabs.harvard.edu/full/1984AJ.....89..899B
+	return np.sin(np.pi*k*(1-lc/l))**2/(np.pi*k*(1-lc/l))**2
+plt.plot(man["wavelength"], blaze(man["wavelength"])*100, label="blaze")
+(blaze(man["wavelength"])*man).plot(label="combined", color="k")
+plt.legend()
+plt.xlabel(r"$\lambda$ (nm)")
+plt.ylabel(r"Relative Efficiency (%)")
+plt.gcf().savefig("./figures/expected.pdf")
 # %%
 
 paths = list(sorted(glob("../measurement/2025-04-04/004*")))[:-1]
@@ -71,7 +81,7 @@ def scale(target, reference):
 
 for r,p in zip(references,paths): 
 	scale(r, spectrum).plot(label=p.rsplit("/",1)[1][3:-4])
-spectrum.plot(color="k")
+spectrum.plot(color="k", label="dut")
 plt.ylim(1e2, None)
 plt.xlim(None, 1250)
 plt.yscale("log")

@@ -27,11 +27,11 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="6.6493266"
-     inkscape:cx="224.8348"
-     inkscape:cy="93.167329"
-     inkscape:window-width="3072"
-     inkscape:window-height="1662"
+     inkscape:zoom="4.7017839"
+     inkscape:cx="161.00272"
+     inkscape:cy="109.00118"
+     inkscape:window-width="1920"
+     inkscape:window-height="1134"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -90,40 +90,20 @@
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path9017" />
     </marker>
-    <marker
-       style="overflow:visible"
-       id="TriangleStart"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       inkscape:stockid="TriangleStart"
-       markerWidth="5.3244081"
-       markerHeight="6.155385"
-       viewBox="0 0 5.3244081 6.1553851"
-       inkscape:isstock="true"
-       inkscape:collect="always"
-       preserveAspectRatio="xMidYMid">
-      <path
-         transform="scale(0.5)"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
-         d="M 5.77,0 -2.88,5 V -5 Z"
-         id="path135" />
-    </marker>
   </defs>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:none;fill-opacity:1;stroke:#ff6600;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-start:url(#marker9019)"
+       style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+       d="M 55,25 V 39.999999"
+       id="path18896" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#808080;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-start:url(#marker9019)"
        d="M 5.0000005,25 H 25 l 5,-8.5"
        id="path9015"
        sodipodi:nodetypes="ccc" />
-    <path
-       style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#TriangleStart)"
-       d="m 55,25 0,24.999998 h 9.999999 V 45 L 55,49.999998 60.5,41.5"
-       id="path8599"
-       sodipodi:nodetypes="cccccc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
        d="m 30,16.5 5,8.5 h 20 25 l 5,-8.5 5,8.5 h 10"
@@ -145,37 +125,6 @@
          id="path7013" />
     </g>
     <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect8485"
-       width="4.5"
-       height="1.5"
-       x="71.996223"
-       y="-3.5355341"
-       transform="rotate(45)" />
-    <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect8485-3"
-       width="4.5"
-       height="1.5"
-       x="8.3566017"
-       y="81.317291"
-       transform="rotate(-45)" />
-    <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       id="rect8485-3-6"
-       width="4.5"
-       height="1.5"
-       x="-79.522926"
-       y="-16.700155"
-       transform="rotate(-157.5)" />
-    <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.352999, 1.059;stroke-dashoffset:0"
-       id="rect9013"
-       width="20"
-       height="15"
-       x="50"
-       y="40" />
-    <rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
        id="rect14689"
        width="15"
@@ -191,8 +140,9 @@
        y="10" />
     <path
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.352999, 1.059;stroke-dashoffset:0;marker-end:url(#marker18083)"
-       d="m 70,47.5 c 27.5,0 27.5,0.499999 27.5,-12.500002"
-       id="path18079" />
+       d="m 60,45 c 27.5,0 37.5,2.999999 37.5,-10.000002"
+       id="path18079"
+       sodipodi:nodetypes="cc" />
     <g
        id="g18593">
       <rect
@@ -274,5 +224,12 @@
          d="M 31.5,16.5 V 17"
          id="path18539-2" />
     </g>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect18892"
+       width="9.5"
+       height="10"
+       x="50.5"
+       y="40" />
   </g>
 </svg>
