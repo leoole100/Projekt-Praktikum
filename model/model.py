@@ -51,6 +51,7 @@ class Model():
             self.T_e[n+1] += -self.dt* (self.T_e[n] - self.T_room)/self.g   # cooling
         return self
 
+    #J/m²   
     @property
     def fluence(self):
         return self.E/pi*self.r**2

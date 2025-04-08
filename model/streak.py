@@ -35,6 +35,10 @@ class Streak:
     def sum(self):
         return self.b.sum(axis=1)
 
+    @property
+    def power(self):
+        return self.b.sum()
+
 if __name__=="__main__":
     m = Model()
     m.fwhm = 10e-15
