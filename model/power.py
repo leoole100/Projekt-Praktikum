@@ -19,7 +19,7 @@ def streak(p, t=None, fwhm=250e-15):
 	s.model.t = np.arange(-500e-15, 5000e-15, 1e-15)
 	return s
 
-fluence = np.linspace(0,20, 20)
+fluence = np.geomspace(0.1,20, 20)
 st = [streak(p)() for p in fluence]
 pwr =  np.array([s.power for s in st])/1e15
 
@@ -29,6 +29,8 @@ popt, pcov = curve_fit(fit_function, fluence, pwr)
 fig = plt.figure()
 plt.plot(fluence, pwr, label="numerical Model")
 plt.plot(fluence, fit_function(fluence, *popt), label="^(4/3) Fit", linestyle="--")
+plt.xscale("log")
+plt.yscale("log")
 
 plt.legend()
 plt.xlabel("fluence (J/m²)")

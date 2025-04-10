@@ -28,8 +28,8 @@
      inkscape:document-units="mm"
      showgrid="true"
      inkscape:zoom="4.7017839"
-     inkscape:cx="104.85382"
-     inkscape:cy="89.85951"
+     inkscape:cx="119.74179"
+     inkscape:cy="99.855716"
      inkscape:window-width="1920"
      inkscape:window-height="1134"
      inkscape:window-x="0"
@@ -178,7 +178,7 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 44.999999,10 h 5"
+       d="m 45.1765,10.1765 h 5"
        id="path19407" />
     <path
        style="fill:none;fill-opacity:1;stroke:#808080;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-start:url(#marker9019)"
@@ -202,9 +202,9 @@
          style="font-size:13.3333px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;white-space:pre;shape-inside:url(#rect19328);display:inline;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.33417;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"><tspan
            x="112.67548"
            y="125.64696"
-           id="tspan22783"><tspan
+           id="tspan24406"><tspan
              style="fill:#000000;stroke:none"
-             id="tspan22781">MC</tspan></tspan></text>
+             id="tspan24404">MC</tspan></tspan></text>
     </g>
     <g
        id="g19344"
@@ -263,11 +263,11 @@
        style="font-size:13.3333px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;white-space:pre;shape-inside:url(#rect19517);display:inline;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:1.33417;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"><tspan
          x="54.873552"
          y="136.98485"
-         id="tspan22789"><tspan
+         id="tspan24412"><tspan
            style="fill:#000000;stroke:none"
-           id="tspan22785">R</tspan><tspan
+           id="tspan24408">R</tspan><tspan
            style="font-size:65%;baseline-shift:sub"
-           id="tspan22787">0</tspan></tspan></text>
+           id="tspan24410">0</tspan></tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,36.247504,-24.989897)"
@@ -275,9 +275,9 @@
        style="font-size:13.3333px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;white-space:pre;shape-inside:url(#rect19517-7);display:inline;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:1.33417;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"><tspan
          x="57.439138"
          y="136.98485"
-         id="tspan22793"><tspan
+         id="tspan24416"><tspan
            style="fill:#1a1a1a;stroke:none"
-           id="tspan22791">T</tspan></tspan></text>
+           id="tspan24414">T</tspan></tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-8.8515424,-24.989897)"
@@ -285,9 +285,9 @@
        style="font-size:13.3333px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;white-space:pre;shape-inside:url(#rect19517-7-3);display:inline;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:1.33417;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"><tspan
          x="57.826506"
          y="136.98485"
-         id="tspan22797"><tspan
+         id="tspan24420"><tspan
            style="fill:#000000;stroke:none"
-           id="tspan22795">L</tspan></tspan></text>
+           id="tspan24418">L</tspan></tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-8.8515424,-4.9898968)"
@@ -295,9 +295,9 @@
        style="font-size:13.3333px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;white-space:pre;shape-inside:url(#rect19517-7-3-4);display:inline;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:1.33417;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"><tspan
          x="57.826506"
          y="136.98485"
-         id="tspan22801"><tspan
+         id="tspan24424"><tspan
            style="fill:#000000;stroke:none"
-           id="tspan22799">L</tspan></tspan></text>
+           id="tspan24422">L</tspan></tspan></text>
     <path
        style="fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
        d="M 45,29.5 50,30"
@@ -325,9 +325,9 @@
          style="font-size:13.3333px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;white-space:pre;shape-inside:url(#rect19328-0);display:inline;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.33417;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"><tspan
            x="112.67548"
            y="125.64696"
-           id="tspan22805"><tspan
+           id="tspan24428"><tspan
              style="fill:#000000;stroke:none"
-             id="tspan22803">MC</tspan></tspan></text>
+             id="tspan24426">MC</tspan></tspan></text>
     </g>
     <text
        xml:space="preserve"
@@ -336,11 +336,11 @@
        style="font-size:13.3333px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;white-space:pre;shape-inside:url(#rect19517-3);display:inline;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1.33417;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"><tspan
          x="46.982947"
          y="136.98485"
-         id="tspan22811"><tspan
+         id="tspan24434"><tspan
            style="fill:#000000"
-           id="tspan22807">R+R</tspan><tspan
+           id="tspan24430">R+R</tspan><tspan
            style="font-size:65%;baseline-shift:sub;fill:#000000"
-           id="tspan22809">0</tspan></tspan></text>
+           id="tspan24432">0</tspan></tspan></text>
     <path
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.352999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
        d="m 50,27.5 v 5"

@@ -19,20 +19,17 @@ def double_streak(dt=50e-15, t=None, fwhm=50e-15):
 	s.model.source_function = double
 	return s
 
-# dt = np.linspace(10,500, 7)*1e-15
-dt = np.linspace(0,700, 70)*1e-15
+dt = np.linspace(0,700, 100)*1e-15
 st = [double_streak(d, t=np.arange(-500e-15, 5000e-15, 1e-15), fwhm=50e-15)() for d in dt]
 power = np.array([s.power for s in st])
 power /= power[-1]
 
+power_det = np.array([np.mean(s.sum * s.l) for s in st])
+power_det /= power_det[-1]
+
 # %%
 
 plt.figure()
-mirrored_dt = -np.flip(dt)
-mirrored_power = np.flip(power)
-full_dt = np.concatenate((mirrored_dt, dt))
-full_power = np.concatenate((mirrored_power, power))
-
 # Define the Voigt profile function
 def voigt(x, amplitude, sigma, gamma):
 	z = (x + 1j * gamma) / (sigma * np.sqrt(2))
@@ -42,10 +39,11 @@ def voigt(x, amplitude, sigma, gamma):
 
 popt = [0.2, st[0].model.sigma/2, st[0].model.g/2]
 # popt, pcov = curve_fit(voigt, full_dt / 1e-15, full_power, p0=popt)
-fitted_curve = voigt(full_dt, *popt)
+fitted_curve = voigt(dt, *popt)
 
-plt.plot(full_dt / 1e-15, full_power, label="Numerical")
-plt.plot(full_dt / 1e-15, fitted_curve, "--", label="Voigt Fit")
+plt.plot(dt / 1e-15, power, label=r"$\int B\;dt\; d\lambda$")
+# plt.plot(dt / 1e-15, power_det, label=r"$\int B\lambda\;dt\; d\lambda$")
+plt.plot(dt / 1e-15, fitted_curve, "--", label="Voigt Fit")
 plt.legend()
 plt.xlabel("lag (ps)")
 plt.ylabel("normalized Power")
