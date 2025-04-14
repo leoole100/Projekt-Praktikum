@@ -38,6 +38,8 @@ ax1.set_ylabel("S (GW)")
 ax2.set_ylabel("T (10³ K)")
 ax3.set_xlabel(r"$\lambda$ (nm)")
 ax3.set_ylabel(r"$\int$B dt")
+# ax3.set_yscale("log")
+# ax3.set_ylim(1e-2, None)
 # ax3.axvspan(400,800, color="lightgray")
 ax3.set_xlim(200, 1200)
 

@@ -31,19 +31,19 @@ power_det /= power_det[-1]
 
 plt.figure()
 # Define the Voigt profile function
-def voigt(x, amplitude, sigma, gamma):
-	z = (x + 1j * gamma) / (sigma * np.sqrt(2))
-	z = np.real(wofz(z))/ (sigma * np.sqrt(2 * np.pi))
-	z /= np.max(z)
-	return amplitude *  z + 1
+# def voigt(x, amplitude, sigma, gamma):
+# 	z = (x + 1j * gamma) / (sigma * np.sqrt(2))
+# 	z = np.real(wofz(z))/ (sigma * np.sqrt(2 * np.pi))
+# 	z /= np.max(z)
+# 	return amplitude *  z + 1
 
-popt = [0.2, st[0].model.sigma/2, st[0].model.g/2]
+# popt = [0.2, st[0].model.sigma/2, st[0].model.g/2]
 # popt, pcov = curve_fit(voigt, full_dt / 1e-15, full_power, p0=popt)
-fitted_curve = voigt(dt, *popt)
+# fitted_curve = voigt(dt, *popt)
 
 plt.plot(dt / 1e-15, power, label=r"$\int B\;dt\; d\lambda$")
 # plt.plot(dt / 1e-15, power_det, label=r"$\int B\lambda\;dt\; d\lambda$")
-plt.plot(dt / 1e-15, fitted_curve, "--", label="Voigt Fit")
+# plt.plot(dt / 1e-15, fitted_curve, "--", label="Voigt Fit")
 plt.legend()
 plt.xlabel("lag (ps)")
 plt.ylabel("normalized Power")
@@ -51,3 +51,20 @@ plt.savefig("figures/autocorrelation.pdf")
 plt.show()
 
 # %%
+# Create a 2D array for the autocorrelation at each wavelength
+wavelengths = st[0].l
+autocorrelation = np.array([s.sum for s in st])
+
+# add 5% noise
+# autocorrelation = np.array([s.sum + s.sum*0.05 * np.random.normal(size=s.sum.shape) for s in st])
+
+# Normalize the autocorrelation for each wavelength
+# autocorrelation /= np.max(autocorrelation, axis=0)
+
+# Plot the 2D autocorrelation
+plt.figure()
+plt.contourf(dt / 1e-15, wavelengths * 1e9, autocorrelation.T, vmin=0, 	levels=17)
+plt.xlabel("lag (ps)")
+plt.ylabel("Wavelength (nm)")
+plt.savefig("figures/autocorrelation spectrum.pdf")
+plt.show()
