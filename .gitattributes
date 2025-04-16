@@ -3,5 +3,6 @@
 *.jpg binary
 *.svg binary
 *.pickle binary
+*.dll binary
 *FCStd binary
 /data/** binary
