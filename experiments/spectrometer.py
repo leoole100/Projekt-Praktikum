@@ -24,7 +24,7 @@ class Spectrometer():
     def __call__(self) -> Spectrum:
         return Spectrum(
             wavelength=self.monochromator.wavelength + self.offsets,
-            counts = self.lineCamera()
+            counts = self.lineCamera()[::-1]
         )
     
     def close(self):
@@ -40,10 +40,15 @@ if __name__ == "__main__":
     spec = Spectrometer()
 
     spec.lineCamera.exposure = 0.1
-    spec.monochromator.grating = 3
-    spec.monochromator.wavelength = 600
+    # spec.monochromator.grating = 3
+    # spec.monochromator.wavelength = 600
 
+    print("Waiting for cooldown")
+    spec.lineCamera.wait_for_cooldown()
+    
     spectrum = spec()
+
+    spec.close()
 
     plt.plot(*spectrum)
     plt.show()

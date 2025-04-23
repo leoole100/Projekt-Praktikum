@@ -5,6 +5,10 @@ class Camera:
         self.cam = Andor.AndorSDK2Camera(fan_mode="full")
         self.cam.set_read_mode("image")
         self.temperature = -80
+        self.cam.set_amp_mode(
+            oamp=1, # convetional
+            # preamp=3, # 5.2x
+        )
 
     @property
     def temperature(self):
@@ -28,6 +32,9 @@ class Camera:
     def wait_for_cooldown(self):
         while self.temperature > self.cam.get_temperature_setpoint():
             pass
+
+    def info(self):
+        return self.cam.get_full_info()
 
     def __del__(self):
         self.cam.close()
