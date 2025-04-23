@@ -1,0 +1,80 @@
+image_indexing: rcb
+frame_format: list
+frame_info_format: namedtuple
+frame_info_period: 1
+roi: [0, 512, 0, 512, 1, 1]
+temperature: 20
+cooler: true
+channel: 0
+oamp: 1
+hsspeed: 0
+preamp: 0
+vsspeed: 4
+EMCCD_gain: [0, 0]
+shutter: [closed, 0, 0, 0]
+fan_mode: full
+trigger_mode: int
+acq_parameters:
+  accum: [1, 0]
+  kinetic: [1, 0.0, 1, 0, 0]
+  fast_kinetic: [1, 0.0]
+  cont: 0
+acq_mode: cont
+frame_transfer: false
+read_parameters:
+  single_track: [0, 1]
+  multi_track: [1, 1, 0]
+  random_track: [[0, 1]]
+  image: [0, 512, 0, 512, 1, 1]
+read_mode: fvb
+exposure: 0.0038799999747425318
+frame_period: 0.0038799999747425318
+buffer_size: 0
+acquired_frames: 0
+acquisition_in_progress: false
+frames_status:
+  acquired: 0
+  unread: 0
+  skipped: 0
+  buffer_size: 0
+data_dimensions: [1, 512]
+frame_timings:
+  exposure: 0.0038799999747425318
+  frame_period: 0.0038799999747425318
+roi_limits:
+  - min: 3
+    max: 512
+    pstep: 1
+    sstep: 1
+    maxbin: 32
+  - min: 2
+    max: 512
+    pstep: 1
+    sstep: 1
+    maxbin: 32
+temperature_monitor: -62.37300109863281
+temperature_status: not_reached
+amp_mode:
+  channel: 0
+  channel_bitdepth: 14
+  oamp: 1
+  oamp_kind: Conventional
+  hsspeed: 0
+  hsspeed_MHz: 3.0
+  preamp: 0
+  preamp_gain: 1.0
+acq_status: idle
+cycle_timings:
+  exposure: 0.0038799999747425318
+  accum_cycle_time: 0.0038799999747425318
+  kinetic_cycle_time: 0.0038799999747425318
+readout_time: 0.0038799999747425318
+cls: AndorSDK2Camera
+conn: [0, '']
+detector_size: [512, 512]
+frame_info_fields: [frame_index]
+device_info:
+  controller_model: CCI-23
+  head_model: DU897_BV
+  serial_number: 4085
+pixel_size: [1.6e-05, 1.6e-05]

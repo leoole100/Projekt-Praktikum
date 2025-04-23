@@ -6,28 +6,28 @@ import numpy as np
 from glob import glob
 import matplotlib.pyplot as plt
 
+# %%
+paths = glob("../measurement/*/*grating=*nm*")
+positions = [int(path.split("grating=")[-1].split("nm")[0]) for path in paths]
+wls = [np.loadtxt(p)[:, 0] for p in paths]
+
+offsets = {p:wl-p for (p, wl) in zip(positions, wls)}
+offsets = dict(sorted(offsets.items()))
+
+px = np.arange(len(offsets[600]))
+
+fits = {}
+for position, offset in offsets.items():
+	fits[position] = np.polyfit(px, offset, 2)
+
+fit_params = {position: fit for position, fit in fits.items()}
+
+
 #%%
-# get file path
-p = glob("../measurement/*/*grating=600nm*")[-1]
 
-# get wavelengths
-wl = np.loadtxt(p)[:, 0]
-
-# get offset
-wl = wl-600
-px = np.arange(len(wl))
-
-np.savetxt("offset.csv", wl)
-
-# %% look at a different grating position
-p = glob("../measurement/*/*grating=1200nm*")
-
-#%%
-
-p = np.polyfit(px, wl, 3)
-fit = np.polyval(p, px)
-
-plt.plot(px, wl-fit)
-plt.xlabel("residual")
+for p,wl in offsets.items():
+	plt.plot(wl, label=p)
+plt.legend()
+plt.show()
 
 # %%
