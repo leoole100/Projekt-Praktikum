@@ -12,14 +12,7 @@ class Spectrometer():
     def __init__(self):
         self.lineCamera = LineCamera()
         self.monochromator = Monochromator()
-
-    @cached_property
-    def offsets(self):
-        pixels = self.lineCamera().shape[0]
-        density = self.monochromator.density
-        center_px = 282
-        scale = 50.78092367906066	# from Andor Solis / calibration
-        return (np.arange(pixels)-center_px)*scale/density
+        self.offsets = np.loadtxt("offset.csv")
 
     def __call__(self) -> Spectrum:
         return Spectrum(
