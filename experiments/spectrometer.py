@@ -3,6 +3,7 @@ from monochromator import Monochromator
 import numpy as np
 from typing import NamedTuple
 from functools import cached_property
+from offset import offset
 
 class Spectrum(NamedTuple):
     wavelength: np.ndarray
@@ -16,7 +17,7 @@ class Spectrometer():
 
     def __call__(self) -> Spectrum:
         return Spectrum(
-            wavelength=self.monochromator.wavelength + self.offsets,
+            wavelength=self.monochromator.wavelength + offset(self.monochromator.wavelength),
             counts = self.lineCamera()[::-1]
         )
     
@@ -33,8 +34,8 @@ if __name__ == "__main__":
     spec = Spectrometer()
 
     spec.lineCamera.exposure = 0.1
-    # spec.monochromator.grating = 3
-    # spec.monochromator.wavelength = 600
+    spec.monochromator.grating = 3
+    spec.monochromator.wavelength = 600
 
     print("Waiting for cooldown")
     spec.lineCamera.wait_for_cooldown()
