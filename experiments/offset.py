@@ -22,6 +22,7 @@ spl = CubicSpline(positions, offsets)
 
 # %%
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 plt.style.use("../style.mplstyle")
 all_offsets = np.concatenate(offsets)
 all_pixels = np.concatenate([np.arange(len(o)) for o in offsets])
@@ -31,11 +32,12 @@ linear_trend = np.polyval(linear_fit, all_pixels)
 
 non_linear_part = all_offsets - linear_trend
 
-for p, o in zip(positions, offsets):
+for p, o, c in zip(positions, offsets, mpl.colormaps['plasma'](np.linspace(0,1, len(positions)))):
 	start_idx = sum(len(offsets[i]) for i in range(positions.index(p)))
 	end_idx = start_idx + len(o)
-	plt.plot(non_linear_part[start_idx:end_idx], label=f"{p} nm")
+	plt.plot(non_linear_part[start_idx:end_idx], label=f"{p} nm", color=c)
 plt.legend()
 plt.ylabel("nonlinear offset in nm")
 plt.xlabel("pixel number")
+plt.savefig("figures/spectrometer offset.pdf")
 plt.show()
