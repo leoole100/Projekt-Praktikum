@@ -4,10 +4,8 @@ import numpy as np
 from typing import NamedTuple
 from functools import cached_property
 from offset import offset
-
-class Spectrum(NamedTuple):
-    wavelength: np.ndarray
-    counts: np.ndarray
+from time import time
+import yaml
 
 class Spectrometer():
     def __init__(self):
@@ -15,10 +13,10 @@ class Spectrometer():
         self.monochromator = Monochromator()
         self.offsets = np.loadtxt("offset.csv")
 
-    def __call__(self) -> Spectrum:
-        return Spectrum(
-            wavelength=self.monochromator.wavelength + offset(self.monochromator.wavelength),
-            counts = self.lineCamera()[::-1]
+    def __call__(self):
+        return (
+            self.monochromator.wavelength + offset(self.monochromator.wavelength),
+            self.lineCamera()[::-1]
         )
     
     def close(self):
@@ -27,6 +25,27 @@ class Spectrometer():
 
     def __del__(self):
         self.close()
+    
+    @property
+    def info(self) -> dict:
+        return {
+            "camera": self.lineCamera.info,
+            "monochromator": self.monochromator.info,
+        }
+    
+    def save(self, path: str):
+        spectrum = self()
+        data = {
+            "time": time(),
+            "metadata": self.info,
+            "spectrum": {
+                "wavelength": spectrum.wavelength.tolist(),
+                "counts": spectrum.counts.tolist(),
+            }
+        }
+        with open(path, "w") as f:
+            yaml.safe_dump(data, f)
+
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt

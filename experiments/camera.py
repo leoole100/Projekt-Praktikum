@@ -33,7 +33,8 @@ class Camera:
         while self.temperature > self.cam.get_temperature_setpoint():
             pass
 
-    def info(self):
+    @property
+    def info(self) -> dict:
         return self.cam.get_full_info()
 
     def __del__(self):

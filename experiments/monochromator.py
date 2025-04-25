@@ -40,6 +40,14 @@ class Monochromator:
     @property
     def density(self) -> int:
         return self.gratings[self.grating]
+    
+    @property
+    def info(self) -> dict:
+        return {
+            "center": self.wavelength,
+            "grating": self.grating,
+            "density": self.density
+        }
 
     def close(self):
         self.ser.close()
