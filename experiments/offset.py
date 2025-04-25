@@ -4,30 +4,38 @@ get's the pixel to nm offset from a andor solis file
 #%%
 import numpy as np
 from glob import glob
-import matplotlib.pyplot as plt
+from scipy.interpolate import CubicSpline
 
 # %%
 paths = glob("../measurement/*/*grating=*nm*")
 positions = [int(path.split("grating=")[-1].split("nm")[0]) for path in paths]
+
+sorted_indices = np.argsort(positions)
+paths = [paths[i] for i in sorted_indices]
+positions = [positions[i] for i in sorted_indices]
+
 wls = [np.loadtxt(p)[:, 0] for p in paths]
 
-offsets = {p:wl-p for (p, wl) in zip(positions, wls)}
-offsets = dict(sorted(offsets.items()))
+offsets = np.array([wl-p for (p, wl) in zip(positions, wls)])
 
-px = np.arange(len(offsets[600]))
-
-fits = {}
-for position, offset in offsets.items():
-	fits[position] = np.polyfit(px, offset, 2)
-
-fit_params = {position: fit for position, fit in fits.items()}
-
-
-#%%
-
-for p,wl in offsets.items():
-	plt.plot(wl, label=p)
-plt.legend()
-plt.show()
+spl = CubicSpline(positions, offsets)
 
 # %%
+import matplotlib.pyplot as plt
+plt.style.use("../style.mplstyle")
+all_offsets = np.concatenate(offsets)
+all_pixels = np.concatenate([np.arange(len(o)) for o in offsets])
+
+linear_fit = np.polyfit(all_pixels, all_offsets, 1)
+linear_trend = np.polyval(linear_fit, all_pixels)
+
+non_linear_part = all_offsets - linear_trend
+
+for p, o in zip(positions, offsets):
+	start_idx = sum(len(offsets[i]) for i in range(positions.index(p)))
+	end_idx = start_idx + len(o)
+	plt.plot(non_linear_part[start_idx:end_idx], label=f"{p} nm")
+plt.legend()
+plt.ylabel("nonlinear offset in nm")
+plt.xlabel("pixel number")
+plt.show()
