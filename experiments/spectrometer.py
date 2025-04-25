@@ -26,7 +26,7 @@ class Spectrometer():
     @property
     def info(self) -> dict:
         return {
-            "camera": self.lineCamera.info,
+            #"camera": self.lineCamera.info,
             "monochromator": self.monochromator.info,
         }
     
@@ -36,8 +36,8 @@ class Spectrometer():
             "time": time(),
             "metadata": self.info,
             "spectrum": {
-                "wavelength": spectrum.wavelength.tolist(),
-                "counts": spectrum.counts.tolist(),
+            "wavelength": spectrum[0].tolist(),
+                "counts": spectrum[1].tolist(),
             }
         }
         with open(path, "w") as f:
