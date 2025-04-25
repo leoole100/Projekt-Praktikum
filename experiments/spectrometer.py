@@ -1,8 +1,6 @@
 from lineCamera import LineCamera
 from monochromator import Monochromator
 import numpy as np
-from typing import NamedTuple
-from functools import cached_property
 from offset import offset
 from time import time
 import yaml
@@ -11,7 +9,6 @@ class Spectrometer():
     def __init__(self):
         self.lineCamera = LineCamera()
         self.monochromator = Monochromator()
-        self.offsets = np.loadtxt("offset.csv")
 
     def __call__(self):
         return (
