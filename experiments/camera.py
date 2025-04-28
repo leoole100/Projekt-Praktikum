@@ -27,7 +27,12 @@ class Camera:
         self.cam.set_exposure(value)
 
     def __call__(self):
-        return self.cam.grab(frame_timeout=self.exposure+1)[0]
+        self.cam.start_acquisition()
+        self.cam.wait_for_frame("now")
+        f =  self.cam.read_newest_image()
+        self.cam.stop_acquisition()
+        return f
+
 
     def wait_for_cooldown(self):
         while self.temperature > self.cam.get_temperature_setpoint():

@@ -28,6 +28,8 @@ class Monochromator:
     @wavelength.setter
     def wavelength(self, value: float):
         self.send(f"{value:.3f} GOTO")
+        while not self.done:
+            ...
 
     @property
     def grating(self) -> int:
@@ -40,6 +42,10 @@ class Monochromator:
     @property
     def density(self) -> int:
         return self.gratings[self.grating]
+    
+    @property
+    def done(self) -> bool:
+        return int(self.send("MONO-?DONE")) == 1
     
     @property
     def info(self) -> dict:
