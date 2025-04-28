@@ -7,19 +7,19 @@ from glob import glob
 
 # %%
 # import the data
-p = glob("../measurement/2025-04-25/004 *nm.yaml")
+p = glob("../measurement/2025-04-25/005 *.yaml")
 data = []
 for file in p:
 	with open(file, 'r') as f:
 		data.append(yaml.safe_load(f))
 data = sorted(data, key=lambda x: x["metadata"]["monochromator"]["center"])
 
-#%%
+plt.figure()
 for d in data:
 	s = d["spectrum"]
 	plt.plot(
 		s["wavelength"], s["counts"], 
-		label=d["metadata"]["monochromator"]["center"],
+		label=f"{round(d["metadata"]["monochromator"]["center"])} nm",
 		alpha=0.7
 	)
 plt.legend()
