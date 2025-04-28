@@ -9,8 +9,8 @@ s = Spectrometer()
 wl = np.arange(300, 1200, 100)
 
 for w in wl:
-        print(f"{w}nm")
 	s.monochromator.wavelength = w
 	time.sleep(1)
+	print(f"{w}nm")
 	s()
 	s.save(f"../measurement/2025-04-25/006 dark {w}.yaml")
