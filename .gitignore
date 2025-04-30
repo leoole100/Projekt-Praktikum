@@ -19,6 +19,8 @@ __pycache__
 *.nav
 *.snm
 *.toc
+**/.fuse_hidden*
+*.tmp
 
 *.kate-swp
 
