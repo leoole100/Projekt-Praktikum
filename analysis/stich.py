@@ -44,18 +44,19 @@ counts_mean = np.nanmean(interpolated, axis=0)
 counts_std = np.nanstd(interpolated, axis=0)
 
 plt.figure()
-plt.plot(wl, counts_mean, color="k", label="Combined")
-plt.fill_between(
-    wl,
-    counts_mean - counts_std,
-    counts_mean + counts_std,
-    color='gray',
-	label="std"
-)
+# plt.plot(wl, counts_mean, color="k", label="Combined")
+# plt.fill_between(
+#     wl,
+#     counts_mean - counts_std,
+#     counts_mean + counts_std,
+#     color='gray',
+# 	label="std"
+# )
 for d in data:
 	s = d["spectrum"]
+	interp = sp.interpolate.interp1d(wl,counts_mean)(s["wavelength"])
 	plt.plot(
-		s["wavelength"], s["counts"] - sp.interpolate.interp1d(wl,counts_mean)(s["wavelength"]), 
+		s["wavelength"], (s["counts"] - interp)/interp, 
 		# label=f"{round(d["metadata"]["monochromator"]["center"])} nm",
 		alpha=0.7
 	)
