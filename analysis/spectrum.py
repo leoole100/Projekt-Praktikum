@@ -22,8 +22,8 @@ d = d[:,1] - bkg[:,1]
 d /= 2
 
 plt.plot(wl, d)
-plt.xlabel("counts / s")
-plt.ylabel("wavelength (nm)")
+plt.ylabel("counts / s")
+plt.xlabel("wavelength (nm)")
 plt.savefig("figures/spectrum.pdf")
 plt.show()
 # %%
