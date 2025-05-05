@@ -12,17 +12,19 @@ dname = os.path.dirname(abspath)
 os.chdir(dname)
 
 # %%
-p = sorted(glob("../measurement/2025-05-02/*.asc"))
+p = sorted(glob("../measurement/2025-05-05/003 thermal*.asc"))
 
-d = np.loadtxt(p[1])
-bkg = np.loadtxt(p[2])
+d = np.loadtxt(p[0])
 
 wl = d[:,0]
-d = d[:,1] - bkg[:,1]
-d /= 2
+d = d[:,1] - np.min(d[:,1])
+d /= 2 * np.diff(wl).mean()
 
 plt.plot(wl, d)
-plt.ylabel("counts / s")
+mask = (wl >= 0) & (wl <= 800)
+max_value = np.max(d[mask])
+plt.ylim(0, max_value*1.1)
+plt.ylabel("counts / s / nm")
 plt.xlabel("wavelength (nm)")
 plt.savefig("figures/spectrum.pdf")
 plt.show()
