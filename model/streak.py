@@ -57,5 +57,16 @@ if __name__=="__main__":
     plt.savefig("./figures/streak view.pdf")
     plt.show()
 
+    # plot the expected spectrum
+    m = Model()
+    m.fwhm = 250e-15
+    s = Streak(m)
+    s()
+    s.T_e.max()
+    plt.plot(s.l/1e-9, s.b.sum(axis=1)/1e15)
+    plt.xlim(300, 2000)
+    plt.xlabel(r"$\lambda$ (nm)")
+    plt.ylabel(r"$\int B dt$")
+    plt.savefig("./figures/spectrum.pdf")
 
 # %%
