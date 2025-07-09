@@ -74,74 +74,195 @@ The detector's quantum efficiency peaks in the visible spectral range but drops 
 
 \section{Noise Sources and SNR Optimisation}
 
-Measurements of thermal radiation from ultrafast hot electrons require detection of extremely weak optical signals. The total noise in these measurements arises from several independent sources, each contributing to the uncertainty in the recorded pixel signal. The combined noise can be approximated as
+The detector response is fundamentally linear, meaning the measured signal is directly proportional to the incoming photon flux and exposure time. However, the signal is offset by an electronic bias level, which is added to avoid negative values during digitisation. This offset can be easily removed by subtracting a bias frame acquired with the same settings but without illumination.\\
+Beyond this deterministic offset, there are statistical fluctuations in the pixel signal, collectively referred to as noise. These noise contributions are not constant but depend on several parameters of the measurement, such as readout settings, exposure time, sensor temperature, and gain. For a measured signal the total noise can be estimated as
 
 \begin{equation}
-    \sigma_{\text{total}} = \sqrt{\sigma_{\text{bias}}^2 + \sigma_{\text{read}}^2 + \sigma_{\text{dark}}^2 + \sigma_{\text{shot}}^2 + \sigma_{\text{CIC}}^2}.
+    \sigma_{\text{total}} = \sqrt{\sigma_{\text{read}}^2 + \sigma_{\text{dark}}^2 + \sigma_{\text{shot}}^2 + \sigma_{\text{CIC}}^2}.
 \end{equation}
-
-\paragraph{Bias Noise}
-
-Bias noise refers to small fluctuations in the electronic offset added to all pixel values, typically constant and independent of exposure time. For scientific CCD cameras, this noise is on the order of $1$--$2~e^{-}$~RMS.
 
 \paragraph{Readout Noise}
 
-Readout noise arises during charge-to-voltage conversion and digitisation in the detector electronics. Without electron multiplication (EM) gain, this noise typically amounts to $2$--$5~e^{-}$~RMS. An important consideration is that readout noise scales \emph{per readout bin}. This means that summing multiple pixels via hardware binning before digitisation can significantly reduce the overall noise, because only a single readout noise contribution is added for the binned superpixel rather than for each individual pixel. Hardware binning is therefore advisable wherever spatial or spectral resolution permits.
+Readout noise arises during charge-to-voltage conversion and digitisation in the detector electronics. It is essentially constant for a given readout mode and independent of the exposure time or photon flux. Without electron multiplication (EM) gain, this noise typically amounts to $2$--$5~e^{-}$~RMS. An important consideration is that readout noise scales \emph{per readout bin}. Summing multiple pixels via hardware binning before digitisation can significantly reduce the overall noise, as only a single readout noise contribution is added for the binned superpixel rather than for each individual pixel. Hardware binning is therefore advisable wherever spatial or spectral resolution permits.
 
-In EM mode, the effective readout noise is reduced because the signal is amplified before readout, but the amplification process introduces additional noise contributions such as clock-induced charge.
+In EM mode, the effective readout noise is reduced because the signal is amplified before readout. However, this benefit comes at the cost of introducing other noise contributions, such as clock-induced charge.
 
 \paragraph{Thermal Noise (Dark Current Noise)}
 
-Thermal noise, also known as dark current noise, originates from thermally generated electrons that accumulate during the exposure time. It follows Poisson statistics and is calculated as
+Thermal noise, or dark current noise, originates from thermally generated electrons accumulating in each pixel during the exposure time. It scales with both temperature and exposure time, following Poisson statistics:
 
 \begin{equation}
     \sigma_{\text{dark}} = \sqrt{I_{\text{dark}} \cdot t_{\text{exp}}},
 \end{equation}
 
-where $I_{\text{dark}}$ is the dark current in electrons per second per pixel, and $t_{\text{exp}}$ is the exposure time in seconds.
-
-The dark current itself depends exponentially on the sensor temperature according to
+where $I_{\text{dark}}$ is the dark current in electrons per second per pixel, and $t_{\text{exp}}$ is the exposure time. The dark current itself depends exponentially on the sensor temperature:
 
 \begin{equation}
     I_{\text{dark}}(T) = I_0 \cdot \exp\left(-\frac{E_{\text{gap}}}{k T}\right),
 \end{equation}
 
-where $I_0$ is a pre-exponential factor determined by the device, $E_{\text{gap}}$ is the effective activation energy (typically around $0.6$--$0.7$~eV for silicon), $k$ is the Boltzmann constant, and $T$ is the absolute temperature in Kelvin. This relationship highlights the importance of cooling the sensor to achieve low-noise measurements.
+where $I_0$ is a device-specific pre-exponential factor, $E_{\text{gap}}$ is the effective activation energy (typically around $0.6$--$0.7$~eV for silicon), $k$ is the Boltzmann constant, and $T$ is the absolute temperature in Kelvin. This exponential relationship underscores the importance of sensor cooling to minimise dark noise in low-light measurements.
+
+Figure~\ref{fig:dark_noise} shows the measured dark noise as a function of sensor temperature and exposure time, along with a fit using the exponential model for $I_{\text{dark}}$.
+
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/dark_noise.pdf}
+    \caption{Dark noise as a function of sensor temperature and exposure time. The curve is fitted with an effective activation energy of $E_\text{gap} = \SI{0.597(4)}{eV}$ and a constant readout noise of $\sigma_{\text{read}} = \SI{0.81(12)}{e^-}$.}
+    \label{fig:dark_noise}
+\end{figure}
 
 \paragraph{Shot Noise}
 
-Shot noise reflects the statistical nature of photon arrival and is given by
+Shot noise arises from the discrete nature of photon arrival and follows Poisson statistics. It scales with the square root of the signal:
 
 \begin{equation}
-    \sigma_{\text{shot}} = \sqrt{S},
+    \sigma_{\text{shot}} = \sqrt{S}.
 \end{equation}
 
-where $S$ is the signal in electrons. Shot noise is fundamentally unavoidable but decreases in relative terms as the signal increases, since the signal-to-shot-noise ratio improves proportionally to $\sqrt{S}$.
+Although shot noise cannot be eliminated, its relative impact decreases as the total signal increases, since the signal-to-shot-noise ratio improves proportionally to $\sqrt{S}$.
 
 \paragraph{Clock-Induced Charge (CIC)}
 
-An additional noise source relevant to EM gain mode is clock-induced charge (CIC). CIC arises from spurious electrons generated during rapid voltage changes as pixel charges are shifted through the EM register. This noise becomes significant in low-light measurements, particularly at high EM gain. It can be approximated as
+Clock-induced charge (CIC) is a noise source unique to EM gain mode. It originates from spurious electrons generated during rapid voltage transitions as charges are shifted through the EM register. CIC is essentially independent of exposure time and becomes significant for short exposures and low-light conditions when using high EM gain. The noise contribution from CIC can be approximated as
 
 \begin{equation}
     \sigma_{\text{CIC}} = \sqrt{N_{\text{CIC}} \times \text{EM}_{\text{gain}}^2},
 \end{equation}
 
-where $N_{\text{CIC}}$ denotes the average number of CIC electrons per pixel per frame, and $\text{EM}_{\text{gain}}$ is the electron multiplication gain factor. High EM gain amplifies both the signal and CIC, potentially reducing the overall signal-to-noise ratio (SNR).
+where $N_{\text{CIC}}$ is the average number of CIC electrons per pixel per frame, and $\text{EM}_{\text{gain}}$ is the electron multiplication gain factor. While EM gain reduces readout noise, it also amplifies CIC and introduces multiplicative noise (with an excess noise factor around $\sqrt{2}$), which can degrade the overall signal-to-noise ratio (SNR) in low-light measurements.
 
 \paragraph{Implications for SNR Optimisation}
 
-From a practical perspective, these considerations imply that lower EM gain and longer exposure times are generally beneficial for achieving a higher SNR. Longer exposures increase the total collected signal, improving the shot noise-limited SNR, while also reducing the relative contribution of frame-based noises like CIC. However, longer exposure times also increase dark noise, which must be mitigated through sufficient sensor cooling.
+These different noise sources scale differently with experimental parameters. While readout noise is essentially constant, dark noise increases with exposure time and temperature. Shot noise increases with the square root of the signal, whereas CIC becomes significant primarily in EM gain mode and short exposures.
 
-In the measurements performed for this work, the electron multiplication feature of the Andor iXonEM+ camera was disabled. Tests showed that EM gain introduced significant additional noise, including CIC, which degraded the overall SNR. Instead, data acquisition was performed in conventional CCD mode, using longer exposure times, sensor cooling, and hardware binning where possible, to optimise sensitivity while maintaining acceptable noise levels.
+In practice, lower EM gain and longer exposure times are generally beneficial for achieving higher SNR because they increase the collected signal and reduce the relative impact of frame-based noise contributions like CIC. However, longer exposures also increase dark noise, which necessitates effective cooling. In the measurements performed for this work, the electron multiplication feature of the Andor iXonEM+ camera was disabled. Tests showed that EM gain introduced significant additional noise, including CIC, which degraded the overall SNR. Therefore, data acquisition was carried out in conventional CCD mode, using longer exposure times, sensor cooling, and hardware binning where possible to optimise sensitivity while maintaining acceptable noise levels.
+
+\subsection{Calculating the expected SNR}
+To demonstrate how the understanding of the System Noise can be used the SNR of the Hot Electron Experiment is being calculated.
+The signal strength should be in the order of $10^{-9}\;\si{W/nm}$ and centered around $\lambda = \SI{600}{nm}$. Let's say we want to have a spectral resolution of \SI{1}{nm}. This means that we need to detect a signal of $P=10^{-9}\;\si{W}$. This means $P \lambda / hc = \SI{2.5e-9}{Hz}$ Photons per second.
+
+
+\section{Efficiency and Flatness}
+After light is generated as thermal radiation with a spectral power distribution $B(\lambda)\, d\lambda$ on a piece of the surface of the sample with radius $r_0$, it is emitted with a radial distribution. For simplicity, it is assumed to be omnidirectional.
+
+The collection mirror (PM1) captures a fraction of this radiation determined by its solid angle $\Omega$ as seen from the emission point. For a circular mirror of radius $r_\text{PM}$ positioned at a distance $f_\text{PM}$ (the focal length), the collection half-angle $\theta$ is given by
+
+\begin{equation}
+    \theta = \arctan\left( \frac{r_\text{PM}}{f_\text{PM}} \right).
+\end{equation}
+
+The solid angle subtended by the mirror is then
+
+\begin{equation}
+    \Omega = 2\pi \left( 1 - \cos \theta \right).
+\end{equation}
+
+Relative to the total spherical emission of $4\pi$ steradians, the fraction of thermal radiation collected is
+
+\begin{equation}
+    f_\Omega = \frac{\Omega}{4\pi}.
+\end{equation}
+
+Hence, the spectral power captured by PM1 is
+
+\begin{equation}
+    P_\text{PM1}(\lambda) 
+    = B(\lambda) \cdot A_\text{emit} \cdot f_\Omega,
+\end{equation}
+
+where $A_\text{emit} = \pi r_0^2$ is the area of the emitting region on the sample.
+
+The collimated light is subsequently directed toward the second parabolic mirror (PM2), which focuses it into a spot of diameter $d_\text{focus}$ determined by the system magnification $M$:
+
+\begin{equation}
+    M = \frac{f_\text{PM2}}{f_\text{PM1}},
+\end{equation}
+
+yielding
+
+\begin{equation}
+    d_\text{focus} = M \cdot 2 r_0.
+\end{equation}
+
+However, the optical fibre used as the spectrometer entrance has a core diameter $d_\text{fibre} = \SI{200}{\micro\meter}$. Therefore, only a fraction of the focused light is coupled into the fibre, given by the ratio of their areas:
+
+\begin{equation}
+    f_\text{fibre, area}
+    =
+    \left( \frac{d_\text{fibre}}{d_\text{focus}} \right)^2.
+\end{equation}
+
+Furthermore, the fibre's numerical aperture (NA) limits the acceptance angle of incoming rays. Assuming the focused beam has a divergence $\theta_\text{beam}$ smaller than the fibre's acceptance angle, the angular coupling efficiency $f_\text{NA}$ can be approximated as unity. If not, an additional loss factor must be included. The fibre's acceptance angle can be improved by using a cosine corrector, but this introduces additional losses.
+
+Losses within the fibre itself are considered negligible.
+
+The light then reaches the monochromator, where again there may be a mismatch between the NA of the first monochromator mirror and the fibre, resulting in further losses.
+
+The losses in the mirrors are small and can be neglected in this analysis.
+
+The main contributions to the wavelength-dependent transmission curve through the spectrometer and the entire setup are:
+
+\begin{equation}
+    T_\text{optics}(\lambda) 
+    \propto T_\text{filters}(\lambda)
+    \times T_\text{grating}(\lambda)
+    \times \text{QE}(\lambda),
+\end{equation}
+
+where:
+
+\begin{itemize}
+    \item $T_\text{filters}(\lambda)$ represents the transmission of short-pass or band-pass filters,
+    \item $T_\text{grating}(\lambda)$ is the blazing efficiency of the monochromator grating,
+    \item $\text{QE}(\lambda)$ is the quantum efficiency of the detector.
+\end{itemize}
+
+Hence, the spectral power density finally detected by the EMCCD is
+
+\begin{equation}
+    P_\text{detected}(\lambda)\, d\lambda
+    = B(\lambda)\, d\lambda \cdot A_\text{emit} \cdot f_\Omega 
+      \cdot f_\text{fibre, area} 
+      \cdot f_\text{NA}
+      \cdot T_\text{optics}(\lambda).
+\end{equation}
+
+Expressing this as a detected photon rate for a wavelength interval $[\lambda, \lambda + d\lambda]$ requires dividing by the photon energy $E_\text{photon}(\lambda)$:
+
+\begin{equation}
+    N_\text{photons}(\lambda, d\lambda)
+    = \frac{P_\text{detected}(\lambda)\, d\lambda}{E_\text{photon}(\lambda)},
+\end{equation}
+
+where
+
+\begin{equation}
+    E_\text{photon}(\lambda)
+    = \frac{h c}{\lambda}.
+\end{equation}
+
+\subsection{Measurement of the Sensitivity Curve}
+
+The wavelength-dependent sensitivity of the entire optical system is described by the \emph{sensitivity curve}, also referred to in the literature as the \emph{throughput curve}, \emph{efficiency curve}, or \emph{instrument response curve}. This curve represents the combined wavelength-dependent transmission and detection efficiency of all optical components in the setup, including filters, the diffraction grating, fibre coupling, and the detector's quantum efficiency. Accurate determination of the sensitivity curve is essential for converting measured spectra into absolute spectral power distributions emitted by the sample.
+
+One common approach for determining the sensitivity curve is a direct measurement using a calibrated broadband light source. A lamp with a well-characterized spectral emission is coupled directly into the entrance fibre of the spectrometer. The spectrum recorded by the spectrometer is then compared to the lamp's certified spectral output. The sensitivity curve is obtained as the ratio of the measured signal to the known lamp spectrum, corrected for any geometrical factors such as fibre coupling efficiency or beam divergence. This method provides an absolute calibration, but it requires a lamp with stable and precisely known spectral characteristics, as well as careful alignment to avoid additional systematic errors.
+
+Another practical method is transfer calibration using a reference spectrometer. In this approach, the same calibrated lamp is first measured with a well-characterized reference spectrometer whose response is already known. The lamp spectrum is then measured with the experimental spectrometer under identical conditions. Dividing the spectrum obtained from the experimental spectrometer by that from the reference spectrometer yields the relative sensitivity curve. Although this method typically does not yield an absolute calibration without additional scaling, it is particularly useful when an absolute-calibrated lamp is unavailable but a reliable reference spectrometer is accessible.
+
+A more sophisticated technique involves the use of a bolometer and a reference spectrometer, typically employed in calibration laboratories. A bolometer can measure the absolute radiant power across a broad spectral range with high accuracy, particularly when used in conjunction with a monochromator to isolate narrow wavelength intervals. Comparing the spectrometer's measured signal to the bolometric measurement allows for the derivation of an extremely accurate sensitivity curve, accounting for slit widths, spectral responsivity, and absolute radiometric units. However, this method is complex and requires access to specialized equipment, including a second monochromator and a precisely calibrated flat-response bolometer, making it impractical for routine laboratory calibrations.
+
+In this work, the sensitivity curve was estimated based on the individual transmission and efficiency curves of the components used in the optical path. The quantum efficiency of the detector was obtained from manufacturer data \cite{andor_ixonem_nodate}, while the blazing efficiency of the monochromator grating was estimated using models available in the literature \cite{barker_ripple_1984}. The transmission curve of the optical filters was measured directly using a broadband white light source. These combined curves, shown in Figure~\ref{fig:transmission}, provide an estimated sensitivity curve that serves as the basis for correcting measured spectra and reconstructing the absolute spectral power distribution emitted by the sample.
 
 \begin{figure}
     \centering
-    \includegraphics{../analysis/figures/dark_noise.pdf}
-    \caption{Dark noise over Temperature and Exposure Time. With modeled $E_\text{gap} = \SI{0.613(6)}{eV}$ and a constant Readout noise of $\sigma_{\text{read}} = \SI{0.88(12)}{e^-}$.}
+    \includegraphics{../analysis/figures/filter.pdf}
+    \caption{Transmission curves of various components and filters used in the setup.}
+    \label{fig:transmission}
 \end{figure}
 
+ 
 
-\section{Flatness and Efficiency}
 
 \addcontentsline{toc}{section}{Concolusion}
 \section*{Conclusion}
