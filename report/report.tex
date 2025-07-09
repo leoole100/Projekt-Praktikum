@@ -69,7 +69,7 @@ The monochromator allows tuning of the central wavelength and control of the spe
 \subsection{Detector}
 Spectrally dispersed thermal radiation is detected using an Andor iXonEM+ CCD camera. Although this camera features an electron multiplication (EM) register capable of amplifying low-light signals, in this setup the EM feature is disabled. Initial tests showed that electron multiplication introduced excess noise, ultimately reducing the signal-to-noise ratio (SNR). Instead, measurements are performed in conventional CCD mode, which provides better overall sensitivity for the photon flux levels encountered in thermal emission experiments.
 
-The detector's quantum efficiency peaks in the visible spectral range but drops significantly below approximately 480 nm, as specified in the manufacturer's datasheet \autocite{andor_andor_nodate}. This wavelength-dependent response must be considered when analysing measured spectra, and corrections may be required to reconstruct the true emission profile. In addition, variations in quantum efficiency between individual cameras can introduce systematic errors, highlighting the need for in-situ calibration to ensure quantitative accuracy.
+The detector's quantum efficiency peaks in the visible spectral range but drops significantly below approximately 480 nm, as specified in the manufacturer's datasheet \autocite{andor_ixonem_nodate}. This wavelength-dependent response must be considered when analysing measured spectra, and corrections may be required to reconstruct the true emission profile. In addition, variations in quantum efficiency between individual cameras can introduce systematic errors, highlighting the need for in-situ calibration to ensure quantitative accuracy.
 
 
 \section{Noise Sources and SNR Optimisation}
@@ -134,7 +134,11 @@ From a practical perspective, these considerations imply that lower EM gain and 
 
 In the measurements performed for this work, the electron multiplication feature of the Andor iXonEM+ camera was disabled. Tests showed that EM gain introduced significant additional noise, including CIC, which degraded the overall SNR. Instead, data acquisition was performed in conventional CCD mode, using longer exposure times, sensor cooling, and hardware binning where possible, to optimise sensitivity while maintaining acceptable noise levels.
 
-
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/dark_noise.pdf}
+    \caption{Dark noise over Temperature and Exposure Time. With modeled $E_\text{gap} = \SI{0.613(6)}{eV}$ and a constant Readout noise of $\sigma_{\text{read}} = \SI{0.88(12)}{e^-}$.}
+\end{figure}
 
 
 \section{Flatness and Efficiency}

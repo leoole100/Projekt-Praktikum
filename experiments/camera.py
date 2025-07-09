@@ -1,4 +1,6 @@
 from pylablib.devices import Andor
+import time
+import numpy as np
 
 class Camera:
     def __init__(self):
@@ -28,14 +30,15 @@ class Camera:
 
     def __call__(self):
         self.cam.start_acquisition()
-        self.cam.wait_for_frame("now")
+        self.cam.wait_for_frame("now", timeout=self.exposure + 1)
         f =  self.cam.read_newest_image()
         self.cam.stop_acquisition()
         return f
 
-
-    def wait_for_cooldown(self):
-        while self.temperature > self.cam.get_temperature_setpoint():
+    def wait_for_cooldown(self, epsilon = 1):
+        while np.abs(self.temperature - self.cam.get_temperature_setpoint()) > epsilon:
+            print(self.temperature)
+            time.sleep(1)
             pass
 
     @property
