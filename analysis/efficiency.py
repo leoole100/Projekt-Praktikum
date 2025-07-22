@@ -79,14 +79,23 @@ def scale(target, reference):
 	scale = (r * t).sum() / (t**2).sum()
 	return target*scale
 
-for r,p in zip(references,paths): 
-	scale(r, spectrum).plot(label=p.rsplit("/",1)[1][3:-4])
-spectrum.plot(color="k", label="dut")
+label = [
+	"USB2000+",
+	"USB2000+XR1-ES",
+	"USB2000+",
+	"USB4000",
+]
+
+for r,l in zip(references,label): 
+	scale(r, spectrum).plot(label=l)
+spectrum.plot(color="k", label="Acton & Andor")
 plt.ylim(5e2, None)
 plt.xlim(200, 1250)
-plt.yscale("log")
-plt.xlabel(r"$\lambda$ (nm)")
-plt.ylabel("Intensity")
+# plt.yscale("log")
+plt.xlabel(r"Wavelength (nm)")
+plt.ylabel("Intensity Scaled")
+plt.gca().yaxis.set_tick_params(labelbottom=False)
 plt.legend()
 
 plt.gcf().savefig("figures/efficiency_different.pdf")
+# %%
