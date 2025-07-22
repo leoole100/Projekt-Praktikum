@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 plt.style.use("../style.mplstyle")
-from model import Model
 
 # %%
 
@@ -13,7 +12,7 @@ c = 300e6       # Speed of light (m/s)
 kB = 1.381e-23  # Boltzmann constant (J/K)
 
 class Streak:
-    def __init__(self, model=Model()):
+    def __init__(self, model):
         self.model = model
         self.model.t = np.linspace(-3*self.model.sigma, .7*(self.model.sigma+self.model.g), 1000)
         self.l = np.linspace(100, 2000, 100)*1e-9
@@ -40,6 +39,8 @@ class Streak:
         return self.b.sum()
 
 if __name__=="__main__":
+
+    from model import Model
     m = Model()
     m.fwhm = 10e-15
     s = Streak(m)
@@ -59,6 +60,7 @@ if __name__=="__main__":
 
     # plot the expected spectrum
     m = Model()
+    m.E = 50e-6
     m.fwhm = 250e-15
     s = Streak(m)
     s()
