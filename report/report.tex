@@ -255,17 +255,22 @@ One common approach for determining the sensitivity curve is a direct measuremen
 
 Another practical method is transfer calibration using a reference spectrometer. In this approach, the same calibrated lamp is first measured with a well-characterized reference spectrometer whose response is already known. The lamp spectrum is then measured with the experimental spectrometer under identical conditions. Dividing the spectrum obtained from the experimental spectrometer by that from the reference spectrometer yields the relative sensitivity curve. Although this method typically does not yield an absolute calibration without additional scaling, it is particularly useful when an absolute-calibrated lamp is unavailable but a reliable reference spectrometer is accessible.
 
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/efficiency_different.pdf}
+    \caption{Same spectrum recorded with different instruments.}
+\end{figure}
+
 A more sophisticated technique involves the use of a bolometer and a reference spectrometer, typically employed in calibration laboratories. A bolometer can measure the absolute radiant power across a broad spectral range with high accuracy, particularly when used in conjunction with a monochromator to isolate narrow wavelength intervals. Comparing the spectrometer's measured signal to the bolometric measurement allows for the derivation of an extremely accurate sensitivity curve, accounting for slit widths, spectral responsivity, and absolute radiometric units. However, this method is complex and requires access to specialized equipment, including a second monochromator and a precisely calibrated flat-response bolometer, making it impractical for routine laboratory calibrations.
 
 In this work, the sensitivity curve was estimated based on the individual transmission and efficiency curves of the components used in the optical path. The quantum efficiency of the detector was obtained from manufacturer data \cite{andor_ixonem_nodate}, while the blazing efficiency of the monochromator grating was estimated using models available in the literature \cite{barker_ripple_1984}. The transmission curve of the optical filters was measured directly using a broadband white light source. These combined curves, shown in Figure~\ref{fig:transmission}, provide an estimated sensitivity curve that serves as the basis for correcting measured spectra and reconstructing the absolute spectral power distribution emitted by the sample.
 
 \begin{figure}
     \centering
-    \includegraphics{../analysis/figures/filter.pdf}
+    \includegraphics{../analysis/figures/expected.pdf}
     \caption{Transmission curves of various components and filters used in the setup.}
     \label{fig:transmission}
 \end{figure}
-
 
 \section{Data Analysis and Spectral Modeling}
 

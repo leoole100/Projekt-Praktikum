@@ -25,6 +25,7 @@ class Streak:
         self.b = self._compute_b(self.l, self.T_e)
         return self
 
+    # W/nm^3
     def _compute_b(self, l, T_e):
         return 2*h*c**2 / l[:, None]**5 / (
             np.exp(h * c / (l[:, None] * kB * T_e[None, :])) - 1
