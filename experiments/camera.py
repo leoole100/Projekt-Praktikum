@@ -35,7 +35,7 @@ class Camera:
         self.cam.stop_acquisition()
         return f
 
-    def wait_for_cooldown(self, epsilon = 1):
+    def wait_for_cooldown(self, epsilon = 5):
         while np.abs(self.temperature - self.cam.get_temperature_setpoint()) > epsilon:
             print(self.temperature)
             time.sleep(1)

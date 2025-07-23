@@ -6,4 +6,5 @@
 *.dll binary
 *.FCStd binary
 *.stl binary
+*.npy binary
 /data/** binary

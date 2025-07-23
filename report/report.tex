@@ -84,6 +84,7 @@ The noise sources of the setup are mainly from the detector.
 Variation in the laser output power are assumed to be comparatively small and ignored in the following discussion.
 
 The detector used is a EMCCD camera as is common for spectroscopy. The manufacturer Andor has some documents that discuss the Optimisation of SNR \cite{andor_establishing_nodate,dr_jo_walters_sensitivity_2023}.
+Another more detailed description can be found in \autocite{european_machine_vision_association_standard_2010}.
 
 The simplest noise source is \textit{Readout Noise}. Every bin that is read out get's a constant noise from the CCD shifting and the analog to digital converter. For the high performance CCD camera used here this is in the order of \SI{1}{e^-} \cite{andor_ixonem_nodate}. It is measured to be in that range in \autoref{fig:dark_noise}.
 This is applied per read out bin, not per pixel, leading to the use of hardware vertical binning.
@@ -137,6 +138,7 @@ The easiest way is to use a white light source with a known spectrum, and transf
 A different approach would be to get a calibrated spectrometer and use that one to calibrate a light source. This was tried with a deuterium halogen lamp (DH-2000-BAL from ocean optics), with multiple different ocean optics USB spectrometers.
 The recorded spectra are shown in \autoref{fig:calibration}. 
 As the spectrometer have different sensitivities, the Intensity axis had to be scaled differently for each spectrometer. But the instrument don't agree, which shows that calibrating to more trusted instrument is necessary.
+
 
 
 \clearpage

@@ -46,7 +46,14 @@ plt.plot(camera.wavelength, camera/100, label="Camera")
 
 def blaze(l, lc=500, k=.75): # https://adsabs.harvard.edu/full/1984AJ.....89..899B
 	return np.sin(np.pi*k*(1-lc/l))**2/(np.pi*k*(1-lc/l))**2
+
 plt.plot(camera["wavelength"], blaze(camera["wavelength"])*0.95, label="Grating")
+
+np.save("expected_efficiency.npy", 
+		np.array([camera["wavelength"], camera/100*blaze(camera["wavelength"])])
+)
+
+plt.plot(camera["wavelength"], camera/100*blaze(camera["wavelength"])*0.95, label="Spectrometer", color="k")
 
 plt.xlabel("Wavelength (nm)")
 plt.ylabel("Efficiency")
@@ -54,18 +61,3 @@ plt.ylim(0, 1)
 plt.legend(loc="upper left", frameon=True)
 plt.savefig("./figures/filter.pdf")
 plt.show()
-
-# %%
-#%%
-
-
-
-plt.plot()
-def blaze(l, lc=500, k=.75): # https://adsabs.harvard.edu/full/1984AJ.....89..899B
-	return np.sin(np.pi*k*(1-lc/l))**2/(np.pi*k*(1-lc/l))**2
-plt.plot(man["wavelength"], blaze(man["wavelength"])*100, label="Blaze")
-(blaze(man["wavelength"])*man).plot(label="Combined", color="k")
-plt.legend()
-plt.xlabel(r"$\lambda$ (nm)")
-plt.ylabel(r"Relative Efficiency (%)")
-plt.gcf().savefig("./figures/expected.pdf")
