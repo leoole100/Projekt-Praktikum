@@ -57,16 +57,29 @@ The process of heating a bulk material by means of femtosecond laser pulses can 
 \begin{equation}
 C_e(T_e) \frac{\partial T_e}{\partial t} = -G(T_e - T_l) + S(r,t)\text{,}
 \end{equation}
-where $C_e(T_e)$ is the temperature-dependent electronic heat capacity, $G$ is the electron-phonon coupling constant, $T_l$ is the constant lattice temperature, and $S(r,t)$ represents the laser source term. Since the electronic heat capacity $C_e$ is much lower than the lattice heat capacity, the hot electron temperature can far exceed the lattice temperature during the initial femtoseconds following laser excitation \cite{nihira_temperature_2003}. The cooling dynamics involve complex mechanisms including strongly coupled optical phonons \cite{kampfrath_strongly_2005} and phonon-mediated relaxation processes \cite{stange_hot_2015}. Integration of this equation using realistic laser source terms (\SI{250}{fs} FWHM pulses at \SI{1030}{nm}) predicts short-lived electronic temperatures upwards of \SI{5650}{K} in graphite \cite{roob_thermal_2025}, far exceeding the constant lattice temperature during the sub-picosecond timescales of hot electron thermalization.
-\textbf{TODO: figure}
+where $C_e(T_e)$ is the temperature-dependent electronic heat capacity, $G$ is the electron-phonon coupling constant, $T_l$ is the constant lattice temperature, and $S(r,t)$ represents the laser source term. Since the electronic heat capacity $C_e$ is much lower than the lattice heat capacity, the hot electron temperature can far exceed the lattice temperature during the initial femtoseconds following laser excitation \cite{nihira_temperature_2003}. The cooling dynamics involve complex mechanisms including strongly coupled optical phonons \cite{kampfrath_strongly_2005} and phonon-mediated relaxation processes \cite{stange_hot_2015}.\\
+Integration of this equation using realistic laser parameters predicts dramatic electronic temperature rises in graphite. \autoref{fig:temperature} shows the calculated time-dependent electron temperature for a \SI{7.5}{\micro J} pulse (\SI{300}{mW} average power at \SI{40}{kHz} repetition rate) with \SI{250}{fs} FWHM duration focused to a \SI{50}{\micro m} diameter spot \cite{roob_thermal_2025}. The simulation demonstrates peak electronic temperatures exceeding \SI{6000}{K}, far above the lattice temperature, with cooling occurring on sub-picosecond timescales through electron-phonon coupling.
+\begin{figure}[hb]
+    \centering
+    \includegraphics{../analysis/figures/model te.pdf}
+    \caption{Calculated electron temperature evolution following femtosecond laser excitation of graphite, showing rapid heating and subsequent cooling through electron-phonon coupling.}
+    \label{fig:temperature}
+\end{figure}
 
 % thermal radiation
 The hot electrons described by the two-temperature model emit thermal radiation during their cooling process. The spectral energy density of this radiation follows Planck's law:
 \begin{equation}
 B(\lambda, T) = \frac{2hc^2}{\lambda^5} \frac{1}{\exp\left(\frac{hc}{\lambda kT}\right) - 1}
 \end{equation}
-where $h$ is Planck's constant, $c$ is the speed of light, $k$ is the Boltzmann constant, and $T$ is the electron temperature. Since hot electron temperatures reach values of several thousand Kelvin and far exceed lattice temperatures during femtosecond excitation, the thermal radiation spectrum of hot electrons dominates over that of the lattice. For the time-dependent electron temperature $T_e(t)$ predicted by the two-temperature model, the total thermal radiation spectrum is obtained by integrating Planck's law over the entire cooling dynamics. 
-\textbf{TODO: figure showing simulated thermal radiation spectrum}
+where $h$ is Planck's constant, $c$ is the speed of light, $k$ is the Boltzmann constant, and $T$ is the electron temperature. Since hot electron temperatures reach values of several thousand Kelvin and far exceed lattice temperatures during femtosecond excitation, the thermal radiation spectrum of hot electrons dominates over that of the lattice. 
+
+For the time-dependent electron temperature $T_e(t)$ predicted by the two-temperature model, the total thermal radiation spectrum is obtained by integrating Planck's law over the entire cooling dynamics. \autoref{fig:model_spectrum} shows the calculated spectrum for the same laser parameters as before. The predicted spectrum exhibits a broad emission band spanning visible and near-infrared regions, with peak emission around \SI{500}{nm} corresponding to the high electron temperatures achieved.
+\begin{figure}[b]
+    \centering
+    \includegraphics{../analysis/figures/model spectrum.pdf}
+    \caption{Calculated thermal radiation spectrum from hot electrons in graphite, obtained by integrating Planck's law over the time-dependent electron temperature cooling dynamics. The broad spectrum peaks in the visible range due to the high electron temperatures achieved.}
+    \label{fig:model_spectrum}
+\end{figure}
 
 % experimental context
 The theoretical predictions from the two-temperature model indicate that thermal radiation from hot electrons should produce a low power, broadband spectrum spanning the visible and near-infrared regions. Building upon this understanding, Roob conceptualized a experimental setup to measure the thermal radiation of the hot electrons \cite{roob_thermal_2025}. The ultrafast hot electrons are characterized by their emitted thermal radiation, utilizing graphite as the sample material due to its well-characterized electronic properties \cite{nihira_temperature_2003} and easy procurement.

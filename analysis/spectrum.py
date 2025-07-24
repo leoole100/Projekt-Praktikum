@@ -79,19 +79,20 @@ import sys
 import os
 # sys.path.append(os.path.abspath(".."))
 # %%
-from model.model import Model
-from model.streak import Streak
-m = Model()
-m.E = 50e-6
-m.fwhm = 250e-15
-s = Streak(m)
-s()
-s.T_e.max()
-plt.plot(s.l/1e-9, s.b.sum(axis=1)/1e15*4e-15)
+# from model.model import Model
+# from model.streak import Streak
+# m = Model()
+# m.E = 50e-6
+# m.fwhm = 250e-15
+# s = Streak(m)
+# s()
+# s.T_e.max()
+# plt.plot(s.l/1e-9, s.b.sum(axis=1)/1e15*4e-15)
 
 plt.plot(wl[eff_mask], w_per_nm)
 plt.ylabel("corrected power (W / nm)")
 plt.xlabel("wavelength (nm)")
+plt.ylim(0, None)
 plt.show()
 
 # Integrate total power over the measured wavelength range
