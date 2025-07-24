@@ -62,7 +62,7 @@
 The experimental setup, as designed by Leon Roob \cite{roob_thermal_2025}, is show schematically in \autoref{fig:setup}.
 It is a broadband photoemission setup.
 
-Firstly the laser is a Pharos \textbf{TODO} by Light Conversion with a wavelength of \SI{1030}{nm}, a FWHM Pulse width of \SI{250}{fs} and a repetition rate of \SI{100}{kHz}.
+Firstly the laser is a Pharos PH1-20 by Light Conversion with a wavelength of \SI{1030}{nm}, a FWHM Pulse width of \SI{250}{fs} and a repetition rate of \SI{100}{kHz}.
 The beam is 4 axis stabilized and has a diameter of \textbf{TODO} \si{mm}, when it enters the experiment.
 The lens \textsf{L} with a focal length of \SI{150}{mm} focuses the light on the sample with a diffraction limited spot size of $4 \lambda f / \pi D = $ \textbf{TODO}.
 
@@ -102,8 +102,14 @@ For this reason scientific cameras are mostly cooled, here to \SI{-80}{\degreeCe
 
 Then there is is \textit{Clock Induced Charge Noise}, that scales with the electron multiplying gain in the detector and proportional to the signal. For this reason it is beneficial to deactivate the sensor gain, when the signal is significantly stronger that the readout noise \cite{andor_establishing_nodate}, like in this case.
 
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/shot noise.pdf}
+    \caption{Measured Noise over Signal, demonstrating the shot noise limit.}
+    \label{fig:shotnoise}
+\end{figure}
 The main resulting noise source is shot noise, such that the system is called shot noise limited.
-\textbf{TODO}: It is still to be researched if the shot noise is per photon, or per electron.
+\textbf{TODO}
 
 \section{Efficiency and Flatness}
 Not all light that is emitted from the sample is detected.

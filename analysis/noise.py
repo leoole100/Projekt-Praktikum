@@ -38,12 +38,15 @@ for i in range(mean.shape[1]):
     m = mask[:, i]
     if np.any(m):
         plt.plot(mean[m, i], var[m, i], marker='o', linestyle='-', color=colors[i], alpha=0.1)
+x = np.linspace(0, 2**14, 100)
+plt.plot(x, 0.1*x, color="gray")
 plt.xlabel("Signal")
 plt.ylabel("Variance")
 plt.grid(True)
 plt.show()
 
 # --- Relative QE estimation ---
+# implicitly assuming a perfectly flat white light source.
 n_times, n_pixels = mean.shape
 slopes = np.full(n_pixels, np.nan)
 
@@ -68,6 +71,8 @@ with np.errstate(divide='ignore', invalid='ignore'):
 # Normalize and smooth
 qe_rel /= np.nanmax(qe_rel)
 qe_smooth = gaussian_filter1d(qe_rel, sigma=20)
+qe_rel -= qe_smooth.min()
+qe_smooth -= qe_smooth.min() 
 
 # get the camera manufacturer curve in
 expected = np.load("expected_efficiency.npy")
@@ -81,4 +86,36 @@ plt.plot(expected.wavelength, expected, label="expected")
 plt.xlabel("Wavelength (nm)")
 plt.ylabel("Relative QE")
 plt.legend()
+plt.show()
+
+# %%
+# %%
+from scipy.stats import binned_statistic
+
+# Flatten mean and std arrays, keeping only valid (masked) points
+# signal_flat = mean[mask]
+# noise_flat = np.sqrt(var[mask])
+signal_flat = mean.flatten()
+noise_flat = np.sqrt(var.flatten())
+
+# Define signal bins (logarithmic works well across large dynamic range)
+n_bins = 30
+bin_edges = np.geomspace(signal_flat.min(), signal_flat.max(), n_bins + 1)
+
+# Compute average noise and signal in each bin
+bin_signal_mean, _, _ = binned_statistic(signal_flat, signal_flat, statistic='mean', bins=bin_edges)
+bin_noise_mean, _, _ = binned_statistic(signal_flat, noise_flat, statistic='mean', bins=bin_edges)
+bin_noise_std, _, _ = binned_statistic(signal_flat, noise_flat, statistic='std', bins=bin_edges)
+
+# Plot binned noise vs signal
+plt.figure()
+plt.errorbar(bin_signal_mean, bin_noise_mean, yerr=bin_noise_std, fmt='o', label="Binned noise")
+plt.plot(bin_signal_mean, np.sqrt(0.1*bin_signal_mean), '--', label="Shot noise", color='gray')
+plt.xscale("log")
+plt.yscale("log")
+plt.xlabel("Signal (counts)")
+plt.ylabel(r"Noise (e$^-$)")
+plt.legend()
+plt.tight_layout()
+plt.savefig("figures/shot noise.pdf")
 plt.show()
