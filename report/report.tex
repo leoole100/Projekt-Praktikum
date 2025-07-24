@@ -47,104 +47,112 @@
 % }
 
 \clearpage
-
-
 \section{Introduction}
+Ultrafast laser-matter interactions on femtosecond timescales create non-equilibrium electronic states that are fundamentally important for understanding energy dissipation in condensed matter systems. When intense femtosecond laser pulses interact with materials, they can generate populations of hot electrons with temperatures significantly exceeding the lattice temperature \cite{lui_ultrafast_2010}. 
+These transient hot electron populations have lifetimes on the order of hundreds of femtoseconds \cite{stange_hot_2015} and represent a critical intermediate state in ultrafast energy transfer processes. 
+Hot carrier dynamics have attracted considerable interest for applications in next-generation photovoltaics, ultrafast terahertz photodetectors, and photocatalytic hydrogen production \cite{tang_plasmonic_2020,konig_hot_2010}.
+
+% Two temperature model
+The process of heating a bulk material by means of femtosecond laser pulses can be described with a two-temperature model \cite{roob_thermal_2025}. In this framework, an external energy input first excites out-of-equilibrium electrons in the electron gas to a temperature $T_e$, while the lattice remains at an initial temperature $T_l$. For the short timescales relevant to hot electron dynamics, the lattice temperature can be assumed constant at room temperature, as thermal diffusion in the lattice occurs on much longer timescales than electron thermalization. Under this approximation, the temporal evolution of the electron temperature is governed by:
+\begin{equation}
+C_e(T_e) \frac{\partial T_e}{\partial t} = -G(T_e - T_l) + S(r,t)\text{,}
+\end{equation}
+where $C_e(T_e)$ is the temperature-dependent electronic heat capacity, $G$ is the electron-phonon coupling constant, $T_l$ is the constant lattice temperature, and $S(r,t)$ represents the laser source term. Since the electronic heat capacity $C_e$ is much lower than the lattice heat capacity, the hot electron temperature can far exceed the lattice temperature during the initial femtoseconds following laser excitation \cite{nihira_temperature_2003}. The cooling dynamics involve complex mechanisms including strongly coupled optical phonons \cite{kampfrath_strongly_2005} and phonon-mediated relaxation processes \cite{stange_hot_2015}. Integration of this equation using realistic laser source terms (\SI{250}{fs} FWHM pulses at \SI{1030}{nm}) predicts short-lived electronic temperatures upwards of \SI{5650}{K} in graphite \cite{roob_thermal_2025}, far exceeding the constant lattice temperature during the sub-picosecond timescales of hot electron thermalization.
+\textbf{TODO: figure}
+
+% thermal radiation
+The hot electrons described by the two-temperature model emit thermal radiation during their cooling process. The spectral energy density of this radiation follows Planck's law:
+\begin{equation}
+B(\lambda, T) = \frac{2hc^2}{\lambda^5} \frac{1}{\exp\left(\frac{hc}{\lambda kT}\right) - 1}
+\end{equation}
+where $h$ is Planck's constant, $c$ is the speed of light, $k$ is the Boltzmann constant, and $T$ is the electron temperature. Since hot electron temperatures reach values of several thousand Kelvin and far exceed lattice temperatures during femtosecond excitation, the thermal radiation spectrum of hot electrons dominates over that of the lattice. For the time-dependent electron temperature $T_e(t)$ predicted by the two-temperature model, the total thermal radiation spectrum is obtained by integrating Planck's law over the entire cooling dynamics. 
+\textbf{TODO: figure showing simulated thermal radiation spectrum}
+
+% experimental context
+The theoretical predictions from the two-temperature model indicate that thermal radiation from hot electrons should produce a low power, broadband spectrum spanning the visible and near-infrared regions. Building upon this understanding, Roob conceptualized a experimental setup to measure the thermal radiation of the hot electrons \cite{roob_thermal_2025}. The ultrafast hot electrons are characterized by their emitted thermal radiation, utilizing graphite as the sample material due to its well-characterized electronic properties \cite{nihira_temperature_2003} and easy procurement.
+
+% my specific work
+The present internship work focuses on the optimization and calibration of the experimental setup developed by Roob \cite{roob_thermal_2025}. The primary objective was to improve the measurement of thermal emissions from ultrafast hot electrons through systematic characterization of noise sources in EMCCD detection systems \cite{andor_establishing_nodate, dr_jo_walters_sensitivity_2023} and calibration of the quantum efficiency of the spectrometer system. 
+This report presents the experimental setup optimization, noise analysis, and theoretical framework for spectrometer calibration.
 
 \clearpage
 \section{Experimental Setup}
+
 \begin{figure}[hb]
     \centering
     \includegraphics{figures/setup.pdf}
     \caption{Schematic of the experimental setup.}
     \label{fig:setup}
 \end{figure}
-The experimental setup, as designed by Leon Roob \cite{roob_thermal_2025}, is show schematically in \autoref{fig:setup}.
-It is a broadband photoemission setup.
 
-Firstly the laser is a Pharos PH1-20 by Light Conversion with a wavelength of \SI{1030}{nm}, a FWHM Pulse width of \SI{250}{fs} and a repetition rate of \SI{100}{kHz}.
-The beam is 4 axis stabilized and has a diameter of \textbf{TODO} \si{mm}, when it enters the experiment.
-The lens \textsf{L} with a focal length of \SI{150}{mm} focuses the light on the sample with a diffraction limited spot size of $4 \lambda f / \pi D = $ \textbf{TODO}.
+The experimental setup, designed by Leon Roob \cite{roob_thermal_2025}, is shown schematically in \autoref{fig:setup}. This broadband photoemission configuration enables measurement of thermal emission from ultrafast hot electrons.
 
-The sample is absorbing the laser pulse and emitting thermal radiation into the half sphere.
-To collect and focus the broad band emission off-axis parabolic mirrors with  UV-enhanced aluminum coating are used (\textsf{PM}).
-\textsf{PM1} with a focal length of \SI{50}{mm} is used to collect the emission and \textsf{PM2} with a focal length of \SI{101}{mm} is used to focus the light through a filter onto a bare multi-mode fiber end.
+The excitation source is a Pharos PH1-20 laser (Light Conversion) operating at \SI{1030}{nm} wavelength with \SI{250}{fs} FWHM pulse duration and \SI{100}{kHz} repetition rate. The beam undergoes 4-axis stabilization and is expanded to a diameter of \SI{5}{mm} upon entering the experimental chamber. A focusing lens (L) with \SI{200}{mm} focal length creates a diffraction-limited spot size of $4\lambda f / \pi D = \SI{50}{\micro m}$ on the sample surface.
 
-The used fiber is a QP200-2-SR-BX from Ocean Optics. A \SI{200}{\micro m} multi-mode fiber for transmission from $300-1100$\;\si{nm}.
+Upon laser excitation, the sample absorbs the pulse energy and emits thermal radiation into the collection hemisphere. The broadband emission is collected using UV-enhanced aluminum-coated off-axis parabolic mirrors (PM). Mirror PM1 (\SI{50}{mm} focal length) collects the emission, while PM2 (\SI{101}{mm} focal length) focuses the light through a spectral filter onto a bare multimode fiber end.
+This mirror configuration provides a magnification of $f_\text{PM2}/f_\text{PM1} = 2$ for the collected thermal emission. Therefore the spotsize is roughtly \SI{100}{\micro m} in diameter.
 
-To analyse the light a Acton SpectraPro 300i monochromator with a $150$\;lines/mm grating with a blazing wavelength of \SI{500}{nm} is used.
-The light is detected using a Andor iXon$^\text{EM}$+ 897 EMCCD camera used in Vertical Binning mode as a line detector.
+The optical fiber (QP200-2-SR-BX, Ocean Optics) is a \SI{200}{\micro m} core multimode fiber optimized for 300--1100\,nm transmission. Spectral analysis employs an Acton SpectraPro 300i monochromator equipped with a 150\,lines/mm grating blazed at \SI{500}{nm}. Detection utilizes an Andor iXon$^\text{EM}$+ 897 EMCCD camera operated in vertical binning mode as a line detector.
 
-The lens \textsf{L}, the sample and the fiber end are mounted on 3 axis translation stages, to aid in focusing. The parabolic mirrors are fixed.
+For alignment optimization, lens L, the sample, and fiber end are mounted on 3-axis translation stages, while the parabolic mirrors remain fixed.
 
 \section{Characterization of Noise Sources}
-To be able to detect a the faint thermal radiation from the hot electrons it is necessary to optimize the signal-to-noise ratio (SNR) of the experiment.
 
-The noise sources of the setup are mainly from the detector.
-Variation in the laser output power are assumed to be comparatively small and ignored in the following discussion.
+Detecting the weak thermal radiation from hot electrons requires careful optimization of the signal-to-noise ratio (SNR). The dominant noise sources originate from the detector, while laser power fluctuations are assumed negligible.
 
-The detector used is a EMCCD camera as is common for spectroscopy. The manufacturer Andor has some documents that discuss the Optimisation of SNR \cite{andor_establishing_nodate,dr_jo_walters_sensitivity_2023}.
-Another more detailed description can be found in \autocite{european_machine_vision_association_standard_2010}.
+The EMCCD detector exhibits several characteristic noise mechanisms well-documented by Andor \cite{andor_establishing_nodate,dr_jo_walters_sensitivity_2023} and detailed in \cite{european_machine_vision_association_standard_2010}.
 
-The simplest noise source is \textit{Readout Noise}. Every bin that is read out get's a constant noise from the CCD shifting and the analog to digital converter. For the high performance CCD camera used here this is in the order of \SI{1}{e^-} \cite{andor_ixonem_nodate}. It is measured to be in that range in \autoref{fig:dark_noise}.
-This is applied per read out bin, not per pixel, leading to the use of hardware vertical binning.
+\textbf{Readout noise} represents the fundamental noise floor, arising from charge transfer operations and analog-to-digital conversion. For this high-performance CCD, readout noise measures approximately \SI{1}{e^-} \cite{andor_ixonem_nodate}, consistent with measurements shown in \autoref{fig:dark_noise}. Since this noise applies per readout bin rather than per pixel, hardware vertical binning effectively reduces its impact.
 
 \begin{figure}[hb]
     \centering
     \includegraphics{../analysis/figures/dark_noise.pdf}
-    \caption{Dark noise as a function of sensor temperature and exposure time. The curve is fitted with an effective activation energy of $E = \SI{0.597(4)}{eV}$ and a constant readout noise of $\sigma_{\text{read}} = \SI{0.81(12)}{e^-}$.}
+    \caption{Dark noise as a function of sensor temperature and exposure time. The fitted curve yields an effective activation energy of $E = \SI{0.597(4)}{eV}$ and constant readout noise of $\sigma_{\text{read}} = \SI{0.81(12)}{e^-}$.}
     \label{fig:dark_noise}
 \end{figure}
-Another noise source is \textit{dark current noise}. 
-It is a results from thermal energy stochastically exciting electrons in the semiconductor of the detector. The noise this generates scales with temperature and time $N_\text{dark} \propto \exp(-E / k T) \cdot t_\text{exp}$. This is shown in \autoref{fig:dark_noise}.
-For this reason scientific cameras are mostly cooled, here to \SI{-80}{\degreeCelsius}, such that this is insignificant for this setup.
 
+\textbf{Dark current noise} results from thermal excitation of electrons within the detector semiconductor, following the relationship $N_\text{dark} \propto \exp(-E / kT) \cdot t_\text{exp}$, as demonstrated in \autoref{fig:dark_noise}. Cooling the detector to \SI{-80}{\degreeCelsius} effectively suppresses this contribution, rendering it negligible for typical exposure times.
 
-Then there is is \textit{Clock Induced Charge Noise}, that scales with the electron multiplying gain in the detector and proportional to the signal. For this reason it is beneficial to deactivate the sensor gain, when the signal is significantly stronger that the readout noise \cite{andor_establishing_nodate}, like in this case.
+\textbf{Clock-induced charge noise} scales with electron multiplication gain and signal amplitude. Therefore, sensor gain is deactivated when signal levels significantly exceed readout noise \cite{andor_establishing_nodate}, as in the present configuration.
 
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/shot noise.pdf}
-    \caption{Measured Noise over Signal, demonstrating the shot noise limit.}
+    \caption{Measured noise versus signal, demonstrating shot noise-limited performance.}
     \label{fig:shotnoise}
 \end{figure}
-The main resulting noise source is shot noise, such that the system is called shot noise limited.
-\textbf{TODO}
+
+Under these optimized conditions, \textbf{shot noise} becomes the dominant limitation, establishing shot noise-limited operation as shown in \autoref{fig:shotnoise}. \textbf{TODO}
 
 \section{Efficiency and Flatness}
-Not all light that is emitted from the sample is detected.
-The amount of light that is detected can be considered the efficiency of the setup. This is not a constant across wavelength.
 
-The mirrors and the fiber are selected to be reasonably flat across the detected spectrum, so they just change the efficiency of the setup by a constant amount.
+The detection efficiency—defined as the fraction of sample-emitted light reaching the detector—varies with wavelength due to component-specific spectral responses.
+
+The parabolic mirrors and optical fiber exhibit relatively flat spectral responses across the detection range, contributing primarily constant efficiency factors. However, other components introduce wavelength-dependent losses that must be characterized.
 
 \begin{figure}[hb]
     \centering
     \includegraphics{../analysis/figures/filter.pdf}
-    \caption{Efficiency of various components and filters used in the setup.}
+    \caption{Spectral efficiency of various optical components and filters employed in the setup.}
     \label{fig:efficiency}
 \end{figure}
-The filter to block the excitation laser can be measured. This is shown for two different filters in \autoref{fig:efficiency}. The KG3 Filter is a filter made by SCHOTT to absorb Infrared it has a shallow transmission edge, cropping the expected thermal emission.
-The HR filter is presumably a Edmund optics highly reflective dielectric short pass filter. Details are not know, as it was just labeled HR.
 
-More interesting are the efficiency curves of the detector and the grating, as they are not easily measured. In figure \autoref{fig:efficiency} the quantum efficiency from the manufacturer is plotted for the camera. The efficiency of the the grating is more complicated, as it depends on the exact parameters of the blazed grating. Here a simple model from \cite{barker_ripple_1984} is used.
+Spectral filters for laser rejection exhibit distinct transmission characteristics, as shown in \autoref{fig:efficiency}. The SCHOTT KG3 filter, designed for infrared absorption, displays a gradual transmission edge that attenuates expected thermal emission. The HR filter, identified as a dielectric shortpass filter (likely Edmund Optics), shows sharper cutoff behavior, though detailed specifications were unavailable.
 
-
+The detector quantum efficiency and grating efficiency curves require more sophisticated characterization. \autoref{fig:efficiency} presents the manufacturer-specified quantum efficiency for the EMCCD camera. Grating efficiency calculations employ the blazed grating model from \cite{barker_ripple_1984}, accounting for wavelength-dependent diffraction characteristics.
 
 \subsection{Calibration}
-To determine the efficiency curve of the spectrometer it has to be calibrated.
 
-The easiest way is to use a white light source with a known spectrum, and transfer the calibration from the calibration lab, that was used for calibrating the light source.
+Spectrometer efficiency calibration requires a reference source with precisely known spectral characteristics. The standard approach employs calibrated white light sources with traceable spectral irradiance standards.
 
 \begin{figure}[hb]
     \centering
     \includegraphics{../analysis/figures/efficiency_different.pdf}
-    \caption{Same spectrum recorded with different instruments.}
+    \caption{Identical spectrum recorded with different spectrometer systems, illustrating calibration discrepancies.}
     \label{fig:calibration}
 \end{figure}
-A different approach would be to get a calibrated spectrometer and use that one to calibrate a light source. This was tried with a deuterium halogen lamp (DH-2000-BAL from ocean optics), with multiple different ocean optics USB spectrometers.
-The recorded spectra are shown in \autoref{fig:calibration}. 
-As the spectrometer have different sensitivities, the Intensity axis had to be scaled differently for each spectrometer. But the instrument don't agree, which shows that calibrating to more trusted instrument is necessary.
 
+An alternative calibration approach was attempted using multiple uncalibrated Ocean Optics USB spectrometers to characterize a deuterium-halogen lamp (DH-2000-BAL, Ocean Optics). \autoref{fig:calibration} presents the resulting spectra, with intensity scaling adjusted for different instrument sensitivities. The significant disagreement between instruments highlights the necessity for calibration against more reliable reference standards.
 
 
 \clearpage
