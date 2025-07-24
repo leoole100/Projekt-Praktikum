@@ -20,6 +20,7 @@ d = np.loadtxt(p[0])
 wl = d[:,0]
 d = d[:,1] - np.min(d[:,1])
 d /= 2 # convert to counts / s
+d *= 10 # gain to photons
 d = np.diff(wl) * d[:-1] # convert to counts / s / nm
 wl = wl[:-1] + np.diff(wl)/2 # center the wavelength bins
 
@@ -93,6 +94,7 @@ plt.plot(wl[eff_mask], w_per_nm)
 plt.ylabel("corrected power (W / nm)")
 plt.xlabel("wavelength (nm)")
 plt.ylim(0, None)
+plt.savefig("figures/corrected spectrum.pdf")
 plt.show()
 
 # Integrate total power over the measured wavelength range

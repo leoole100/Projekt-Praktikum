@@ -76,6 +76,7 @@ counts_model_temp = dark_noise_model(T_plot, exposure_temp, I0_fit, E_fit, B_fit
 ax.plot(T_plot, counts_model_temp, "-", label="Fit", color="gray")
 ax.axvline(temperature_exp, color="k", linestyle="--", linewidth=1)
 ax.axhline(B_fit, color="k", linewidth=1)
+ax.set_ylim(0, None)
 # ax.legend()
 
 # Exposure sweep plot

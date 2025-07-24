@@ -49,7 +49,8 @@ def planck_spectrum(wavelength, T):
     return B
 
 # Time vector
-t = np.linspace(-5*sigma, 3*(sigma+g), 1000)
+# t = np.linspace(-5*sigma, 3*(sigma+g), 1000)
+t = np.linspace(-0.5, 1, 1000)*1e-12
 dt = t[1] - t[0]
 
 # Initialize temperature array
@@ -97,6 +98,9 @@ fig = plt.figure()
 ax1 = plt.subplot(2, 1, 1)
 ax1.plot(t_ps, S * V, '-', label='Laser Power')
 ax1.set_ylabel('Laser Power (W)')
+ax1.tick_params(axis='x', labelbottom=False)
+ax1.set_ylim(0, None)
+ax1.set_xlim(t_ps.min(), t_ps.max())
 
 ax2 = plt.subplot(2, 1, 2, sharex=ax1)
 ax2.plot(t_ps, T_e, label='Electron Temperature')
