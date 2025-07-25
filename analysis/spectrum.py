@@ -90,9 +90,21 @@ import os
 # s.T_e.max()
 # plt.plot(s.l/1e-9, s.b.sum(axis=1)/1e15*4e-15)
 
-plt.plot(wl[eff_mask], w_per_nm)
+# First mask
+wl_masked = wl[eff_mask]
+power_masked = w_per_nm  # Apply same mask to power
+
+# Second mask around 686 nm
+mask_width = 6  # nm (adjust as needed)
+mask_harmonic = (wl_masked < 686 - mask_width) | (wl_masked > 686 + mask_width)
+
+# Apply second mask to already masked arrays
+power_masked = np.where(mask_harmonic, power_masked, np.nan)
+
+
+plt.plot(wl_masked, power_masked)
 plt.ylabel("corrected power (W / nm)")
-plt.xlabel("wavelength (nm)")
+plt.xlabel("Wavelength (nm)")
 plt.ylim(0, None)
 plt.savefig("figures/corrected spectrum.pdf")
 plt.show()

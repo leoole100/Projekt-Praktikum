@@ -165,18 +165,18 @@ Spectral filters for laser rejection exhibit distinct transmission characteristi
 The detector quantum efficiency and grating efficiency curves require more sophisticated characterization. \autoref{fig:efficiency} presents the manufacturer-specified quantum efficiency for the EMCCD camera. Grating efficiency calculations employ the blazed grating model from \cite{barker_ripple_1984}, accounting for wavelength-dependent diffraction characteristics.
 
 \subsection{Calibration}
+Spectrometer efficiency calibration requires a reference source with precisely known spectral characteristics. This process is distinct from wavelength calibration, which establishes the correct mapping between detector pixels and wavelengths. Wavelength calibration procedures are well-documented and readily available in monochromator manuals and are therefore omitted from this discussion. The standard approach for efficiency calibration employs calibrated tungsten-halogen lamps with traceable spectral irradiance standards.
 
-Spectrometer efficiency calibration requires a reference source with precisely known spectral characteristics. The standard approach employs calibrated white light sources with traceable spectral irradiance standards.
+Professional calibration laboratories employ monochromator-based spectral comparator facilities that use silicon photodiode trap detectors previously calibrated against NIST's cryogenic electrical substitution radiometers \cite{houston_achievement_2022,larason_nist_1996}. This approach enables spectral responsivity calibrations with uncertainties below 0.1\% across the visible and near-infrared spectrum.
 
 \begin{figure}[hb]
     \centering
     \includegraphics{../analysis/figures/efficiency_different.pdf}
-    \caption{Identical spectrum recorded with different spectrometer systems, illustrating calibration discrepancies.}
+    \caption{Comparison of identical spectra recorded with different uncalibrated spectrometer systems, demonstrating the calibration discrepancies that arise without proper reference standards.}
     \label{fig:calibration}
 \end{figure}
 
-An alternative calibration approach was attempted using multiple uncalibrated Ocean Optics USB spectrometers to characterize a deuterium-halogen lamp (DH-2000-BAL, Ocean Optics). \autoref{fig:calibration} presents the resulting spectra, with intensity scaling adjusted for different instrument sensitivities. The significant disagreement between instruments highlights the necessity for calibration against more reliable reference standards.
-
+Since no calibrated light source or reference detector with known spectral response was available for this work, an alternative approach using multiple uncalibrated Ocean Optics USB spectrometers was attempted. The broad-spectrum output of a deuterium-halogen lamp (DH-2000-BAL, Ocean Optics) was measured with several different spectrometers to assess consistency. \autoref{fig:calibration} shows the resulting spectra with intensity scaling adjusted for the different instrument sensitivities. The significant disagreement between instruments demonstrates the inadequacy of this approach and underscores the necessity for calibration against traceable reference standards. This comparison illustrates why professional-grade calibration requires the rigorous procedures and metrologically traceable standards maintained by national institutes, rather than relative comparisons between uncalibrated instruments.
 
 \clearpage
 \section{Data Analysis and Spectral Modeling}
