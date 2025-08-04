@@ -59,7 +59,7 @@ C_e(T_e) \frac{\partial T_e}{\partial t} = -G(T_e - T_l) + S(r,t)\text{,}
 \end{equation}
 where $C_e(T_e)$ is the temperature-dependent electronic heat capacity, $G$ is the electron-phonon coupling constant, $T_l$ is the constant lattice temperature, and $S(r,t)$ represents the laser source term. Since the electronic heat capacity $C_e$ is much lower than the lattice heat capacity, the hot electron temperature can far exceed the lattice temperature during the initial femtoseconds following laser excitation \cite{nihira_temperature_2003}. The cooling dynamics involve complex mechanisms including strongly coupled optical phonons \cite{kampfrath_strongly_2005} and phonon-mediated relaxation processes \cite{stange_hot_2015}.\\
 Integration of this equation using realistic laser parameters predicts dramatic electronic temperature rises in graphite. \autoref{fig:temperature} shows the calculated time-dependent electron temperature for a \SI{7.5}{\micro J} pulse (\SI{300}{mW} average power at \SI{40}{kHz} repetition rate) with \SI{250}{fs} FWHM duration focused to a \SI{50}{\micro m} diameter spot \cite{roob_thermal_2025}. The simulation demonstrates peak electronic temperatures exceeding \SI{6000}{K}, far above the lattice temperature, with cooling occurring on sub-picosecond timescales through electron-phonon coupling.
-\begin{figure}[hb]
+\begin{figure}
     \centering
     \includegraphics{../analysis/figures/model te.pdf}
     \caption{Calculated electron temperature evolution following femtosecond laser excitation of graphite, showing rapid heating and subsequent cooling through electron-phonon coupling.}
@@ -88,12 +88,11 @@ The theoretical predictions from the two-temperature model indicate that thermal
 The present internship work focuses on the optimization and calibration of the experimental setup developed by Roob \cite{roob_thermal_2025}. The primary objective was to improve the measurement of thermal emissions from ultrafast hot electrons through systematic characterization of noise sources in EMCCD detection systems \cite{andor_establishing_nodate, dr_jo_walters_sensitivity_2023} and calibration of the quantum efficiency of the spectrometer system. 
 This report presents the experimental setup optimization, noise analysis, and theoretical framework for spectrometer calibration.
 
-\clearpage
 \section{Experimental Setup}
 
-\begin{figure}[hb]
+\begin{figure}
     \centering
-     \begin{subfigure}{4in}
+     \begin{subfigure}{3.5in}
         \centering
         \includegraphics{figures/setup.pdf}
         \caption{Schematic}
@@ -104,8 +103,8 @@ This report presents the experimental setup optimization, noise analysis, and th
         \includegraphics{figures/photo_setup.pdf}
         \caption{Image}
     \end{subfigure}
-    \label{fig:setup}
     \caption{Experimental Setup.}
+    \label{fig:setup}
 \end{figure}
 
 The experimental setup, designed by Leon Roob \cite{roob_thermal_2025}, is shown schematically in \autoref{fig:setup}. This broadband photoemission configuration enables measurement of thermal emission from ultrafast hot electrons.
@@ -127,7 +126,7 @@ The EMCCD detector exhibits several characteristic noise mechanisms well-documen
 
 \textbf{Readout noise} represents the fundamental noise floor, arising from charge transfer operations and analog-to-digital conversion. For this high-performance CCD, readout noise measures approximately \SI{1}{e^-} \cite{andor_ixonem_nodate}, consistent with measurements shown in \autoref{fig:dark_noise}. Since this noise applies per readout bin rather than per pixel, hardware vertical binning effectively reduces its impact.
 
-\begin{figure}[hb]
+\begin{figure}
     \centering
     \includegraphics{../analysis/figures/dark_noise.pdf}
     \caption{Dark noise as a function of sensor temperature and exposure time. The fitted curve yields an effective activation energy of $E = \SI{0.597(4)}{eV}$ and constant readout noise of $\sigma_{\text{read}} = \SI{0.81(12)}{e^-}$.}
@@ -138,14 +137,18 @@ The EMCCD detector exhibits several characteristic noise mechanisms well-documen
 
 \textbf{Clock-induced charge noise} scales with electron multiplication gain and signal amplitude. Therefore, sensor gain is deactivated when signal levels significantly exceed readout noise \cite{andor_establishing_nodate}, as in the present configuration.
 
+\textbf{Shot noise} becomes the dominant limitation under these optimized conditions, establishing shot noise-limited operation as shown in \autoref{fig:shotnoise}. The fundamental process begins with incident photons that are converted to photoelectrons with quantum efficiency $\eta$, where the number of generated electrons follows $N_e = \eta \cdot N_{\text{photons}}$. Due to the statistical nature of this conversion process, the variance in the number of photoelectrons equals the mean for Poisson statistics: $\sigma^2 = N_e = \eta \cdot N_{\text{photons}}$ \cite{european_machine_vision_association_standard_2010}.
+
+In practical measurements, the photoelectron signal is amplified by a detector gain $G$, resulting in a measurable output signal $S = G \cdot N_e = G \cdot \eta \cdot N_{\text{photons}}$. The amplification process preserves the Poisson statistics, so the measured noise variance becomes $\sigma^2_{\text{measured}} = G^2 \cdot \eta \cdot N_{\text{photons}}$. This relationship produces the characteristic linear dependence of noise variance on signal intensity observed in \autoref{fig:shotnoise}.
+
+While the photon transfer method can extract the product $G \cdot \eta$ from the slope of the noise-versus-signal relationship, it cannot independently determine the individual values of gain and quantum efficiency. This limitation arises because both parameters affect the signal in the same multiplicative manner, making their separate determination impossible without additional independent measurements of either the incident photon flux or one of the individual parameters through alternative methods \cite{european_machine_vision_association_standard_2010}.
+
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/shot noise.pdf}
-    \caption{Measured noise versus signal, demonstrating shot noise-limited performance.}
+    \caption{Measured noise versus signal, demonstrating shot noise-limited performance with the characteristic square-root relationship between noise and signal intensity.}
     \label{fig:shotnoise}
 \end{figure}
-
-Under these optimized conditions, \textbf{shot noise} becomes the dominant limitation, establishing shot noise-limited operation as shown in \autoref{fig:shotnoise}. \textbf{TODO}
 
 \section{Efficiency and Flatness}
 
@@ -153,7 +156,7 @@ The detection efficiency—defined as the fraction of sample-emitted light reach
 
 The parabolic mirrors and optical fiber exhibit relatively flat spectral responses across the detection range, contributing primarily constant efficiency factors. However, other components introduce wavelength-dependent losses that must be characterized.
 
-\begin{figure}[hb]
+\begin{figure}
     \centering
     \includegraphics{../analysis/figures/filter.pdf}
     \caption{Spectral efficiency of various optical components and filters employed in the setup.}
@@ -169,7 +172,7 @@ Spectrometer efficiency calibration requires a reference source with precisely k
 
 Professional calibration laboratories employ monochromator-based spectral comparator facilities that use silicon photodiode trap detectors previously calibrated against NIST's cryogenic electrical substitution radiometers \cite{houston_achievement_2022,larason_nist_1996}. This approach enables spectral responsivity calibrations with uncertainties below 0.1\% across the visible and near-infrared spectrum.
 
-\begin{figure}[hb]
+\begin{figure}
     \centering
     \includegraphics{../analysis/figures/efficiency_different.pdf}
     \caption{Comparison of identical spectra recorded with different uncalibrated spectrometer systems, demonstrating the calibration discrepancies that arise without proper reference standards.}
