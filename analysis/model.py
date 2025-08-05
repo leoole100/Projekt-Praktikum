@@ -56,8 +56,8 @@ class MaterialParameters:
     M: float = 0.012                # Molar mass (kg/mol)
     rho: float = 2260               # Density (kg/m³)
     rho_uncertainty: float = 100    # Density uncertainty (kg/m³)
-    g: float = 0.3e-12             # Electron-lattice coupling time (s)
-    g_uncertainty: float = 0.1e-12  # Coupling time uncertainty (s)
+    g: float = 0.25e-12             # Electron-lattice coupling time (s)
+    g_uncertainty: float = 0.05e-12  # Coupling time uncertainty (s)
     T_room: float = 294             # Room temperature (K)
     T_room_uncertainty: float = 0   # Temperature uncertainty (K)
     
@@ -370,7 +370,7 @@ if __name__ == "__main__":
     # Define parameters
     laser_params = LaserParameters()
     material_params = MaterialParameters()
-    sim_params = SimulationParameters(n_monte_carlo=1000)
+    sim_params = SimulationParameters(n_monte_carlo=100)
     
     # Run deterministic simulation
     t, T_e, spectrum = run_single_simulation(laser_params, material_params, sim_params)
@@ -407,10 +407,10 @@ if __name__ == "__main__":
     l = ax2.plot(t_ps, mc_results['temperature_mean'])[0]
     
     # Uncertainty bands
-    ax2.fill_between(t_ps, 
-                    mc_results['temperature_percentiles'][0], 
-                    mc_results['temperature_percentiles'][1],
-                    alpha=0.3, color=l.get_color())
+    # ax2.fill_between(t_ps, 
+    #                 mc_results['temperature_percentiles'][0], 
+    #                 mc_results['temperature_percentiles'][1],
+    #                 alpha=0.3, color=l.get_color())
     
     ax2.set_xlabel('Time (ps)')
     ax2.set_ylabel('Temperature (K)')
@@ -425,14 +425,14 @@ if __name__ == "__main__":
     
     # Main spectrum with uncertainty
     spectrum_mean_nW = mc_results['spectrum_mean'] * 1e-9  # Convert to W/nm
-    
+    # %%
     l = plt.plot(wavelength, spectrum_mean_nW)[0]
     
     # Uncertainty bands
-    plt.fill_between(wavelength,
-                    mc_results['spectrum_percentiles'][0] * 1e-9,
-                    mc_results['spectrum_percentiles'][1] * 1e-9,
-                    alpha=0.3, color=l.get_color())
+    # plt.fill_between(wavelength,
+    #                 mc_results['spectrum_percentiles'][0] * 1e-9,
+    #                 mc_results['spectrum_percentiles'][1] * 1e-9,
+    #                 alpha=0.3, color=l.get_color())
     
     plt.xlabel('Wavelength (nm)')
     plt.ylabel('Average Radiated Power (W/nm)')

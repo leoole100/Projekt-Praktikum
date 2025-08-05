@@ -22,8 +22,8 @@ class Model():
         self.Vm = self.M / self.rho # Molar volume (m³/mol)
 
         # Coupling and environment
-        self.g = 0.3e-12            # Electron-lattice coupling time (s)
-        self.T_room = 300           # Ambient temperature (K)
+        self.g = 0.25e-12            # Electron-lattice coupling time (s)
+        self.T_room = 50           # Ambient temperature (K)
 
         # Time vector
         self.t = None
