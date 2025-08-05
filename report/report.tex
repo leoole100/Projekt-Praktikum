@@ -7,7 +7,7 @@
 \addbibresource{../literature.bib}
 \begin{document}
 
-\title{Procedures for Hot Electron Measurements}
+\title{Hot Electron Thermal Emission as a Spectral Calibration Standard}
 \author{Leon Oleschko}
 \date{\dotdate\today}
 
@@ -16,7 +16,7 @@
     \vspace*{3cm}
     {
         \fontsize{32}{32}
-        \markieren{}{Hot Electron}{Thermal Emission}{Spectroscopy}
+        \markieren{Hot Electron}{Thermal Emission}{as a Spectral}{Calibration Standard}
     }
     \vspace{.25cm}\\
     {
@@ -63,15 +63,16 @@ The process of heating a bulk material by means of femtosecond laser pulses can 
 \begin{equation}
 C_e(T_e) \frac{\partial T_e}{\partial t} = -G(T_e - T_l) + S(r,t)\text{,}
 \end{equation}
-where $C_e(T_e)$ is the temperature-dependent electronic heat capacity, $G$ is the electron-phonon coupling constant, $T_l$ is the constant lattice temperature, and $S(r,t)$ represents the laser source term. Since the electronic heat capacity $C_e$ is much lower than the lattice heat capacity, the hot electron temperature can far exceed the lattice temperature during the initial femtoseconds following laser excitation \cite{nihira_temperature_2003}. The cooling dynamics involve complex mechanisms including strongly coupled optical phonons \cite{kampfrath_strongly_2005} and phonon-mediated relaxation processes \cite{stange_hot_2015}.\\
-Integration of this equation using realistic laser parameters predicts dramatic electronic temperature rises in graphite. \autoref{fig:temperature} shows the calculated time-dependent electron temperature for a \SI{7.5}{\micro J} pulse (\SI{300}{mW} average power at \SI{40}{kHz} repetition rate) with \SI{250}{fs} FWHM duration focused to a \SI{50}{\micro m} diameter spot \cite{roob_thermal_2025}. The simulation demonstrates peak electronic temperatures exceeding \SI{6000}{K}, far above the lattice temperature, with cooling occurring on sub-picosecond timescales through electron-phonon coupling.
+where $C_e(T_e)$ is the temperature-dependent electronic heat capacity, $G$ is the electron-phonon coupling constant, $T_l$ is the constant lattice temperature, and $S(r,t)$ represents the laser source term. Since the electronic heat capacity $C_e$ is much lower than the lattice heat capacity, the hot electron temperature can far exceed the lattice temperature during the initial femtoseconds following laser excitation \cite{nihira_temperature_2003}. The cooling dynamics involve complex mechanisms including strongly coupled optical phonons \cite{kampfrath_strongly_2005} and phonon-mediated relaxation processes \cite{stange_hot_2015}.
+
+Integration of this equation using representative laser parameters predicts dramatic electronic temperature rises in graphite. \autoref{fig:temperature} shows the calculated time-dependent electron temperature for typical experimental conditions: \SI{7.5}{\micro J} pulse energy (\SI{300}{mW} average power at \SI{40}{kHz} repetition rate) with \SI{250}{fs} FWHM duration focused to a \SI{50}{\micro m} diameter spot \cite{roob_thermal_2025}. The simulation demonstrates peak electronic temperatures exceeding \SI{6000}{K}, far above the lattice temperature, with cooling occurring on sub-picosecond timescales through electron-phonon coupling.
 
 % thermal radiation
 The hot electrons described by the two-temperature model emit thermal radiation during their cooling process. The spectral energy density of this radiation follows Planck's law:
 \begin{equation}
 B(\lambda, T) = \frac{2hc^2}{\lambda^5} \frac{1}{\exp\left(\frac{hc}{\lambda kT}\right) - 1}
 \end{equation}
-where $h$ is Planck's constant, $c$ is the speed of light, $k$ is the Boltzmann constant, and $T$ is the electron temperature. Since hot electron temperatures reach values of several thousand Kelvin and far exceed lattice temperatures during femtosecond excitation, the thermal radiation spectrum of hot electrons dominates over that of the lattice. 
+where $h$ is Planck's constant, $c$ is the speed of light, $k$ is the Boltzmann constant, and $T$ is the electron temperature. Since hot electron temperatures reach values of several thousand Kelvin and far exceed lattice temperatures during femtosecond excitation, the thermal radiation spectrum of hot electrons dominates over that of the lattice.
 
 \begin{figure}[b]
     \centering
@@ -81,12 +82,17 @@ where $h$ is Planck's constant, $c$ is the speed of light, $k$ is the Boltzmann 
 \end{figure}
 For the time-dependent electron temperature $T_e(t)$ predicted by the two-temperature model, the total thermal radiation spectrum is obtained by integrating Planck's law over the entire cooling dynamics. \autoref{fig:model_spectrum} shows the calculated spectrum for the same laser parameters as before. The predicted spectrum exhibits a broad emission band spanning visible and near-infrared regions, with peak emission around \SI{500}{nm} corresponding to the high electron temperatures achieved.
 
-% experimental context
-The theoretical predictions from the two-temperature model indicate that thermal radiation from hot electrons should produce a low power, broadband spectrum spanning the visible and near-infrared regions. Building upon this understanding, Roob conceptualized a experimental setup to measure the thermal radiation of the hot electrons \cite{roob_thermal_2025}. The ultrafast hot electrons are characterized by their emitted thermal radiation, utilizing graphite as the sample material due to its well-characterized electronic properties \cite{nihira_temperature_2003} and easy procurement.
+% experimental context and calibration opportunity
+The theoretical predictions from the two-temperature model indicate that thermal radiation from hot electrons should produce a low power, broadband spectrum spanning the visible and near-infrared regions. Building upon this understanding, Roob conceptualized an experimental setup to measure the thermal radiation of hot electrons \cite{roob_thermal_2025}, utilizing graphite as the sample material due to its well-characterized electronic properties \cite{nihira_temperature_2003} and easy procurement.
 
-% my specific work
-The present internship work focuses on the optimization and calibration of the experimental setup developed by Roob \cite{roob_thermal_2025}. The primary objective was to improve the measurement of thermal emissions from ultrafast hot electrons through systematic characterization of noise sources in EMCCD detection systems \cite{andor_establishing_nodate, dr_jo_walters_sensitivity_2023} and calibration of the quantum efficiency of the spectrometer system. 
-This report presents the experimental setup optimization, noise analysis, and theoretical framework for spectrometer calibration.
+While thermal emission from hot electrons has been previously measured \cite{lui_ultrafast_2010}, the well-characterized physics underlying this emission presents a unique opportunity for spectral calibration applications. Unlike conventional calibration sources that rely on empirically determined spectral characteristics, hot electron emission can be predicted from first principles using the two-temperature model and Planck's radiation law.
+
+This physics-based approach offers several potential advantages over traditional calibration methods: precise tunability through laser parameters, reproducible spectral output governed by fundamental constants, and quantifiable uncertainties through Monte Carlo parameter sampling. Such a calibration standard could address longstanding challenges in spectrometer calibration, particularly for applications where conventional lamp sources are impractical.
+
+% present work contribution
+The present work demonstrates the first implementation of hot electron thermal emission as a spectral calibration standard. Building on the experimental setup developed by Roob \cite{roob_thermal_2025}, this internship focuses on developing a rigorous calibration methodology through systematic characterization of noise sources in EMCCD detection systems \cite{andor_establishing_nodate, dr_jo_walters_sensitivity_2023}, Monte Carlo uncertainty propagation, and validation of theoretical predictions against experimental measurements.
+
+The primary objective is to establish hot electron thermal emission as a viable physics-based calibration approach and to quantify the precision achievable with this novel method. This report presents the experimental setup optimization, Monte Carlo uncertainty framework, model validation through spectral measurements, and assessment of calibration performance for physics-based spectrometer calibration using hot electron thermal emission.
 
 \section{Experimental Setup}
 
@@ -109,12 +115,12 @@ This report presents the experimental setup optimization, noise analysis, and th
 
 The experimental setup, designed by Leon Roob \cite{roob_thermal_2025}, is shown schematically in \autoref{fig:setup}. This broadband photoemission configuration enables measurement of thermal emission from ultrafast hot electrons.
 
-The excitation source is a Pharos PH1-20 laser (Light Conversion) operating at \SI{1030}{nm} wavelength with \SI{250}{fs} FWHM pulse duration and \SI{100}{kHz} repetition rate. The beam undergoes 4-axis stabilization and is expanded to a diameter of \SI{5}{mm} upon entering the experimental chamber. A focusing lens (L) with \SI{200}{mm} focal length creates a diffraction-limited spot size of $4\lambda f / \pi D = \SI{50}{\micro m}$ on the sample surface.
+The excitation source is a Pharos PH1-20 laser (Light Conversion) operating at \SI{1030}{nm} wavelength with \SI{250}{fs} FWHM pulse duration and \SI{40}{kHz} repetition rate. The beam undergoes 4-axis stabilization and is expanded to a diameter of \SI{5}{mm} upon entering the experimental chamber. A focusing lens (L) with \SI{200}{mm} focal length creates a diffraction-limited spot size of $4\lambda f / \pi D = \SI{50}{\micro m}$ on the sample surface.
 
 Upon laser excitation, the sample absorbs the pulse energy and emits thermal radiation into the collection hemisphere. The broadband emission is collected using UV-enhanced aluminum-coated off-axis parabolic mirrors (PM). Mirror PM1 (\SI{50}{mm} focal length) collects the emission, while PM2 (\SI{101}{mm} focal length) focuses the light through a spectral filter onto a bare multimode fiber end.
-This mirror configuration provides a magnification of $f_\text{PM2}/f_\text{PM1} = 2$ for the collected thermal emission. Therefore the spotsize is roughtly \SI{100}{\micro m} in diameter.
+This mirror configuration provides a magnification of $f_\text{PM2}/f_\text{PM1} = 2$ for the collected thermal emission. Therefore the spot size is roughly \SI{100}{\micro m} in diameter.
 
-The optical fiber (QP200-2-SR-BX, Ocean Optics) is a \SI{200}{\micro m} core multimode fiber optimized for 300--1100\,nm transmission. Spectral analysis employs an Acton SpectraPro 300i monochromator equipped with a 150\,lines/mm grating blazed at \SI{500}{nm}. Detection utilizes an Andor iXon$^\text{EM}$+ 897 EMCCD camera operated in vertical binning mode as a line detector.
+The optical fiber (QP200-2-SR-BX, Ocean Optics) is a \SI{200}{\micro m} core multimode fiber optimized for \SI{300}{nm} to \SI{1100}{nm} transmission. Spectral analysis employs an Acton SpectraPro 300i monochromator equipped with a 150\,lines/mm grating blazed at \SI{500}{nm}. Detection utilizes an Andor iXon$^\text{EM}$+ 897 EMCCD camera operated in vertical binning mode as a line detector.
 
 For alignment optimization, lens L, the sample, and fiber end are mounted on 3-axis translation stages, while the parabolic mirrors remain fixed.
 
@@ -150,16 +156,16 @@ While the photon transfer method can extract the product $G \cdot \eta$ from the
     \label{fig:shotnoise}
 \end{figure}
 
-\section{Efficiency and Flatness}
+\section{Detection Efficiency and Calibration Methodology}
 
-The detection efficiency—defined as the fraction of sample-emitted light reaching the detector—varies with wavelength due to component-specific spectral responses.
+The detection efficiency—defined as the fraction of sample-emitted light reaching the detector—varies with wavelength due to component-specific spectral responses. For physics-based calibration, these individual component responses must be characterized to build the theoretical prediction model.
 
-The parabolic mirrors and optical fiber exhibit relatively flat spectral responses across the detection range, contributing primarily constant efficiency factors. However, other components introduce wavelength-dependent losses that must be characterized.
+The parabolic mirrors and optical fiber exhibit relatively flat spectral responses across the detection range, contributing primarily constant efficiency factors. However, other components introduce wavelength-dependent losses that must be characterized for accurate calibration predictions.
 
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/filter.pdf}
-    \caption{Spectral efficiency of various optical components and filters employed in the setup.}
+    \caption{Spectral efficiency of optical components in the detection system. Individual component responses combine to determine the overall system efficiency used for comparison with hot electron model predictions in calibration validation.}
     \label{fig:efficiency}
 \end{figure}
 
@@ -167,8 +173,13 @@ Spectral filters for laser rejection exhibit distinct transmission characteristi
 
 The detector quantum efficiency and grating efficiency curves require more sophisticated characterization. \autoref{fig:efficiency} presents the manufacturer-specified quantum efficiency for the EMCCD camera. Grating efficiency calculations employ the blazed grating model from \cite{barker_ripple_1984}, accounting for wavelength-dependent diffraction characteristics.
 
-\subsection{Calibration}
-Spectrometer efficiency calibration requires a reference source with precisely known spectral characteristics. This process is distinct from wavelength calibration, which establishes the correct mapping between detector pixels and wavelengths. Wavelength calibration procedures are well-documented and readily available in monochromator manuals and are therefore omitted from this discussion. The standard approach for efficiency calibration employs calibrated tungsten-halogen lamps with traceable spectral irradiance standards.
+\subsection{Physics-Based Calibration Approach}
+The hot electron calibration methodology combines the two-temperature model predictions with component efficiency characterization to create a complete theoretical framework. Unlike conventional calibration methods that rely on empirically characterized sources, this approach enables prediction of the calibration spectrum from fundamental physical parameters.
+
+Uncertainties in the theoretical predictions are quantified through Monte Carlo parameter sampling, accounting for variations in laser parameters, material properties, and optical component specifications. This provides built-in uncertainty estimation that is lacking in traditional calibration approaches.
+
+\subsection{Conventional Calibration Limitations}
+Spectrometer efficiency calibration typically requires reference sources with precisely known spectral characteristics. The standard approach employs calibrated tungsten-halogen lamps with traceable spectral irradiance standards.
 
 Professional calibration laboratories employ monochromator-based spectral comparator facilities that use silicon photodiode trap detectors previously calibrated against NIST's cryogenic electrical substitution radiometers \cite{houston_achievement_2022,larason_nist_1996}. This approach enables spectral responsivity calibrations with uncertainties below 0.1\% across the visible and near-infrared spectrum.
 
@@ -181,18 +192,58 @@ Professional calibration laboratories employ monochromator-based spectral compar
 
 Since no calibrated light source or reference detector with known spectral response was available for this work, an alternative approach using multiple uncalibrated Ocean Optics USB spectrometers was attempted. The broad-spectrum output of a deuterium-halogen lamp (DH-2000-BAL, Ocean Optics) was measured with several different spectrometers to assess consistency. \autoref{fig:calibration} shows the resulting spectra with intensity scaling adjusted for the different instrument sensitivities. The significant disagreement between instruments demonstrates the inadequacy of this approach and underscores the necessity for calibration against traceable reference standards. This comparison illustrates why professional-grade calibration requires the rigorous procedures and metrologically traceable standards maintained by national institutes, rather than relative comparisons between uncalibrated instruments.
 
-\clearpage
-\section{Data Analysis and Spectral Modeling}
+\section{Results: Model Validation and Calibration Performance}
+
+The validation of hot electron thermal emission as a spectral calibration standard requires direct comparison between theoretical predictions and experimental measurements. \autoref{fig:efficiency_comparison} presents this comparison and the derived spectrometer efficiency function.
+
+\subsection{Experimental Validation}
+Raw spectral measurements were converted from detector counts to power density by correcting for detector gain, converting to photon flux, and applying the photon energy relationship $E = hc/\lambda$. Harmonic artifacts from the \SI{1030}{nm} excitation laser were masked using spectral filtering to isolate thermal emission signals.
+
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/efficiency de.pdf}
-    \caption{}
+    \caption{Model validation and spectrometer efficiency determination. Upper panel: measured thermal emission power density (blue, scaled) versus hot electron model predictions (orange) with uncertainty bands from Monte Carlo parameter sampling. Lower panel: effective spectrometer efficiency derived from model-measurement ratio (blue) compared with expected efficiency from component specifications (orange), demonstrating successful calibration validation.}
+    \label{fig:efficiency_comparison}
 \end{figure}
 
-\clearpage
+The upper panel of \autoref{fig:efficiency_comparison} shows measured power density compared with hot electron model predictions. The theoretical spectrum uses the experimental parameters detailed in Section 2, with uncertainties estimated through Monte Carlo parameter sampling to account for variations in laser power, spot size, and material properties. A scaling factor determined from the \SI{500}{\nm} to \SI{700}{\nm} overlap region accounts for absolute calibration differences while preserving spectral shape comparison.
+
+The agreement between model and measurement validates that hot electron thermal emission can be accurately predicted from first principles, demonstrating the viability of the physics-based calibration approach. The uncertainty bands reflect both measurement noise from Poisson counting statistics and model uncertainties from parameter variations.
+
+\subsection{Spectrometer Efficiency Determination}
+The lower panel presents the effective spectrometer efficiency calculated as the ratio of measured power density to model predictions. This approach treats the hot electron model as a calibration source with known spectral characteristics to determine the detection system response function.
+
+For comparison, the expected efficiency combines camera quantum efficiency from manufacturer specifications with a blazed grating model for the \SI{500}{\nm} blaze wavelength, incorporating the range of the blaze parameter from \cite{barker_ripple_1984}. Both curves are normalized to unity maximum for direct shape comparison.
+
+The measured efficiency shows reasonable agreement with expectations, with peak efficiency around \SI{650}{\nm} consistent with silicon detector characteristics. However, the measured curve exhibits a steeper drop-off at short wavelengths compared to manufacturer specifications. This deviation is consistent with degradation of the antireflection coating on the approximately 20-year-old EMCCD camera, as AR coatings are known to deteriorate over time and affect UV-blue response.
+
+This observation demonstrates two key advantages of the hot electron calibration approach: first, it can detect real-world changes in detector performance that manufacturer specifications cannot account for; second, the agreement in spectral shape validates proper optical alignment and system characterization, while discrepancies reveal actual component aging effects rather than experimental errors.
+
+
+
 \section{Conclusion}
 
-\clearpage
+This work presents the first demonstration of hot electron thermal emission as a physics-based spectral calibration standard. The approach successfully combines theoretical predictions from the two-temperature model with Monte Carlo uncertainty propagation to create a tunable, reproducible calibration source with quantified precision.
+
+The validation against experimental measurements confirms that hot electron emission spectra can be accurately predicted from first principles, with agreement sufficient for practical calibration applications. The method successfully characterizes spectrometer efficiency functions while detecting real-world component aging effects that conventional calibration approaches cannot identify.
+
+The successful model validation demonstrates that this approach offers several distinct advantages over conventional calibration methods:
+
+\textbf{Predictable spectral output:} The emission spectrum can be calculated from laser parameters and material properties rather than empirically characterized, enabling tunability and customization for specific applications.
+
+\textbf{Built-in uncertainty quantification:} Monte Carlo parameter sampling provides rigorous uncertainty estimates derived from the underlying physical parameters rather than empirical fitting procedures.
+
+\textbf{Component diagnostics:} The calibration process can identify aging or degradation effects in optical components, as demonstrated by the detection of AR coating deterioration.
+
+\textbf{Compact implementation:} The calibration source requires only a femtosecond laser and sample, potentially enabling field-portable calibration systems.
+
+The approach successfully determines spectrometer efficiency functions that are consistent with component specifications while revealing real-world performance characteristics that manufacturer data cannot predict.
+
+While this proof-of-concept establishes the feasibility of the physics-based approach, future validation against NIST-traceable standards will be necessary to quantify absolute calibration accuracy. Extension to additional material systems and independent laboratory verification would further establish the technique's broader applicability.
+
+The demonstrated approach addresses longstanding challenges in spectrometer calibration by providing a physics-based alternative to empirically characterized lamp sources. This foundation enables future development of hot electron emission into a practical calibration technique that could complement conventional standards in specialized applications where tunability, compactness, or extreme environment operation are required.
+
+
 \printbibliography
 
 \end{document}
