@@ -179,7 +179,7 @@ eff_meas_lower /= np.nanmax(eff_meas_lower)
 eff_meas_upper /= np.nanmax(eff_meas_upper)
 eff_meas /= np.nanmax(eff_meas)
 
-l = plt.plot(wavelength_meas, eff_meas, label="measured")
+l = plt.plot(wavelength_meas, eff_meas, label="measured", color="C1")
 plt.fill_between(wavelength_meas,
     eff_meas_lower, eff_meas_upper,
     color = l[0].get_color(), alpha=0.4

@@ -51,30 +51,26 @@
 \section{Introduction}
 Accurate spectral measurements require knowledge of an instrument’s spectral response—how efficiently the system transmits and detects light as a function of wavelength. To recover physically meaningful spectra, the system response must be determined against a known reference and applied as a correction.
 
-This work targets the ultraviolet (UV), where suitable calibration sources are limited. Deuterium lamps are the practical standard in the UV because of their strong output below about \SI{350}{\nano\metre}, yet their spectral irradiance is markedly wavelength dependent and subject to aging and stability issues. Primary radiometric scales are realized using high-temperature graphite-cavity blackbodies operated near $\sim$\SI{3500}{\kelvin} and propagated via calibrated transfer standards to working instruments \cite{yoon_nist_2011,sapritsky_black-body_1995}.
+This work targets the ultraviolet (UV), where suitable calibration sources are limited. Deuterium lamps are the practical secondary standard in the UV (optionally combined with tungsten–halogen to bridge into the VIS–NIR), yet their spectral irradiance is sharply wavelength dependent and subject to aging and stability issues. In addition, they require periodic replacement and careful handling, which adds cost and maintenance burden to UV calibration workflows. Primary radiometric scales are realized using high-temperature graphite-cavity blackbodies operated near $\sim$\SI{3500}{\kelvin} and propagated via calibrated transfer standards to working instruments \cite{yoon_nist_2011,sapritsky_black-body_1995}.
 
-In a lamp-based calibration, a source with known spectral irradiance is measured at the spectrometer input to solve for the instrument’s wavelength-dependent response. In the UV this typically involves deuterium lamps (optionally combined with tungsten–halogen to bridge into the VIS–NIR), while graphite blackbodies provide the underlying primary scale. The non-flat spectrum of deuterium lamps and their drift over time limit accuracy and increase maintenance overheads.
+As an alternative to a source-based procedure, a calibrated, near-flat detector can be used to establish a detector-based traceability chain; this approach has been demonstrated in practice and can substitute the lamp path in suitable setups \cite{larason_nist_1996}.
 
-As an alternative to a source-based procedure, the calibrated lamp can be replaced by a calibrated, near-flat detector to establish a detector-based traceability chain; this approach has been demonstrated in practice and can substitute the lamp path in suitable setups \cite{larason_nist_1996}.
-
-Motivated by these constraints, we explore thermal radiation from hot electrons in solids as a broadband reference. Under ultrafast excitation, the electronic subsystem can reach effective temperatures of several thousand \si{\kelvin} on picosecond time scales~\cite{lui_ultrafast_2010}, producing smooth, thermal-like emission that spans the UV–VIS. If stability, reproducibility, and an absolute radiometric scale can be established, hot-electron emission could offer a compact UV calibration route that competes with deuterium lamps while avoiding their spectral non-flatness.
-
-
+Motivated by these constraints, we explore thermal radiation from hot electrons in solids as a broadband reference. Under ultrafast excitation, the electronic subsystem can reach effective temperatures of several thousand \si{\kelvin} on picosecond time scales~\cite{lui_ultrafast_2010}, producing smooth, thermal-like emission that spans the UV–VIS. Because the spectrum is broadband, predictable from basic physics, and largely free from narrow spectral features, hot-electron emission offers one of the most straightforward routes to generating stable UV reference light—potentially replacing deuterium lamps where a compact, low-maintenance source is desirable. If stability, reproducibility, and an absolute radiometric scale can be established, hot-electron emission could offer a compact UV calibration route that competes with deuterium lamps while avoiding their spectral non-flatness.
 
 \section{Theory}
 To obtain the spectral shape, we model ultrafast absorption and subsequent thermal emission with a zero-dimensional (lumped) two-temperature picture for the probed volume. The probed volume is approximated as the excited spot area times the optical absorption depth, \(V_{\text{probe}} \approx A_{\text{spot}}\,d_{\text{abs}}\). A short laser pulse deposits power \(P(t)\) into the electronic system, which rapidly thermalizes; electron–phonon coupling then cools the electrons toward the lattice temperature \(T_l\). Neglecting transport and other slow losses on the picosecond timescale, the electron temperature \(T_e(t)\) obeys
 \begin{equation}
     \frac{\mathrm d T_e}{\mathrm d t}
     \;=\;
-    -\,\frac{T_e - T_l}{\tau_{\mathrm{ep}}(T_e)}
+    -\,\frac{T_e - T_l}{\tau_{\mathrm{ep}}}
     \;+\;
     \frac{P(t)}{C_e(T_e)}.
     \label{eq:Te}
 \end{equation}
-Here \(C_e(T_e)\) is the electronic heat capacity of the probed volume (units \si{J\per K}), \(\tau_{\mathrm{ep}}(T_e)\) is the electron–phonon energy-relaxation time \(T_l\) is the lattice temperature (taken approximately constant over this window since typically \(C_l \gg C_e\)), and \(P(t)\) is the laser power deposited in the probed volume (units \si{W}).\\
-Because the instantaneous radiant exitance scales as \(M \propto T^4\) (Stefan–Boltzmann law), the emission is dominated by the high-temperature portion of \(T_e(t)\) immediately after excitation; the later, lower-temperature evolution contributes comparatively little. This justifies treating \(T_l\) as constant and using the simplified dynamics above when we are interested in the relative spectral shape rather than absolute irradiance.
+Here \(C_e(T_e)\) is the electronic heat capacity of the probed volume (units \si{J\per K}), \(\tau_{\mathrm{ep}}\) is the electron–phonon energy-relaxation time, \(T_l\) is the lattice temperature (taken approximately constant over this window since typically \(C_l \gg C_e\)), and \(P(t)\) is the laser power deposited in the probed volume (units \si{W}).\\
+Because the instantaneous radiant exitance scales with \(T^4\) (Stefan–Boltzmann law), the emission is dominated by the high-temperature portion of \(T_e(t)\) immediately after excitation; the later, lower-temperature evolution contributes comparatively little. This justifies treating \(T_l\) as constant and using the simplified dynamics above when we are interested in the relative spectral shape rather than absolute irradiance.
 
-To map \(T_e(t)\) to the emitted spectrum we use Planck’s law in wavelength form. The blackbody spectral radiance is
+To map \(T_e(t)\) to the emitted spectrum we use Planck’s law. The blackbody spectral radiance is
 \begin{equation}
     B(\lambda,T)
     = \frac{2hc^{2}}{\lambda^{5}}
@@ -82,7 +78,7 @@ To map \(T_e(t)\) to the emitted spectrum we use Planck’s law in wavelength fo
     \label{eq:B}
 \end{equation}
 Here \(B\) has the units \si{\watt\per\metre\squared\per\steradian\per\nano\metre}. The emissivity is assumed to be unity, as is commonly done for the material used here \cite{sapritsky_black-body_1995}.\\
-The quantity compared to data is the spectral power density \(P_\lambda(\lambda)\) in \si{\watt\per\nano\metre}. We obtain it from radiance by multiplying with the illuminated spot area \(A_{\text{spot}}\) and the collection solid angle \(\Omega_{\text{coll}}\) (emission approximated as Lambertian within the collection cone) and integrating over the exposure window:
+The quantity compared to the measurement is the spectral power density \(P(\lambda)\) in \si{\watt\per\nano\metre}. We obtain it from radiance by multiplying with the illuminated spot area \(A_{\text{spot}}\) and the collection solid angle \(\Omega_{\text{coll}}\) (emission approximated as Lambertian within the collection cone) and integrating over the exposure window:
 \begin{equation}
       P(\lambda) = A_{\text{spot}}\,\Omega_{\text{coll}}
       \int B\bigl(\lambda, T_e(t)\bigr)\,\mathrm dt.
@@ -109,13 +105,13 @@ The quantity compared to data is the spectral power density \(P_\lambda(\lambda)
 
 The experimental setup, originally developed by Leon Roob~\cite{roob_thermal_2025}, is shown in \autoref{fig:setup}. It is designed to measure broadband thermal emission from hot electrons in graphite using reflective collection optics and a fibre-coupled spectrometer.
 
-The excitation source is a PHAROS PH1-20 (Light Conversion) at a centre wavelength of \SI{1030}{\nano\metre}, with pulse duration \SI{250}{\femto\second} (FWHM) and repetition rate \SI{40}{\kilo\hertz}. The pulse energy is \SI{7.5}{\micro\joule} (average power \SI{300}{\milli\watt}). The beam pointing is stabilised in four axes and expanded to a diameter of \SI{5}{\milli\metre} before entering the chamber.
+The excitation source is a PHAROS PH1-20 (Light Conversion) at a centre wavelength of \SI{1030}{\nano\metre}, with pulse duration \SI{250}{\femto\second} (FWHM) and repetition rate \SI{40}{\kilo\hertz}. The pulse energy is \SI{7.5}{\micro\joule} (average power \SI{300}{\milli\watt}). The beam is stabilised in four axes and expanded to a diameter of \SI{5}{\milli\metre} before entering the chamber.
 
-Inside the chamber, a plano-convex lens with focal length \(f=\SI{200}{\milli\metre}\) focuses the beam onto the sample. Using the standard diffraction estimate \(d \approx 4\lambda f / \pi D\) with \(\lambda=\SI{1030}{\nano\metre}\) and \(D=\SI{5}{\milli\metre}\), the expected spot diameter is \(\sim\SI{50}{\micro\metre}\).
+Inside the chamber, a plano-convex lens with focal length \(f=\SI{200}{\milli\metre}\) focuses the beam onto the sample. Using the standard diffraction estimate \(d \approx 4\lambda f / \pi D\) with \(D=\SI{5}{\milli\metre}\), the expected spot diameter is \(\sim\SI{50}{\micro\metre}\).
 
 The target is a graphite sample mounted on a three-axis translation stage. Thermal emission from the irradiated spot is collected by two off-axis parabolic mirrors (UV-enhanced aluminium). The first mirror (PM1, \(f=\SI{50}{\milli\metre}\)) collimates the emission; the second (PM2, \(f=\SI{101}{\milli\metre}\)) focuses it onto a band-pass filter and into a multimode fibre with a \SI{200}{\micro\metre} core (Ocean Optics QP200-2-SR-BX). The magnification is \(M = f_{\mathrm{PM2}}/f_{\mathrm{PM1}} \approx 2\), yielding an image spot of \(\sim\SI{100}{\micro\metre}\) at the fibre entrance, comfortably within the core.
 
-The fibre feeds an Acton SpectraPro 300i monochromator equipped with a 150\,lines\,mm\(^{-1}\) grating blazed at \SI{500}{\nano\metre}. The dispersed spectrum is detected by an Andor iXon\textsuperscript{EM}+ 897 EMCCD operated in vertical binning mode, effectively serving as a 1D line detector.All spectra are corrected by subtracting a dark frame recorded with identical acquisition settings; this removes the fixed electronic bias (offset) and dark current.
+The fibre feeds an Acton SpectraPro 300i monochromator equipped with a 150\,lines\,mm\(^{-1}\) grating blazed at \SI{500}{\nano\metre}. The dispersed spectrum is detected by an Andor iXon\textsuperscript{EM}+ 897 EMCCD operated in vertical binning mode, effectively serving as a 1D line detector.
 Wavelength calibration (performed once following the manufacturer’s procedure~\cite{roob_thermal_2025}) was stable throughout the measurements.
 
 For alignment and maximal throughput, the lens, sample, and fibre ferrule are mounted on independent precision translation stages, while PM1 and PM2 are fixed on the common optical axis. 
@@ -143,49 +139,17 @@ For alignment and maximal throughput, the lens, sample, and fibre ferrule are mo
 
 We obtain the electron temperature trajectory $T_e(t)$ by numerically integrating the ODE in the Theory section (\autoref{eq:Te}), using a Gaussian pulse for $P(t)$ with per-pulse energy $E_p = P_{\text{avg}}/f_{\text{rep}}$. The time step $\Delta t$ and integration window were chosen such that further refinement did not change the resulting spectrum appreciably. The parameters used are listed in \autoref{tab:parameters}.
 
-The modeled spectral power density is then computed by inserting $T_e(t)$ into Planck’s law (Eq.~\eqref{eq:P}) and integrating numerically over time.
+The modeled spectral power density is then computed by inserting $T_e(t)$ into Planck’s law (\autoref{eq:P}) and integrating numerically over time.
 
-To estimate uncertainties, we sample the parameters in \autoref{tab:parameters} within their stated $1\sigma$ ranges, recompute the (relative) spectrum for each draw, and report, for each wavelength, the mean and standard deviation.
-
-
-\subsection{Focusing and alignment}
-The objective is to image the excited spot on the sample onto the spectrometer fibre with maximal, stable throughput. Parabolic mirrors (PM1/PM2) remain fixed once set; all focusing is done with the lamp, fibre/spectrometer port, and sample stages.
-
-\begin{enumerate}
-  \item \textbf{Remove the sample and place a fibre-coupled lamp at the sample position.}
-  Mount the lamp so its ferrule sits at the exact $x$–$y$–$z$ location the sample surface will occupy. Use \emph{visible light} from the lamp to aid the initial alignment and viewing.
-
-  \item \textbf{Align the lamp beam so the image at the spectrometer fibre port is circular and sharply focused.}
-  With PM1/PM2 fixed on the common axis, adjust the lamp position and pointing until the spot at the fibre entrance appears round, centred, and with the smallest, sharp-edged footprint. This confirms the collection path is approximately aligned.
-
-  \item \textbf{Connect the spectrometer to its port and maximise the signal.}
-  Attach the collection fibre to the spectrometer entrance. Using live counts, \emph{slightly move the spectrometer (or fibre ferrule)} to find the coupling “sweet spot.” Then, use the \emph{micrometer screws on the sample/lamp stage} for fine $x$–$y$–$z$ adjustments to peak the signal. 
-  \emph{Focused spot size:} at optimal focus the lamp image at the fibre face is circular and sharp, with a diameter on the order of \(\sim\)the expected image (\(\approx\)\SI{100}{\micro\metre} here, comfortably within the \SI{200}{\micro\metre} core). Record these stage coordinates.
-
-  \item \textbf{Swap the lamp for the sample at the \emph{same} position.}
-  Insert the sample so its surface coincides with the previously established plane (use a kinematic stop or gauge if available). Keep PM1/PM2 untouched.
-
-  \item \textbf{Illuminate the sample via the lamp path and fine-focus the sample.}
-  Temporarily reconnect the lamp to the spectrometer port so the sample is illuminated (reverse-path check). On the inspection optics, adjust the sample $z$ to \emph{minimise the visible spot size}; a sharply defined, smallest spot indicates correct focus in the PM1 object plane. Re-centre $x$–$y$ if needed.
-
-  \item \textbf{Turn on the \SI{1030}{\nano\metre} laser and set the pump focus.}
-  With the lamp off, use an IR viewing card to locate the pump on the sample. Adjust the focusing lens and sample $z$ to minimise the IR spot on the same surface plane. Start at low power to avoid damage; only increase after focus is established.
-
-  \item \textbf{Disconnect the lamp and use the spectrometer to maximise the reflected-signal alignment.}
-  With only the laser on, monitor the spectrometer signal (from scattered/reflected light) and perform small orthogonal scans: sample $z$ in tens of \si{\micro\metre}, and fibre $x$–$y$ within \(\pm\)\SI{50}{\micro\metre}. Fine-tune pump focus and sample/fibre positions for \emph{maximum} signal. Record final stage coordinates (sample $z$, fibre $x$–$y$) as the operational setpoint.
-\end{enumerate}
-
-\noindent\textit{Notes.}
-Keep the spectrometer exposure and slit constant during focusing. Use the same wavelength setting throughout to avoid alignment bias. The “circular and sharply focused” lamp image at the fibre face is the quickest sanity check; if it degrades, re-do steps 1–3 before touching the mirrors.
-
+To estimate uncertainties, we sample the parameters in \autoref{tab:parameters} within their stated $1\sigma$ ranges, recompute the spectrum for each draw, and report, for each wavelength, the mean and standard deviation.
 
 \subsection{Noise and detector considerations}
-Detecting the weak thermal radiation from hot electrons requires careful optimisation of the signal-to-noise ratio (SNR). In this setup the dominant noise sources originate from the detector; laser power fluctuations are treated as negligible. The EMCCD mechanisms are well documented by Andor~\cite{andor_establishing_nodate,dr_jo_walters_sensitivity_2023} and standardised terminology follows~\cite{european_machine_vision_association_standard_2010}.
+Detecting the weak thermal radiation from hot electrons requires careful optimisation of the signal-to-noise ratio (SNR). In this setup the dominant noise sources originate from the detector; laser power fluctuations are treated as negligible. The EMCCD mechanisms are well documented by Andor~\cite{andor_establishing_nodate,dr_jo_walters_sensitivity_2023} and standards \cite{european_machine_vision_association_standard_2010}.
 
 \textbf{Readout noise.}
-This is the fundamental floor from charge transfer and A/D conversion. For the present camera, the fit in \autoref{fig:dark_noise} yields a constant read noise of
+This is the fundamental noise from charge transfer and A/D conversion. For the present camera, the fit in \autoref{fig:dark_noise} yields a constant read noise of
 \(\sigma_{\text{read}}=\SI{0.81(12)}{e^{-}}\), consistent with the manufacturer’s specification~\cite{andor_ixonem_nodate}.
-Because read noise is applied \emph{per read} rather than per pixel, hardware \emph{vertical binning} (1D line-detector mode) reduces its impact by summing signal prior to the single read.
+Because read noise is applied per read out bin, hardware binning (1D line-detector mode) reduces its impact by summing signal prior to the single read.
 
 \textbf{Dark current noise.}
 Thermally generated charge scales with temperature and time,
@@ -205,7 +169,7 @@ CIC is created during high-speed clocking.
 Its apparent contribution grows with electron multiplication gain, so \emph{EM gain is disabled} in this work (signal levels are well above the read-noise floor), which keeps CIC negligible~\cite{andor_establishing_nodate}.
 
 \textbf{Shot noise and photon-transfer method.}
-Under these optimised conditions the dominant term is photon (shot) noise.
+Under these optimised conditions the dominant term is shot noise.
 Incident photons create photoelectrons with quantum efficiency \(\eta\), so \(N_e=\eta\,N_{\text{photons}}\) and, for Poisson statistics, \(\operatorname{var}(N_e)=N_e\)~\cite{european_machine_vision_association_standard_2010}.
 Let \(G\) denote the system conversion gain (DN per electron). The measured signal in data numbers (DN) is \(S = G\,N_e\), and the measured variance becomes \(\sigma^2_{\text{meas}} \;=\; \sigma_{\text{read}}^2 \;+\; G\,S\) (dark \& CIC negligible, no EM gain).
 Thus a plot of variance vs.\ mean (photon-transfer curve) is linear in the shot-noise regime with slope \(G\).
@@ -222,6 +186,44 @@ Note that this procedure does \emph{not} determine \(\eta\); it only gives the D
 \textbf{Practical settings for reproducibility.}
 (1) Keep the camera at \(\leq\)\SI{-80}{\degreeCelsius}; (2) use vertical binning to treat the EMCCD as a 1D detector; (3) disable EM gain to avoid CIC and excess-noise-factor penalties; (4) fix slit width and exposure during noise characterisation; (5) verify the shot-noise regime by measuring \(\sigma^2\) vs.\ \(S\) and confirming linearity and slope \(G\)
 
+\subsection{Focusing and alignment}
+The objective is to image the excited spot on the sample onto the spectrometer fibre with maximal throughput. Parabolic mirrors (PM1/PM2) remain fixed once set; all focusing is done with the lamp, fibre/spectrometer port, and sample stages.
+
+\begin{enumerate}
+  \item \textbf{Initial setup with a fiber coupled lamp.}  
+  Remove the sample and place a fiber-coupled lamp at the sample position. This will help align and focus the optics using visible light.
+
+  \item \textbf{Align the beam.}  
+  Adjust the lamp position and the parabolic mirrors so that the beam appears circular and sharply focused at the spectrometer fiber port. This ensures the optics are approximately aligned.
+
+  \item \textbf{Connect and optimize with spectrometer.}  
+  Connect the spectrometer to the spectrometer port and move the holder to maximize the signal roughly. Use the micrometer screws on the sample stage for fine adjustments.
+
+  \item \textbf{Swap back in the sample.}  
+  Replace the lamp with the sample at the same position. Connect the lamp output to the spectrometer port to illuminate the sample.
+
+  \item \textbf{Fine-focus the sample.}  
+  Adjust the sample position to minimize the size of the visible spot on the sample.
+
+  \item \textbf{Focus the infrared laser.}  
+  Turn on the infrared laser and use an IR detection card to locate and focus the beam onto the sample. The white light and the IR should overlap and be centered.
+
+  \item \textbf{Optimize laser alignment.}  
+  Replace the lamp with the spectrometer and monitor the reflected laser signal on the spectrometer. Fine-tune the laser focus to maximize this signal.
+\end{enumerate}
+
+\subsection{Data processing}
+All raw spectra were first corrected by subtracting a dark frame recorded with identical acquisition settings, removing the fixed electronic bias and dark current.  
+Residual peaks at the fundamental and harmonic wavelengths of the pump laser, normally suppressed by laser line filters, were present due to the absence of suitable optical filtering.  
+These peaks were identified and removed digitally, leaving small gaps in the plotted spectra where the affected bins were excluded.  
+
+The corrected signal \(S(\lambda)\) in DN was converted to spectral power density \(P_{\text{meas}}(\lambda)\) via
+\begin{equation}
+  P_{\text{meas}}(\lambda)
+  = \frac{S(\lambda)}{G\,t_{\text{exp}}\,\Delta\lambda}\,\frac{hc}{\lambda},
+\end{equation}
+with \(G\) the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time, and \(\Delta\lambda\) the spectral bin width.  
+
 
 \section{Results}
 \begin{figure}
@@ -233,38 +235,29 @@ Note that this procedure does \emph{not} determine \(\eta\); it only gives the D
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/spectrum de.pdf}
-    \caption{Measured spectral power density \(P(\lambda)\) compared with the model spectrum obtained by applying Planck’s law to \(T_e(t)\). The measurement is scaled to match the model. The measured peak is narrower than the model, consistent with the instrument’s finite sensitivity window.}
+    \caption{Measured spectral power density \(P_\text{measured}(\lambda)\) compared with the model spectrum obtained by applying Planck’s law to \(T_e(t)\). The measurement is scaled to match the model. The measured peak is narrower than the model, consistent with the instrument’s finite sensitivity window.}
     \label{fig:spectra}
 \end{figure}
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/efficiency de.pdf}
-    \caption{Effective spectrometer efficiency (peak-normalised) from \(P^{\text{meas}}(\lambda)/P^{\text{model}}(\lambda)\). The overlay shows the expected relative efficiency from component specifications (camera QE \(\times\) blazed-grating model). The shaded range reflects uncertainty in blaze parameters. The measured curve shows stronger roll-off at both band edges and oscillations over wavelength.}
+    \caption{Effective spectrometer efficiency (peak-normalised) from \(P_{\text{meas}}(\lambda)/P_{\text{model}}(\lambda)\). The overlay shows the expected relative efficiency from component specifications (camera QE \(\times\) blazed-grating model). The shaded range reflects uncertainty in blaze parameters. The measured curve shows stronger roll-off at both band edges and oscillations over wavelength.}
     \label{fig:efficiency}
 \end{figure}
 
-As shown in \autoref{fig:Te}, a Gaussian pump drives a rapid rise of the electron temperature \(T_e(t)\) according to \autoref{eq:Te}, followed by cooling on the electron–phonon timescale \(\tau_{\mathrm{ep}}\) using the parameters in \autoref{tab:parameters}. The shaded band (Monte Carlo) indicates the propagated uncertainty; the inferred peak temperature is \SI{8500(2500)}{\kelvin}.
+The time evolution for the electron temperature \(T_e(t)\) according to the ODE in \autoref{eq:Te} with the parameters from \autoref{tab:parameters} is s shown in \autoref{fig:Te}.
+A Gaussian pump drives a rapid rise of \(T_e\) followed by cooling on the electron–phonon timescale \(\tau_{\mathrm{ep}}\). The shaded band indicates the propagated $1\sigma$ uncertainty; the inferred peak temperature is \SI{8500(2500)}{\kelvin}.
 
-Using \(T_e(t)\) as input to Planck’s law (\autoref{eq:P}), the modelled spectral power density \(P(\lambda)\) is computed and compared with the bias/dark-subtracted measurement in \autoref{fig:spectra}. Conversion from the measured signal to spectral power density follows
-\begin{equation}
-  P^{\text{meas}}(\lambda)
-  = \frac{S(\lambda)}{G\,t_{\text{exp}}\,\Delta\lambda}\,\frac{hc}{\lambda},
-\end{equation}
-where \(S\) is in DN (bias/dark subtracted), \(G\) is the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time, and \(\Delta\lambda\) the bin width. The factor \(hc/\lambda\) uses \(\lambda\) in \si{\metre} to yield units of \si{\watt\per\nano\metre}. The measured \(P(\lambda)\) is lower in absolute scale than the unscaled model; for visual comparison, the model in \autoref{fig:spectra} is multiplied by a constant to match the measured peak. The measured spectrum is noticeably narrower than the model, consistent with the finite sensitivity window set by the Si detector QE and the blazed-grating envelope.
+Using \(T_e(t)\) as input to Planck’s law (\autoref{eq:B}), the modelled spectral power density \(P_\text{model}(\lambda)\) is computed and compared with measured spectrum in \autoref{fig:spectra}. 
+The measured spectrum \(P_\text{measured}(\lambda)\) is a lot lower in absolute scale than the model, therefore the measurement in \autoref{fig:spectra} is scaled to match the model. The measured spectrum is noticeably narrower than the model, consistent with the finite sensitivity window set by the Si detector quantum efficiency and the blazed-grating envelope.
 
-An effective spectrometer efficiency is obtained by taking the wavelength-wise ratio \(P^{\text{meas}}(\lambda)/P^{\text{model}}(\lambda)\) and normalising to its maximum, so the peak equals unity (\autoref{fig:efficiency}). The expected curve is calculated from the manufacturer’s QE data for the camera when new~\cite{andor_ixonem_nodate} multiplied by a blazed-grating efficiency model~\cite{barker_ripple_1984}; the shaded interval reflects uncertainty in the blaze parameters. The measured efficiency falls off more steeply than expected at both short and long wavelengths, indicating additional wavelength-dependent loss not captured by the nominal QE\(\times\)blaze model. Moreover, the measured curve exhibits oscillations over wavelength, which may indicate interference effects or ripple in the grating efficiency.
-
-
-\section{Discussion}
-The earlier-than-expected roll-off at the short-wavelength edge of the effective efficiency curve (\autoref{fig:efficiency}) is plausibly explained by degradation of the UV-enhancing coating on the detector, consistent with the age of the EMCCD. At the long-wavelength edge, reduced response may arise from decreased detector quantum efficiency in the near-IR due to ageing-related changes in the Si surface passivation, as well as possible increased absorption in optical coatings. 
-
-The oscillatory structure superimposed on the efficiency curve is consistent with thin-film interference effects, likely from oxide layers formed on metallic mirror surfaces and other coated optics. Such features are stable over time but can vary in amplitude and period depending on the exact thickness and refractive index of the oxidised layers.
-
+An effective spectrometer efficiency is obtained by taking the wavelength-wise ratio \[\eta = P_{\text{meas}}(\lambda)/P_{\text{model}}(\lambda)\] and normalizing to its maximum, so the peak equals unity (\autoref{fig:efficiency}). The expected curve is calculated from the manufacturer’s QE data for the camera when new~\cite{andor_ixonem_nodate} multiplied by a blazed-grating efficiency model~\cite{barker_ripple_1984}; the shaded interval reflects uncertainty in the blaze parameters. The measured efficiency falls off more steeply than expected at both short and long wavelengths, indicating additional wavelength-dependent loss not captured by the nominal QE\(\times\)blaze model. Moreover, the measured curve exhibits oscillations over wavelength, which may indicate interference effects or ripple in the grating efficiency.
 
 \section{Discussion}
 The earlier-than-expected roll-off at the short-wavelength edge of the effective efficiency (\autoref{fig:efficiency}) is plausibly due to degradation of the UV-enhancing coating on the detector, consistent with the instrument’s age. The long-wavelength roll-off may stem from reduced near-IR sensitivity of the EMCCD caused by ageing-related changes in the silicon surface passivation and anti-reflection coatings, compounded by increased absorption in optical coatings and possible fibre transmission losses.  
 
-The oscillatory structure superimposed on the efficiency curve is consistent with thin-film interference effects, likely arising from oxide layers on metallic mirrors and other coated optics. Such features are stable over time but depend on the exact thickness and refractive index of the oxidised layers.
+The oscillatory structure superimposed on the efficiency curve is consistent with thin-film interference effects, likely arising from oxide layers on metallic mirrors and other coated optics. 
+Such features are stable over short time scales but depend on the exact thickness and refractive index of the oxidised layers.
 
 \section{Conclusion}
 The present comparison between model and measurement is limited by the restricted sensitivity window of the existing optical path. A measurement with a calibrated, broadband setup is required to validate the model more rigorously. Furthermore, if the hot-electron emission mechanism is to be used for any serious calibration purpose, a more detailed physical model will be necessary to reduce uncertainty.  
