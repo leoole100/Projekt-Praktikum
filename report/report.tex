@@ -7,7 +7,7 @@
 \addbibresource{../literature.bib}
 \begin{document}
 
-\title{Hot Electron Thermal Emission as a Spectral Calibration Standard}
+\title{Hot-Electron Emission for Spectral Calibration}
 \author{Leon Oleschko}
 \date{\dotdate\today}
 
@@ -16,7 +16,7 @@
     \vspace*{3cm}
     {
         \fontsize{32}{32}
-        \markieren{Hot Electron}{Thermal Emission}{as a Spectral}{Calibration Standard}
+        \markieren{}{}{Hot-Electron Emission}{for Spectral Calibration}
     }
     \vspace{.25cm}\\
     {
@@ -47,217 +47,228 @@
 % }
 
 \clearpage
+
 \section{Introduction}
-Characterizing the spectral response of optical detection systems is essential for quantitative spectroscopy. In the ultraviolet to visible (UV-VIS) range, however, conventional reference sources are often inadequate: they may be spectrally limited or lack reliable calibration. This hampers accurate measurement and interpretation of spectral data across this region.
+Accurate spectral measurements require knowledge of an instrument’s spectral response—how efficiently the system transmits and detects light as a function of wavelength. To recover physically meaningful spectra, the system response must be determined against a known reference and applied as a correction.
 
-A novel approach is to use the thermal radiation emitted by hot electrons as a calibration reference. When excited by ultrafast laser pulses, electrons in solids can reach effective temperatures of several thousand kelvin, emitting broadband radiation that extends into the UV. The spectral shape of this emission is well described by Planck’s law and can be calculated from first principles. Since the source is generated in situ and free of aging components like calibration lamps, this technique offers a robust and reproducible method for characterizing spectral response.
+This work targets the ultraviolet (UV), where suitable calibration sources are limited. Deuterium lamps are the practical standard in the UV because of their strong output below about \SI{350}{\nano\metre}, yet their spectral irradiance is markedly wavelength dependent and subject to aging and stability issues. Primary radiometric scales are realized using high-temperature graphite-cavity blackbodies operated near $\sim$\SI{3500}{\kelvin} and propagated via calibrated transfer standards to working instruments \cite{yoon_nist_2011,sapritsky_black-body_1995}.
 
-This work investigates whether hot electron emission can serve as a practical spectral calibration standard, assuming access to an ultrafast laser system. The spectral shape of the emission is characterized and compared to theoretical predictions, and the influence of experimental noise sources is evaluated.
+In a lamp-based calibration, a source with known spectral irradiance is measured at the spectrometer input to solve for the instrument’s wavelength-dependent response. In the UV this typically involves deuterium lamps (optionally combined with tungsten–halogen to bridge into the VIS–NIR), while graphite blackbodies provide the underlying primary scale. The non-flat spectrum of deuterium lamps and their drift over time limit accuracy and increase maintenance overheads.
+
+As an alternative to a source-based procedure, the calibrated lamp can be replaced by a calibrated, near-flat detector to establish a detector-based traceability chain; this approach has been demonstrated in practice and can substitute the lamp path in suitable setups \cite{larason_nist_1996}.
+
+Motivated by these constraints, we explore thermal radiation from hot electrons in solids as a broadband reference. Under ultrafast excitation, the electronic subsystem can reach effective temperatures of several thousand \si{\kelvin} on picosecond time scales~\cite{lui_ultrafast_2010}, producing smooth, thermal-like emission that spans the UV–VIS. If stability, reproducibility, and an absolute radiometric scale can be established, hot-electron emission could offer a compact UV calibration route that competes with deuterium lamps while avoiding their spectral non-flatness.
+
+
 
 \section{Theory}
-
-% Two temperature model
-\begin{figure}
-    \centering
-    \includegraphics{../analysis/figures/model te.pdf}
-    \caption{Calculated electron temperature evolution following femtosecond laser excitation of graphite, showing rapid heating and subsequent cooling through electron-phonon coupling.}
-    \label{fig:temperature}
-\end{figure}
-
-The excitation of a solid by femtosecond laser pulses can be described using the two-temperature model \cite{roob_thermal_2025,lui_ultrafast_2010}. In this framework, the laser pulse deposits energy into the electron system, raising its temperature \( T_e \), while the lattice remains at its initial temperature \( T_l \). For the short timescales relevant to hot electron dynamics, the lattice temperature can be assumed constant, since thermal diffusion in the lattice occurs much more slowly than electron thermalization.
-
-Under this approximation, the temporal evolution of the electron temperature is governed by
-
+To obtain the spectral shape, we model ultrafast absorption and subsequent thermal emission with a zero-dimensional (lumped) two-temperature picture for the probed volume. The probed volume is approximated as the excited spot area times the optical absorption depth, \(V_{\text{probe}} \approx A_{\text{spot}}\,d_{\text{abs}}\). A short laser pulse deposits power \(P(t)\) into the electronic system, which rapidly thermalizes; electron–phonon coupling then cools the electrons toward the lattice temperature \(T_l\). Neglecting transport and other slow losses on the picosecond timescale, the electron temperature \(T_e(t)\) obeys
 \begin{equation}
-C_e(T_e) \frac{\partial T_e}{\partial t} = -G(T_e - T_l) + S(r,t),
+    \frac{\mathrm d T_e}{\mathrm d t}
+    \;=\;
+    -\,\frac{T_e - T_l}{\tau_{\mathrm{ep}}(T_e)}
+    \;+\;
+    \frac{P(t)}{C_e(T_e)}.
+    \label{eq:Te}
 \end{equation}
+Here \(C_e(T_e)\) is the electronic heat capacity of the probed volume (units \si{J\per K}), \(\tau_{\mathrm{ep}}(T_e)\) is the electron–phonon energy-relaxation time \(T_l\) is the lattice temperature (taken approximately constant over this window since typically \(C_l \gg C_e\)), and \(P(t)\) is the laser power deposited in the probed volume (units \si{W}).\\
+Because the instantaneous radiant exitance scales as \(M \propto T^4\) (Stefan–Boltzmann law), the emission is dominated by the high-temperature portion of \(T_e(t)\) immediately after excitation; the later, lower-temperature evolution contributes comparatively little. This justifies treating \(T_l\) as constant and using the simplified dynamics above when we are interested in the relative spectral shape rather than absolute irradiance.
 
-where \( C_e(T_e) \) is the temperature-dependent electronic heat capacity taken from \cite{nihira_temperature_2003}, \( G = \SI{250(50)}{fs}\) \cite{stange_hot_2015} is the electron-phonon coupling constant, and \( S(r,t) \) represents the laser source term. Because the electronic heat capacity is significantly smaller than that of the lattice, the electron temperature can exceed \( T_l \) by several thousand kelvin during the initial femtoseconds after excitation \cite{roob_thermal_2025}. The subsequent cooling proceeds via coupling to optical phonons \cite{lui_ultrafast_2010} and other phonon-mediated relaxation processes \cite{stange_hot_2015}.
-
-Numerical integration of this equation with the utilized laser parameters predicts rapid electronic heating in graphite. \autoref{fig:temperature} shows the resulting electron temperature evolution. The peak electronic temperature exceeds \SI{6000}{K}.
-
-% thermal radiation
-The hot electrons emit broadband thermal radiation during their relaxation. Assuming a quasi-equilibrium electron distribution at each moment in time, the instantaneous emission spectrum follows Planck’s law:
-
+To map \(T_e(t)\) to the emitted spectrum we use Planck’s law in wavelength form. The blackbody spectral radiance is
 \begin{equation}
-B(\lambda, T) = \frac{2hc^2}{\lambda^5} \cdot \frac{1}{\exp\left(\frac{hc}{\lambda kT}\right) - 1},
+    B(\lambda,T)
+    = \frac{2hc^{2}}{\lambda^{5}}
+      \frac{1}{\exp\bigl(\tfrac{hc}{\lambda k_{\mathrm B}T}\bigr)-1}.
+    \label{eq:B}
 \end{equation}
-
-where \( h \) is Planck's constant, \( c \) is the speed of light, \( k \) is Boltzmann's constant, and \( T \) is the electron temperature. Since the electron temperatures far exceed the lattice temperature during this phase, the electronic thermal emission dominates.
-
-\begin{figure}[b]
-    \centering
-    \includegraphics{../analysis/figures/model spectrum.pdf}
-    \caption{Calculated thermal radiation spectrum from hot electrons in graphite, obtained by integrating Planck's law over the time-dependent electron temperature. Gray curves show blackbody spectra at constant temperatures, scaled by the effective radiating time.}
-    \label{fig:model_spectrum}
-\end{figure}
-
-To obtain the total emission spectrum, Planck's law is integrated over the electron cooling curve \( T_e(t) \). \autoref{fig:model_spectrum} shows the result for the same laser parameters as before. The resulting spectrum covers visible and ultraviolet wavelengths. Its smooth shape and theoretical predictability make it a promising candidate for spectral calibration, particularly in the UV where conventional sources are limited.
+Here \(B\) has the units \si{\watt\per\metre\squared\per\steradian\per\nano\metre}. The emissivity is assumed to be unity, as is commonly done for the material used here \cite{sapritsky_black-body_1995}.\\
+The quantity compared to data is the spectral power density \(P_\lambda(\lambda)\) in \si{\watt\per\nano\metre}. We obtain it from radiance by multiplying with the illuminated spot area \(A_{\text{spot}}\) and the collection solid angle \(\Omega_{\text{coll}}\) (emission approximated as Lambertian within the collection cone) and integrating over the exposure window:
+\begin{equation}
+      P(\lambda) = A_{\text{spot}}\,\Omega_{\text{coll}}
+      \int B\bigl(\lambda, T_e(t)\bigr)\,\mathrm dt.
+      \label{eq:P}
+\end{equation}
 
 
 \section{Experimental Setup}
-
 \begin{figure}
     \centering
     \begin{subfigure}{3.5in}
         \centering
         \includegraphics{figures/setup.pdf}
         \caption{Schematic}
-    \end{subfigure}
-    \hfill
+    \end{subfigure}\hfill
     \begin{subfigure}{2in}
         \centering
         \includegraphics{figures/photo_setup.pdf}
         \caption{Photograph}
     \end{subfigure}
-    \caption{Experimental setup used to measure thermal emission from hot electrons. The schematic shows the optical path and key components, while the photograph provides a view of the physical arrangement inside the chamber.}
+    \caption{Experimental setup used to measure thermal emission from ultrafast-excited hot electrons. The schematic shows the optical path and key components; the photograph shows the arrangement inside the chamber.}
     \label{fig:setup}
 \end{figure}
 
-The experimental setup, originally developed by Leon Roob \cite{roob_thermal_2025}, is shown in \autoref{fig:setup}. It is designed to measure broadband thermal emission from ultrafast-excited hot electrons in graphite using a reflective collection system and fiber-coupled spectrometer.
+The experimental setup, originally developed by Leon Roob~\cite{roob_thermal_2025}, is shown in \autoref{fig:setup}. It is designed to measure broadband thermal emission from hot electrons in graphite using reflective collection optics and a fibre-coupled spectrometer.
 
-The excitation source is a Pharos PH1-20 laser (Light Conversion), emitting pulses at \SI{1030}{nm} with a full-width at half-maximum (FWHM) duration of \SI{250}{\femto\second} and a repetition rate of \SI{40}{\kilo\hertz}. The pulse energy was set to \SI{7.5}{\micro\joule}, corresponding to an average power of \SI{300}{\milli\watt}. The beam is stabilized in four axes (position and direction) and expanded to a \SI{5}{\milli\meter} diameter before entering the experiment.
+The excitation source is a PHAROS PH1-20 (Light Conversion) at a centre wavelength of \SI{1030}{\nano\metre}, with pulse duration \SI{250}{\femto\second} (FWHM) and repetition rate \SI{40}{\kilo\hertz}. The pulse energy is \SI{7.5}{\micro\joule} (average power \SI{300}{\milli\watt}). The beam pointing is stabilised in four axes and expanded to a diameter of \SI{5}{\milli\metre} before entering the chamber.
 
-Inside the chamber, the beam is focused onto the sample using a plano-convex lens (L) with a focal length of \SI{200}{\milli\meter}. The resulting spot diameter is approximately \( 4\lambda f / \pi D \approx \SI{50}{\micro\meter} \).
+Inside the chamber, a plano-convex lens with focal length \(f=\SI{200}{\milli\metre}\) focuses the beam onto the sample. Using the standard diffraction estimate \(d \approx 4\lambda f / \pi D\) with \(\lambda=\SI{1030}{\nano\metre}\) and \(D=\SI{5}{\milli\metre}\), the expected spot diameter is \(\sim\SI{50}{\micro\metre}\).
 
-The target material is graphite, mounted on a 3-axis translation stage. Thermal emission from the irradiated spot is collected by a pair of off-axis parabolic mirrors (UV-enhanced aluminum coating). The first mirror (PM1, \SI{50}{\milli\meter} focal length) collimates the emitted light. The second mirror (PM2, \SI{101}{\milli\meter}) focuses it onto a bandpass filter and into a multimode optical fiber with a core diameter of \SI{200}{\micro\meter} (Ocean Optics QP200-2-SR-BX). The magnification factor of this optical system is \( f_{\text{PM2}} / f_{\text{PM1}} = 2 \), resulting in an image spot of approximately \SI{100}{\micro\meter} at the fiber entrance.
+The target is a graphite sample mounted on a three-axis translation stage. Thermal emission from the irradiated spot is collected by two off-axis parabolic mirrors (UV-enhanced aluminium). The first mirror (PM1, \(f=\SI{50}{\milli\metre}\)) collimates the emission; the second (PM2, \(f=\SI{101}{\milli\metre}\)) focuses it onto a band-pass filter and into a multimode fibre with a \SI{200}{\micro\metre} core (Ocean Optics QP200-2-SR-BX). The magnification is \(M = f_{\mathrm{PM2}}/f_{\mathrm{PM1}} \approx 2\), yielding an image spot of \(\sim\SI{100}{\micro\metre}\) at the fibre entrance, comfortably within the core.
 
-The fiber guides the collected light to an Acton SpectraPro 300i monochromator, equipped with a 150\,lines/mm diffraction grating blazed at \SI{500}{\nano\meter}. The dispersed spectrum is detected by an Andor iXon\textsuperscript{EM}+ 897 EMCCD camera operated in vertical binning mode, effectively serving as a 1D line detector.\\
-All spectra were corrected by subtracting a dark frame recorded under identical acquisition settings, to remove the detector bias. Wavelength calibration was performed by Leon Roob following the manufacturer's procedure and remained stable throughout the experiment.
+The fibre feeds an Acton SpectraPro 300i monochromator equipped with a 150\,lines\,mm\(^{-1}\) grating blazed at \SI{500}{\nano\metre}. The dispersed spectrum is detected by an Andor iXon\textsuperscript{EM}+ 897 EMCCD operated in vertical binning mode, effectively serving as a 1D line detector.All spectra are corrected by subtracting a dark frame recorded with identical acquisition settings; this removes the fixed electronic bias (offset) and dark current.
+Wavelength calibration (performed once following the manufacturer’s procedure~\cite{roob_thermal_2025}) was stable throughout the measurements.
 
-To ensure optimal signal and alignment, the lens, sample, and fiber end are mounted on independent precision translation stages. The reflective optics (PM1 and PM2) are fixed relative to the optical axis. Coarse and fine alignment procedures, including the use of a fiber-coupled lamp and real-time spectrometer monitoring, are discussed in the following subsection.
+For alignment and maximal throughput, the lens, sample, and fibre ferrule are mounted on independent precision translation stages, while PM1 and PM2 are fixed on the common optical axis. 
 
-\subsection{Focusing Procedure}
-Precise alignment of the sample and optics is essential to maximize coupling efficiency into the spectrometer and ensure reproducible measurements. The focusing process is carried out in several stages, starting with visible light and proceeding to infrared laser optimization.
+\section{Methods}
 
-First, the sample is removed and replaced with a fiber-coupled lamp positioned at the sample location. This visible light source is used to align the optical system by adjusting the lamp position until the output beam appears circular and sharply focused at the spectrometer fiber input. Once a well-defined image is obtained, the spectrometer is connected and positioned to maximize the detected signal. Fine alignment is performed using micrometer screws on the fiber stage, ensuring that the beam spot is centered within the fiber core.
+\subsection{Model}
+\begin{table}
+    \centering
+    \begin{tabular}{lllll}
+        Parameter & Symbol & Value & \\
+        \hline
+        Spot diameter on sample\footnote{State definition (FWHM or $1/\mathrm e^2$).} & $d_{\text{spot}}$ & $70^{+50}_{-0}$\;\si{\micro\metre}\\
+        Pulse duration & $\tau_\text{fwhm}$ & \SI{250(50)}{fs} & \\
+        Optical absorption depth & $d_{\text{abs}}$ & \SI{250(100)}{\nano\metre} &  &  \\
+        Average laser power & $P_{\text{avg}}$ & \SI{300(5)}{mW} &  &  \\
+        Repetition rate & $f_{\text{rep}}$ & \SI{40}{k\hertz} &  &  \\
+        Cooling time constant & $\tau_{\mathrm{ep}}$ & \SI{250(50)}{fs} & \cite{stange_hot_2015} &  \\
+        Electronic heat capacity & $C_e(T_e)$ & \si{\joule\per\metre\cubed\per\kelvin\squared} & \cite{nihira_temperature_2003} &  \\
+        Lattice (ambient) temperature & $T_l$ & \SI{300}{\kelvin} & &  \\
+    \end{tabular}
+    \caption{Model parameters used in the spectrum calculation. Uncertainties in $1\sigma$.}
+    \label{tab:parameters}
+\end{table}
 
-Based on the calculated spot size on the sample of approximately \SI{50}{\micro\meter} and the 2$\times$ magnification of the mirror system, the expected image size at the fiber input is roughly \SI{100}{\micro\meter}, well within the \SI{200}{\micro\meter} core diameter of the multimode fiber. This provides sufficient tolerance for stable alignment, while still requiring careful adjustment for optimal signal.
+We obtain the electron temperature trajectory $T_e(t)$ by numerically integrating the ODE in the Theory section (\autoref{eq:Te}), using a Gaussian pulse for $P(t)$ with per-pulse energy $E_p = P_{\text{avg}}/f_{\text{rep}}$. The time step $\Delta t$ and integration window were chosen such that further refinement did not change the resulting spectrum appreciably. The parameters used are listed in \autoref{tab:parameters}.
 
-After completing the optical alignment with the lamp, the sample is reinserted at the same position, and the lamp output is connected to the spectrometer port to illuminate the sample surface. The sample position is then fine-tuned to minimize the visible spot size, indicating the optimal position of the sample.
+The modeled spectral power density is then computed by inserting $T_e(t)$ into Planck’s law (Eq.~\eqref{eq:P}) and integrating numerically over time.
 
-Finally, the infrared laser is turned on, and an IR detection card is used to locate and focus the beam onto the sample. The reflected laser signal is monitored via the spectrometer, and the laser focus is optimized by adjusting its position to maximize the detected intensity.
-
-This multi-step procedure ensures reliable spatial overlap between the laser excitation and the optical detection axis, enabling consistent measurement of thermal emission from the same region of the sample.
+To estimate uncertainties, we sample the parameters in \autoref{tab:parameters} within their stated $1\sigma$ ranges, recompute the (relative) spectrum for each draw, and report, for each wavelength, the mean and standard deviation.
 
 
-\subsection{Characterization of Noise Sources}
+\subsection{Focusing and alignment}
+The objective is to image the excited spot on the sample onto the spectrometer fibre with maximal, stable throughput. Parabolic mirrors (PM1/PM2) remain fixed once set; all focusing is done with the lamp, fibre/spectrometer port, and sample stages.
 
-Detecting the weak thermal radiation from hot electrons requires careful optimization of the signal-to-noise ratio (SNR). The dominant noise sources originate from the detector, while laser power fluctuations are assumed negligible.
+\begin{enumerate}
+  \item \textbf{Remove the sample and place a fibre-coupled lamp at the sample position.}
+  Mount the lamp so its ferrule sits at the exact $x$–$y$–$z$ location the sample surface will occupy. Use \emph{visible light} from the lamp to aid the initial alignment and viewing.
 
-The EMCCD detector exhibits several characteristic noise mechanisms well-documented by Andor \cite{andor_establishing_nodate,dr_jo_walters_sensitivity_2023} and detailed in \cite{european_machine_vision_association_standard_2010}.
+  \item \textbf{Align the lamp beam so the image at the spectrometer fibre port is circular and sharply focused.}
+  With PM1/PM2 fixed on the common axis, adjust the lamp position and pointing until the spot at the fibre entrance appears round, centred, and with the smallest, sharp-edged footprint. This confirms the collection path is approximately aligned.
 
-\textbf{Readout noise} represents the fundamental noise floor, arising from charge transfer operations and analog-to-digital conversion. For this high-performance CCD, readout noise measures approximately \SI{1}{e^-} \cite{andor_ixonem_nodate}, consistent with measurements shown in \autoref{fig:dark_noise}. Since this noise applies per readout bin rather than per pixel, hardware vertical binning effectively reduces its impact.
+  \item \textbf{Connect the spectrometer to its port and maximise the signal.}
+  Attach the collection fibre to the spectrometer entrance. Using live counts, \emph{slightly move the spectrometer (or fibre ferrule)} to find the coupling “sweet spot.” Then, use the \emph{micrometer screws on the sample/lamp stage} for fine $x$–$y$–$z$ adjustments to peak the signal. 
+  \emph{Focused spot size:} at optimal focus the lamp image at the fibre face is circular and sharp, with a diameter on the order of \(\sim\)the expected image (\(\approx\)\SI{100}{\micro\metre} here, comfortably within the \SI{200}{\micro\metre} core). Record these stage coordinates.
+
+  \item \textbf{Swap the lamp for the sample at the \emph{same} position.}
+  Insert the sample so its surface coincides with the previously established plane (use a kinematic stop or gauge if available). Keep PM1/PM2 untouched.
+
+  \item \textbf{Illuminate the sample via the lamp path and fine-focus the sample.}
+  Temporarily reconnect the lamp to the spectrometer port so the sample is illuminated (reverse-path check). On the inspection optics, adjust the sample $z$ to \emph{minimise the visible spot size}; a sharply defined, smallest spot indicates correct focus in the PM1 object plane. Re-centre $x$–$y$ if needed.
+
+  \item \textbf{Turn on the \SI{1030}{\nano\metre} laser and set the pump focus.}
+  With the lamp off, use an IR viewing card to locate the pump on the sample. Adjust the focusing lens and sample $z$ to minimise the IR spot on the same surface plane. Start at low power to avoid damage; only increase after focus is established.
+
+  \item \textbf{Disconnect the lamp and use the spectrometer to maximise the reflected-signal alignment.}
+  With only the laser on, monitor the spectrometer signal (from scattered/reflected light) and perform small orthogonal scans: sample $z$ in tens of \si{\micro\metre}, and fibre $x$–$y$ within \(\pm\)\SI{50}{\micro\metre}. Fine-tune pump focus and sample/fibre positions for \emph{maximum} signal. Record final stage coordinates (sample $z$, fibre $x$–$y$) as the operational setpoint.
+\end{enumerate}
+
+\noindent\textit{Notes.}
+Keep the spectrometer exposure and slit constant during focusing. Use the same wavelength setting throughout to avoid alignment bias. The “circular and sharply focused” lamp image at the fibre face is the quickest sanity check; if it degrades, re-do steps 1–3 before touching the mirrors.
+
+
+\subsection{Noise and detector considerations}
+Detecting the weak thermal radiation from hot electrons requires careful optimisation of the signal-to-noise ratio (SNR). In this setup the dominant noise sources originate from the detector; laser power fluctuations are treated as negligible. The EMCCD mechanisms are well documented by Andor~\cite{andor_establishing_nodate,dr_jo_walters_sensitivity_2023} and standardised terminology follows~\cite{european_machine_vision_association_standard_2010}.
+
+\textbf{Readout noise.}
+This is the fundamental floor from charge transfer and A/D conversion. For the present camera, the fit in \autoref{fig:dark_noise} yields a constant read noise of
+\(\sigma_{\text{read}}=\SI{0.81(12)}{e^{-}}\), consistent with the manufacturer’s specification~\cite{andor_ixonem_nodate}.
+Because read noise is applied \emph{per read} rather than per pixel, hardware \emph{vertical binning} (1D line-detector mode) reduces its impact by summing signal prior to the single read.
+
+\textbf{Dark current noise.}
+Thermally generated charge scales with temperature and time,
+\(N_\text{dark}\propto \exp(-E/kT)\,t_\text{exp}\).
+\autoref{fig:dark_noise} shows the measured dependence; fitting gives an effective activation energy \(E=\SI{0.597(4)}{eV}\).
+With the sensor cooled to \SI{-80}{\degreeCelsius}, the dark contribution is negligible at the exposure times used.
 
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/dark_noise.pdf}
-    \caption{Dark noise as a function of sensor temperature and exposure time. The fitted curve yields an effective activation energy of $E = \SI{0.597(4)}{eV}$ and constant readout noise of $\sigma_{\text{read}} = \SI{0.81(12)}{e^-}$.}
+    \caption{Dark noise vs.\ sensor temperature and exposure time. Fit yields \(E=\SI{0.597(4)}{eV}\) and \(\sigma_{\text{read}}=\SI{0.81(12)}{e^{-}}\).}
     \label{fig:dark_noise}
 \end{figure}
 
-\textbf{Dark current noise} results from thermal excitation of electrons within the detector semiconductor, following the relationship $N_\text{dark} \propto \exp(-E / kT) \cdot t_\text{exp}$, as demonstrated in \autoref{fig:dark_noise}. Cooling the detector to \SI{-80}{\degreeCelsius} effectively suppresses this contribution, rendering it negligible for typical exposure times.
+\textbf{Clock-induced charge (CIC).}
+CIC is created during high-speed clocking.
+Its apparent contribution grows with electron multiplication gain, so \emph{EM gain is disabled} in this work (signal levels are well above the read-noise floor), which keeps CIC negligible~\cite{andor_establishing_nodate}.
 
-\textbf{Clock-induced charge noise} scales with electron multiplication gain and signal amplitude. Therefore, sensor gain is deactivated when signal levels significantly exceed readout noise \cite{andor_establishing_nodate}, as in the present configuration.
-
-\textbf{Shot noise} becomes the dominant limitation under these optimized conditions, establishing shot noise-limited operation as shown in \autoref{fig:shotnoise}. The fundamental process begins with incident photons that are converted to photoelectrons with quantum efficiency $\eta$, where the number of generated electrons follows $N_e = \eta \cdot N_{\text{photons}}$. Due to the statistical nature of this conversion process, the variance in the number of photoelectrons equals the mean for Poisson statistics: $\sigma^2 = N_e = \eta \cdot N_{\text{photons}}$ \cite{european_machine_vision_association_standard_2010}.
-
-In practical measurements, the photoelectron signal is amplified by a detector gain $G$, resulting in a measurable output signal $S = G \cdot N_e = G \cdot \eta \cdot N_{\text{photons}}$. The amplification process preserves the Poisson statistics, so the measured noise variance becomes $\sigma^2_{\text{measured}} = G^2 \cdot \eta \cdot N_{\text{photons}}$. This relationship produces the characteristic linear dependence of noise variance on signal intensity observed in \autoref{fig:shotnoise}. \cite{european_machine_vision_association_standard_2010}.
+\textbf{Shot noise and photon-transfer method.}
+Under these optimised conditions the dominant term is photon (shot) noise.
+Incident photons create photoelectrons with quantum efficiency \(\eta\), so \(N_e=\eta\,N_{\text{photons}}\) and, for Poisson statistics, \(\operatorname{var}(N_e)=N_e\)~\cite{european_machine_vision_association_standard_2010}.
+Let \(G\) denote the system conversion gain (DN per electron). The measured signal in data numbers (DN) is \(S = G\,N_e\), and the measured variance becomes \(\sigma^2_{\text{meas}} \;=\; \sigma_{\text{read}}^2 \;+\; G\,S\) (dark \& CIC negligible, no EM gain).
+Thus a plot of variance vs.\ mean (photon-transfer curve) is linear in the shot-noise regime with slope \(G\).
+\autoref{fig:shotnoise} shows this behaviour; from the slope we estimate \(G \approx 10~\text{DN}/e^{-}\).
+Note that this procedure does \emph{not} determine \(\eta\); it only gives the DN-to-electron conversion.
 
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/shot noise.pdf}
-    \caption{Measured noise versus signal, demonstrating shot noise-limited performance with the characteristic square-root relationship between noise and signal intensity.}
+    \caption{Measured noise vs.\ signal (photon-transfer curve) demonstrating shot-noise-limited operation; the linear slope yields the conversion gain \(G\).}
     \label{fig:shotnoise}
 \end{figure}
 
-% \section{Detection Efficiency and Calibration Methodology}
+\textbf{Practical settings for reproducibility.}
+(1) Keep the camera at \(\leq\)\SI{-80}{\degreeCelsius}; (2) use vertical binning to treat the EMCCD as a 1D detector; (3) disable EM gain to avoid CIC and excess-noise-factor penalties; (4) fix slit width and exposure during noise characterisation; (5) verify the shot-noise regime by measuring \(\sigma^2\) vs.\ \(S\) and confirming linearity and slope \(G\)
 
-% The detection efficiency—defined as the fraction of sample-emitted light reaching the detector—varies with wavelength due to component-specific spectral responses. For physics-based calibration, these individual component responses must be characterized to build the theoretical prediction model.
-
-% The parabolic mirrors and optical fiber exhibit relatively flat spectral responses across the detection range, contributing primarily constant efficiency factors. However, other components introduce wavelength-dependent losses that must be characterized for accurate calibration predictions.
-
-% \begin{figure}
-%     \centering
-%     \includegraphics{../analysis/figures/filter.pdf}
-%     \caption{Spectral efficiency of optical components in the detection system. Individual component responses combine to determine the overall system efficiency used for comparison with hot electron model predictions in calibration validation.}
-%     \label{fig:efficiency}
-% \end{figure}
-
-% Spectral filters for laser rejection exhibit distinct transmission characteristics, as shown in \autoref{fig:efficiency}. The SCHOTT KG3 filter, designed for infrared absorption, displays a gradual transmission edge that attenuates expected thermal emission. The HR filter, identified as a dielectric shortpass filter (likely Edmund Optics), shows sharper cutoff behavior, though detailed specifications were unavailable.
-
-% The detector quantum efficiency and grating efficiency curves require more sophisticated characterization. \autoref{fig:efficiency} presents the manufacturer-specified quantum efficiency for the EMCCD camera. Grating efficiency calculations employ the blazed grating model from \cite{barker_ripple_1984}, accounting for wavelength-dependent diffraction characteristics.
-
-% \subsection{Physics-Based Calibration Approach}
-% The hot electron calibration methodology combines the two-temperature model predictions with component efficiency characterization to create a complete theoretical framework. Unlike conventional calibration methods that rely on empirically characterized sources, this approach enables prediction of the calibration spectrum from fundamental physical parameters.
-
-% Uncertainties in the theoretical predictions are quantified through Monte Carlo parameter sampling, accounting for variations in laser parameters, material properties, and optical component specifications. This provides built-in uncertainty estimation that is lacking in traditional calibration approaches.
-
-% \subsection{Conventional Calibration Limitations}
-% Spectrometer efficiency calibration typically requires reference sources with precisely known spectral characteristics. The standard approach employs calibrated tungsten-halogen lamps with traceable spectral irradiance standards.
-
-% Professional calibration laboratories employ monochromator-based spectral comparator facilities that use silicon photodiode trap detectors previously calibrated against NIST's cryogenic electrical substitution radiometers \cite{houston_achievement_2022,larason_nist_1996}. This approach enables spectral responsivity calibrations with uncertainties below 0.1\% across the visible and near-infrared spectrum.
-
-% \begin{figure}
-%     \centering
-%     \includegraphics{../analysis/figures/efficiency_different.pdf}
-%     \caption{Comparison of identical spectra recorded with different uncalibrated spectrometer systems, demonstrating the calibration discrepancies that arise without proper reference standards.}
-%     \label{fig:calibration}
-% \end{figure}
-
-% Since no calibrated light source or reference detector with known spectral response was available for this work, an alternative approach using multiple uncalibrated Ocean Optics USB spectrometers was attempted. The broad-spectrum output of a deuterium-halogen lamp (DH-2000-BAL, Ocean Optics) was measured with several different spectrometers to assess consistency. \autoref{fig:calibration} shows the resulting spectra with intensity scaling adjusted for the different instrument sensitivities. The significant disagreement between instruments demonstrates the inadequacy of this approach and underscores the necessity for calibration against traceable reference standards. This comparison illustrates why professional-grade calibration requires the rigorous procedures and metrologically traceable standards maintained by national institutes, rather than relative comparisons between uncalibrated instruments.
 
 \section{Results}
-
-To evaluate the use of hot electron thermal emission as a spectral calibration standard, the measured emission spectrum was compared to model predictions based on the time-dependent electron temperature following femtosecond excitation (see \autoref{fig:model_spectrum}). This comparison provides both a test of the theoretical model and a method to determine the relative spectral efficiency of the detection system.
-
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/model te.pdf}
+    \caption{Gaussian pump \(S\) and computed electron temperature \(T_e(t)\) from the lumped two-temperature model (parameters in \autoref{tab:parameters}). The fast rise is followed by electron–phonon cooling with time constant \(\tau_{\mathrm{ep}}\). The shaded band shows the \(1\sigma\) Monte Carlo uncertainty.}
+    \label{fig:Te}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/spectrum de.pdf}
+    \caption{Measured spectral power density \(P(\lambda)\) compared with the model spectrum obtained by applying Planck’s law to \(T_e(t)\). The measurement is scaled to match the model. The measured peak is narrower than the model, consistent with the instrument’s finite sensitivity window.}
+    \label{fig:spectra}
+\end{figure}
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/efficiency de.pdf}
-    \caption{Model validation and spectrometer efficiency determination. Upper panel: measured thermal emission power density (blue, scaled) versus hot electron model predictions (orange) with uncertainty bands from Monte Carlo parameter sampling. Lower panel: effective spectrometer efficiency derived from model-measurement ratio (blue) compared with expected efficiency from component specifications (orange), demonstrating successful calibration validation.}
-    \label{fig:efficiency_comparison}
+    \caption{Effective spectrometer efficiency (peak-normalised) from \(P^{\text{meas}}(\lambda)/P^{\text{model}}(\lambda)\). The overlay shows the expected relative efficiency from component specifications (camera QE \(\times\) blazed-grating model). The shaded range reflects uncertainty in blaze parameters. The measured curve shows stronger roll-off at both band edges and oscillations over wavelength.}
+    \label{fig:efficiency}
 \end{figure}
 
-\subsection{Model Comparison}
+As shown in \autoref{fig:Te}, a Gaussian pump drives a rapid rise of the electron temperature \(T_e(t)\) according to \autoref{eq:Te}, followed by cooling on the electron–phonon timescale \(\tau_{\mathrm{ep}}\) using the parameters in \autoref{tab:parameters}. The shaded band (Monte Carlo) indicates the propagated uncertainty; the inferred peak temperature is \SI{8500(2500)}{\kelvin}.
 
-A comparison of the measured thermal emission with the model prediction is presented in the top graph of \autoref{fig:efficiency_comparison}. The simulation is based on the experimental parameters discussed in \autoref{fig:temperature}, with uncertainties captured via Monte Carlo sampling. Parameters such as laser fluence, spot size, reflectivity, and material-specific heat capacity were randomly varied within plausible bounds to generate an ensemble of predicted spectra.
+Using \(T_e(t)\) as input to Planck’s law (\autoref{eq:P}), the modelled spectral power density \(P(\lambda)\) is computed and compared with the bias/dark-subtracted measurement in \autoref{fig:spectra}. Conversion from the measured signal to spectral power density follows
+\begin{equation}
+  P^{\text{meas}}(\lambda)
+  = \frac{S(\lambda)}{G\,t_{\text{exp}}\,\Delta\lambda}\,\frac{hc}{\lambda},
+\end{equation}
+where \(S\) is in DN (bias/dark subtracted), \(G\) is the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time, and \(\Delta\lambda\) the bin width. The factor \(hc/\lambda\) uses \(\lambda\) in \si{\metre} to yield units of \si{\watt\per\nano\metre}. The measured \(P(\lambda)\) is lower in absolute scale than the unscaled model; for visual comparison, the model in \autoref{fig:spectra} is multiplied by a constant to match the measured peak. The measured spectrum is noticeably narrower than the model, consistent with the finite sensitivity window set by the Si detector QE and the blazed-grating envelope.
 
-To obtain the measured spectrum in physical units, raw CCD counts were corrected for detector gain and converted to photon flux using the energy–wavelength relationship \(E = hc/\lambda\). A spectral filter was used to suppress harmonic artifacts from the \SI{1030}{nm} excitation laser, isolating the broadband thermal emission. The resulting signal was then scaled to match the model, preserving spectral shape while removing dependence on absolute intensity.
+An effective spectrometer efficiency is obtained by taking the wavelength-wise ratio \(P^{\text{meas}}(\lambda)/P^{\text{model}}(\lambda)\) and normalising to its maximum, so the peak equals unity (\autoref{fig:efficiency}). The expected curve is calculated from the manufacturer’s QE data for the camera when new~\cite{andor_ixonem_nodate} multiplied by a blazed-grating efficiency model~\cite{barker_ripple_1984}; the shaded interval reflects uncertainty in the blaze parameters. The measured efficiency falls off more steeply than expected at both short and long wavelengths, indicating additional wavelength-dependent loss not captured by the nominal QE\(\times\)blaze model. Moreover, the measured curve exhibits oscillations over wavelength, which may indicate interference effects or ripple in the grating efficiency.
 
-The observed agreement confirms that hot electron thermal emission can be quantitatively modeled from first principles, within the uncertainty bounds of experimental parameters. This validates the core assumption that such emission can serve as a reliable reference for spectral calibration.
-
-\subsection{Efficiency Determination}
-
-The lower graph in \autoref{fig:efficiency_comparison} shows the effective spectral efficiency of the detection system, obtained as the ratio of measured signal to the modeled thermal emission. This curve reflects the combined spectral response of all optical components and the detector, including fiber transmission, mirrors, grating efficiency, and the quantum efficiency of the EMCCD sensor.
-
-For comparison, the manufacturer specifications of the camera and a theoretical model of the grating response (blazed at \SI{500}{nm}) were combined to yield an expected efficiency curve. Both measured and theoretical curves are normalized for shape comparison.
-
-The measured response closely matches the expected shape in the visible range, with peak efficiency around \SI{650}{nm}. Toward shorter wavelengths, however, the measured response drops off more steeply than predicted. This deviation is consistent with known aging effects of antireflection coatings on the EMCCD sensor, which can degrade UV sensitivity over time.
-
-These results highlight two advantages of the proposed method: first, it enables direct detection of spectral response deviations due to component aging or system-specific imperfections; second, it validates that proper optical alignment and modeling allow reliable calibration even in spectral regions where conventional calibration sources are unavailable.
 
 \section{Discussion}
+The earlier-than-expected roll-off at the short-wavelength edge of the effective efficiency curve (\autoref{fig:efficiency}) is plausibly explained by degradation of the UV-enhancing coating on the detector, consistent with the age of the EMCCD. At the long-wavelength edge, reduced response may arise from decreased detector quantum efficiency in the near-IR due to ageing-related changes in the Si surface passivation, as well as possible increased absorption in optical coatings. 
 
-The results demonstrate that thermal emission from hot electrons can serve as a viable reference for the spectral calibration of optical systems, particularly in the UV–VIS range. The comparison between model predictions and measured spectra shows good agreement within the experimental uncertainty, and the derived efficiency curve captures key features expected from the known optical and detector characteristics.
+The oscillatory structure superimposed on the efficiency curve is consistent with thin-film interference effects, likely from oxide layers formed on metallic mirror surfaces and other coated optics. Such features are stable over time but can vary in amplitude and period depending on the exact thickness and refractive index of the oxidised layers.
 
-However, several limitations remain. First, the absolute scaling of the model spectrum is subject to uncertainty due to parameters such as laser fluence, spot size, and material reflectivity. While the relative shape of the spectrum is robust and primarily determined by the time-dependent electron temperature, these input parameters introduce amplitude uncertainties that must be accounted for, as done here via Monte Carlo sampling.
 
-Second, the measured efficiency may still include systematic effects not captured by the model, such as fiber coupling losses, imperfect filter transmission, or unaccounted optical reflections. These factors can distort the apparent spectral shape, especially in regions of low signal. Additionally, the assumption of Lambertian emission from the sample may not fully hold in all geometries or for strongly anisotropic surfaces.
+\section{Discussion}
+The earlier-than-expected roll-off at the short-wavelength edge of the effective efficiency (\autoref{fig:efficiency}) is plausibly due to degradation of the UV-enhancing coating on the detector, consistent with the instrument’s age. The long-wavelength roll-off may stem from reduced near-IR sensitivity of the EMCCD caused by ageing-related changes in the silicon surface passivation and anti-reflection coatings, compounded by increased absorption in optical coatings and possible fibre transmission losses.  
 
-Despite these challenges, the method offers a valuable alternative to conventional calibration approaches, particularly when no calibrated UV sources are available. Unlike external lamps, the hot electron emission is generated in situ under actual measurement conditions, automatically accounting for alignment, collection geometry, and spectral filtering. This can reveal performance deviations not captured by factory specifications, such as the observed drop in UV sensitivity due to coating degradation.
-
-Further refinements could include a more precise characterization of the spot size and laser fluence using independent diagnostics, as well as improved modeling of angular emission effects. Additionally, repeated measurements across different days or setups could help identify systematic biases and improve reproducibility.
-
-Overall, this study provides a promising foundation for physics-based calibration using hot electron emission, enabling sensitive and spectrum-resolved efficiency characterization of detection systems in challenging spectral regions.
-
+The oscillatory structure superimposed on the efficiency curve is consistent with thin-film interference effects, likely arising from oxide layers on metallic mirrors and other coated optics. Such features are stable over time but depend on the exact thickness and refractive index of the oxidised layers.
 
 \section{Conclusion}
-
-This work demonstrates that thermal emission from hot electrons in graphite can serve as a quantitative reference for determining the spectral response of optical detection systems in the UV–VIS range. By comparing measured emission spectra to model predictions based on the two-temperature framework and Planck's law, the relative efficiency of the spectrometer was extracted.
-
-Despite uncertainties in input parameters and potential systematic effects, the agreement between theory and experiment confirms that the emission spectrum can be reliably predicted from first principles. The method thus offers a physics-based alternative to conventional calibration sources, particularly valuable in spectral regions where standard lamps are unavailable or impractical.
-
-Beyond confirming the viability of the approach, the results also reveal performance deviations in the detection system, such as reduced UV sensitivity consistent with known sensor aging effects. This highlights the broader potential of hot-electron emission as an in situ diagnostic tool for characterizing optical systems under real experimental conditions.
+The present comparison between model and measurement is limited by the restricted sensitivity window of the existing optical path. A measurement with a calibrated, broadband setup is required to validate the model more rigorously. Furthermore, if the hot-electron emission mechanism is to be used for any serious calibration purpose, a more detailed physical model will be necessary to reduce uncertainty.  
+Nevertheless, the principle of using hot electrons remains one of the most straightforward ways to generate broadband, predictable UV emission.
 
 
 \clearpage

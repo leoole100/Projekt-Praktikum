@@ -96,11 +96,11 @@ from scipy.stats import binned_statistic
 # signal_flat = mean[mask]
 # noise_flat = np.sqrt(var[mask])
 signal_flat = mean.flatten()
-noise_flat = np.sqrt(var.flatten())
+noise_flat = var.flatten()
 
 # Define signal bins (logarithmic works well across large dynamic range)
 n_bins = 30
-bin_edges = np.geomspace(signal_flat.min(), signal_flat.max(), n_bins + 1)
+bin_edges = np.linspace(signal_flat.min(), signal_flat.max(), n_bins + 1)
 
 # Compute average noise and signal in each bin
 bin_signal_mean, _, _ = binned_statistic(signal_flat, signal_flat, statistic='mean', bins=bin_edges)
@@ -110,11 +110,11 @@ bin_noise_std, _, _ = binned_statistic(signal_flat, noise_flat, statistic='std',
 # Plot binned noise vs signal
 plt.figure()
 plt.errorbar(bin_signal_mean, bin_noise_mean, yerr=bin_noise_std, fmt='o', label="Binned noise")
-plt.plot(bin_signal_mean, np.sqrt(0.1*bin_signal_mean), '--', label="Shot noise", color='gray')
-plt.xscale("log")
-plt.yscale("log")
-plt.xlabel("Signal (counts)")
-plt.ylabel(r"Noise (e$^-$)")
+plt.plot(bin_signal_mean, 0.1*bin_signal_mean, label="Shot noise (G=10)", color='gray')
+# plt.xscale("log")
+# plt.yscale("log")
+plt.xlabel("Signal (DN)")
+plt.ylabel("Variance")
 plt.legend()
 plt.tight_layout()
 plt.savefig("figures/shot noise.pdf")

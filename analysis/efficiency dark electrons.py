@@ -128,60 +128,79 @@ power_meas = counts_to_power_density(wavelength_meas, counts)
 # ===== Efficiency =====
 def norm(x): return x/np.nanmax(x)
 
-fig, axs = plt.subplots(2, 1, sharex=True)
-
 # plot the model
 power_spectrum_model_nW = mc_results['spectrum_mean'] * 1e-9  # Convert to W/nm
 wavelength_model = mc_results['wavelength']
 
-l = axs[0].plot(wavelength_model, power_spectrum_model_nW, label="model")[0]
+l = plt.plot(wavelength_model, power_spectrum_model_nW, label="model")[0]
     
 # Uncertainty bands
-axs[0].fill_between(wavelength_model,
+plt.fill_between(wavelength_model,
                 mc_results['spectrum_percentiles'][0] * 1e-9,
                 mc_results['spectrum_percentiles'][1] * 1e-9,
                 alpha=0.3, color=l.get_color())
 
-
 model = interp1d(wavelength_model, power_spectrum_model_nW, bounds_error=False)
 mask = np.logical_and(wavelength_meas>500, wavelength_meas<700)
 # mask = wavelength_meas>500
-scale = np.nanmedian(model(wavelength_meas[mask])/unp.nominal_values(power_meas[mask]))
+# scale = np.nanmedian(model(wavelength_meas[mask])/unp.nominal_values(power_meas[mask]))
+scale = np.nanmin(model(wavelength_meas[mask]) / unp.nominal_values(power_meas[mask]))
 
-l = axs[0].plot(wavelength_meas, unp.nominal_values(power_meas)*scale, label=fr"measured $\times {scale:g}$")
-axs[0].fill_between(wavelength_meas,
+l = plt.plot(wavelength_meas, unp.nominal_values(power_meas)*scale, label=fr"measured $\times\; {round(scale, -3):.0f}$")
+plt.fill_between(wavelength_meas,
     (unp.nominal_values(power_meas) - unp.std_devs(power_meas))*scale,
     (unp.nominal_values(power_meas) + unp.std_devs(power_meas))*scale,
     color = l[0].get_color(), alpha=0.3
 )
-axs[0].legend()
-axs[0].set_ylabel("Power Density\n (W/nm)")
-axs[0].set_ylim(0, None)
+plt.legend()
+plt.ylabel("Power Density\n (W/nm)")
+plt.xlabel("Wavelength (nm)")
+plt.ylim(0, None)
+plt.xlim(200, 1000)
+# plt.yscale("log")
 
+plt.savefig("figures/spectrum de.pdf")
+plt.show()
 
-l = axs[1].plot(wavelength_model, norm(load_efficiency_curve(efficiency_file)(wavelength_model)), label="expected")
-axs[1].fill_between(wavelength_model,
+def interp(x): return interp1d(wavelength_model, x * 1e-9, bounds_error=False)(wavelength_meas)
+
+eff_meas =  unp.nominal_values(power_meas) / interp(mc_results["spectrum_mean"])
+
+eff_meas_lower =  unp.nominal_values(power_meas) / interp(mc_results["spectrum_percentiles"][0])
+eff_meas_upper =  unp.nominal_values(power_meas) / interp(mc_results["spectrum_percentiles"][1])
+
+# scale the same
+eff_meas_lower /= np.nanmax(eff_meas)
+eff_meas_upper /= np.nanmax(eff_meas)
+eff_meas /= np.nanmax(eff_meas)
+
+# scale individually
+eff_meas_lower /= np.nanmax(eff_meas_lower)
+eff_meas_upper /= np.nanmax(eff_meas_upper)
+eff_meas /= np.nanmax(eff_meas)
+
+l = plt.plot(wavelength_meas, eff_meas, label="measured")
+plt.fill_between(wavelength_meas,
+    eff_meas_lower, eff_meas_upper,
+    color = l[0].get_color(), alpha=0.4
+)
+
+# expected curve
+# l = plt.plot(wavelength_model, norm(load_efficiency_curve(efficiency_file)(wavelength_model)), label="expected", color="C2")
+plt.fill_between(wavelength_model,
     norm(load_efficiency_curve(efficiency_file, k=0.5)(wavelength_model)),    
     norm(load_efficiency_curve(efficiency_file, k=1)(wavelength_model)),
-    color = l[0].get_color(), alpha=0.3
+    # color = l[0].get_color(), 
+    alpha=0.5,
+    label="expected", color="C2"
 )
 
-modelStd = interp1d(wavelength_model, mc_results['spectrum_std'] * 1e-9, bounds_error=False)
-eff_meas =  unp.nominal_values(power_meas) / model(wavelength_meas)
-eff_meas_lower =  unp.nominal_values(power_meas) / (model(wavelength_meas) + modelStd(wavelength_meas))
-eff_meas_upper =  unp.nominal_values(power_meas) / (model(wavelength_meas) - modelStd(wavelength_meas))
-scale = np.nanmax(eff_meas)
-l = axs[1].plot(wavelength_meas, eff_meas/scale, label="measured")
-axs[1].fill_between(wavelength_meas,
-    eff_meas_lower/np.nanmax(eff_meas_lower), eff_meas_upper/np.nanmax(eff_meas_upper),
-    color = l[0].get_color(), alpha=0.3
-)
 
-axs[1].set_xlim(200, 1000)
-# axs[1].set_ylim(0, 1.4)
-axs[1].legend()
-axs[1].set_xlabel("Wavelength (nm)")
-axs[1].set_ylabel("effective\n Efficiency")
+plt.xlim(200, 1000)
+# plt.ylim(0, 1.2)
+plt.legend()
+plt.xlabel("Wavelength (nm)")
+plt.ylabel("effective\n Efficiency")
 plt.savefig("figures/efficiency de.pdf")
 plt.show()
 # plt.yscale("log")

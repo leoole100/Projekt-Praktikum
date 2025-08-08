@@ -9,7 +9,6 @@ from dataclasses import dataclass
 from typing import Tuple, Dict, Any
 import warnings
 from tqdm import tqdm
-from scipy.stats import skewnorm, truncnorm
 
 import os
 
@@ -407,10 +406,10 @@ if __name__ == "__main__":
     l = ax2.plot(t_ps, mc_results['temperature_mean'])[0]
     
     # Uncertainty bands
-    # ax2.fill_between(t_ps, 
-    #                 mc_results['temperature_percentiles'][0], 
-    #                 mc_results['temperature_percentiles'][1],
-    #                 alpha=0.3, color=l.get_color())
+    ax2.fill_between(t_ps, 
+                    mc_results['temperature_percentiles'][0], 
+                    mc_results['temperature_percentiles'][1],
+                    alpha=0.3, color=l.get_color())
     
     ax2.set_xlabel('Time (ps)')
     ax2.set_ylabel('Temperature (K)')
