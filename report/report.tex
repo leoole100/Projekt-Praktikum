@@ -32,7 +32,7 @@
     \vfill
     {
         \normalfont\normalsize
-
+        Hot-electron thermal emission in graphite was studied as a broadband UV–VIS calibration source. Emission spectra under ultrafast excitation were compared to a two-temperature model with Planck’s law, showing good agreement in shape but reduced measured bandwidth due to detector sensitivity limits. Derived spectrometer efficiencies matched expectations apart from stronger UV roll-off, attributed to sample absorption. Sensitivity analysis identified absorption depth and cooling time as dominant uncertainties. Calibration with a traceable spectrometer and materials with flatter absorption are recommended to improve accuracy.
     }
     \vfill
     \begin{flushright}
@@ -232,8 +232,7 @@ with \(G\) the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time,
     \caption{Gaussian pump \(S\) and computed electron temperature \(T_e(t)\) from the lumped two-temperature model (parameters in \autoref{tab:parameters}). The fast rise is followed by electron–phonon cooling with time constant \(g\). The shaded band shows the \(1\sigma\) Monte Carlo uncertainty.}
     \label{fig:Te}
 \end{figure}
-The time evolution for the electron temperature \(T_e(t)\) according to the ODE in \autoref{eq:Te} with the parameters from \autoref{tab:parameters} is s shown in \autoref{fig:Te}.
-A Gaussian pump drives a rapid rise of \(T_e\) followed by cooling on the electron-phonon timescale \(g\). The shaded band indicates the propagated $1\sigma$ uncertainty; the inferred peak temperature is \SI{8500(2500)}{\kelvin}.
+The time evolution of the electron temperature \(T_e(t)\), obtained by solving the ODE in \autoref{eq:Te} with the parameters from \autoref{tab:parameters}, is shown in \autoref{fig:Te}. A Gaussian pump pulse drives a rapid temperature rise, followed by electron–phonon cooling on the timescale \(g\). The shaded band indicates the propagated $1\sigma$ uncertainty from the Monte Carlo analysis. The inferred peak temperature is \SI{8500(2500)}{\kelvin}.
 
 \begin{figure}
     \centering
@@ -241,8 +240,7 @@ A Gaussian pump drives a rapid rise of \(T_e\) followed by cooling on the electr
     \caption{Measured spectral power density \(P_\text{measured}(\lambda)\) compared with the model spectrum obtained by applying Planck’s law to \(T_e(t)\). The measurement is scaled to match the model. The measured peak is narrower than the model, consistent with the instrument’s finite sensitivity window.}
     \label{fig:spectra}
 \end{figure}
-Using \(T_e(t)\) as input to Planck’s law (\autoref{eq:B}), the modelled spectral power density \(P_\text{model}(\lambda)\) is computed and compared with measured spectrum in \autoref{fig:spectra}. 
-The measured spectrum \(P_\text{measured}(\lambda)\) is a lot lower in absolute scale than the model, therefore the measurement in \autoref{fig:spectra} is scaled to match the model. The measured spectrum is noticeably narrower than the model, consistent with the finite sensitivity window set by the Si detector quantum efficiency and the blazed-grating envelope.
+Using \(T_e(t)\) as input to Planck’s law (\autoref{eq:B}), the modelled spectral power density \(P_\text{model}(\lambda)\) is computed and compared with the measured spectrum in \autoref{fig:spectra}. The measured spectrum \(P_\text{measured}(\lambda)\) is significantly lower in absolute scale than the model; for visual comparison, it is scaled to match the model peak. The measured spectrum is also narrower, consistent with the finite sensitivity window determined by the Si detector quantum efficiency and the blazed-grating envelope.
 
 \begin{figure}
     \centering
@@ -250,26 +248,32 @@ The measured spectrum \(P_\text{measured}(\lambda)\) is a lot lower in absolute 
     \caption{Effective spectrometer efficiency (peak-normalised) from \(P_{\text{meas}}(\lambda)/P_{\text{model}}(\lambda)\). The overlay shows the expected relative efficiency from component specifications (camera QE \(\times\) blazed-grating model). The shaded range reflects uncertainty in blaze parameters. The measured curve shows stronger roll-off at both band edges and oscillations over wavelength.}
     \label{fig:efficiency}
 \end{figure}
-An effective spectrometer efficiency is obtained by taking the wavelength-wise ratio \[\eta = P_{\text{meas}}(\lambda)/P_{\text{model}}(\lambda)\] and normalizing to its maximum, so the peak equals unity (\autoref{fig:efficiency}). The expected curve is calculated from the manufacturer’s QE data for the camera when new~\cite{andor_ixonem_nodate} multiplied by a blazed-grating efficiency model~\cite{barker_ripple_1984}; the shaded interval reflects uncertainty in the blaze parameters.
-The measured efficiency falls of quicker the expected in the UV region.
-This could be due to the aged and possibly partially deteriorated UV enhancing anti reflection coating on the CCD sensor.
-Though more likely due to a inaccuracy as of the, as the absorption spectrum of the material is not accounted for, and it has a steep increase in the UV region \cite{smausz_determination_2017}.
+The effective spectrometer efficiency is obtained by taking the wavelength-wise ratio
+\[
+\eta(\lambda) = \frac{P_{\text{meas}}(\lambda)}{P_{\text{model}}(\lambda)}
+\]
+and normalising it to unity at the peak (\autoref{fig:efficiency}). The expected curve is calculated from the manufacturer’s QE data for the camera when new~\cite{andor_ixonem_nodate}, multiplied by a blazed-grating efficiency model~\cite{barker_ripple_1984}; the shaded interval reflects uncertainty in the blaze parameters.  
+
+The measured efficiency declines more rapidly than expected in the UV region. This could result from aging and partial degradation of the UV-enhancing anti-reflection coating on the CCD sensor. However, a more likely explanation is inaccuracy in the model due to neglecting the material’s absorption spectrum, which rises steeply in the UV~\cite{smausz_determination_2017}.
 
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/sensitivity bars.pdf}
-    \caption{}
+    \caption{Root-mean-square sensitivity of \(P(\lambda)\) to the model parameters.}
     \label{fig:sensitivity}
 \end{figure}
-The uncertainty in the measured efficiency is heigh, due to high uncertainty in the modelled spectrum. To understand how the model uncertainty depends on the input parameters, the sensitivity of the model to the parameters is calculated.
-The unit less sensitivity of a function $f(a)$ to the parameter $a$ is defined as: \[\frac{\partial f(a)}{\partial a} \frac{a}{f(a)}\]
-This is done for each wavelength of $P(\lambda)$ and the root mean square is taken of the sensitivity. This is shown for various parameters in \autoref{fig:sensitivity}.
-This shows that the model is mainly sensitive to the the power input $P_\text{avg}$, the absorption depth $d_\text{abs}$ and the cooling constant $g$. The sensitivity on the lattice temperature $T_l$ is low, as expected.\\
-The average power and spot size of the excitation are easy to accurately measure, but the absorption depth and cooling constant are sample dependent and therefore the limiting factor of the calibration accuracy.
+The uncertainty in the measured efficiency is high, primarily due to the large uncertainty in the modelled spectrum. To assess how the model uncertainty depends on its inputs, the sensitivity of the model to each parameter is calculated. The dimensionless sensitivity of a function \(f(a)\) to a parameter \(a\) is defined as
+\[
+\frac{\partial f(a)}{\partial a} \cdot \frac{a}{f(a)},
+\]
+corresponding to the fractional change in \(f\) per fractional change in \(a\). This is computed for each wavelength of \(P(\lambda)\), and the root-mean-square is taken over wavelength. Results are shown in \autoref{fig:sensitivity}.
+
+The model is most sensitive to the average power input \(P_\text{avg}\), the optical absorption depth \(d_\text{abs}\), and the cooling time constant \(g\). Sensitivity to the lattice temperature \(T_l\) is low, as expected. While \(P_\text{avg}\) and the excitation spot size can be measured accurately, \(d_\text{abs}\) and \(g\) are sample-dependent and thus represent the limiting factors for calibration accuracy.
 
 \section{Conclusion}
+Hot-electron thermal emission in graphite was investigated as a potential broadband UV–VIS calibration source. The measured spectrum was qualitatively reproduced by a two-temperature model, though the absolute scale was overestimated and the measured bandwidth was narrower due to the detector’s finite sensitivity range. The derived spectrometer efficiency agreed in overall shape with expectations but showed stronger UV roll-off, likely from unaccounted sample absorption. Sensitivity analysis identified the absorption depth and cooling time constant as the main limits to calibration accuracy. To refine the model, measurements with a calibrated spectrometer are required, and potential alternative materials with flatter absorption coefficients should be explored. With these improvements, hot-electron emission could offer a compact and stable alternative to conventional UV calibration sources.
 
-\clearpage
+
 \printbibliography
 
 \end{document}
