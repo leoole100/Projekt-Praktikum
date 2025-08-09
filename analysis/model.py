@@ -50,7 +50,7 @@ class LaserParameters:
 @dataclass
 class MaterialParameters:
     """Material properties with uncertainties"""
-    d: float = 250e-9               # Optical absorption depth (m)
+    d: float = 200e-9               # Optical absorption depth (m)
     d_uncertainty: float = 100e-9    # Depth uncertainty (m)
     M: float = 0.012                # Molar mass (kg/mol)
     rho: float = 2260               # Density (kg/m³)
@@ -424,7 +424,6 @@ if __name__ == "__main__":
     
     # Main spectrum with uncertainty
     spectrum_mean_nW = mc_results['spectrum_mean'] * 1e-9  # Convert to W/nm
-    # %%
     l = plt.plot(wavelength, spectrum_mean_nW)[0]
     
     # Uncertainty bands

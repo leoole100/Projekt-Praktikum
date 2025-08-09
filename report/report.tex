@@ -62,12 +62,12 @@ To obtain the spectral shape, we model ultrafast absorption and subsequent therm
 \begin{equation}
     \frac{\mathrm d T_e}{\mathrm d t}
     \;=\;
-    -\,\frac{T_e - T_l}{\tau_{\mathrm{ep}}}
+    -\,\frac{T_e - T_l}{g}
     \;+\;
     \frac{P(t)}{C_e(T_e)}.
     \label{eq:Te}
 \end{equation}
-Here \(C_e(T_e)\) is the electronic heat capacity of the probed volume (units \si{J\per K}), \(\tau_{\mathrm{ep}}\) is the electron–phonon energy-relaxation time, \(T_l\) is the lattice temperature (taken approximately constant over this window since typically \(C_l \gg C_e\)), and \(P(t)\) is the laser power deposited in the probed volume (units \si{W}).\\
+Here \(C_e(T_e)\) is the electronic heat capacity of the probed volume (units \si{J\per K}), \(g\) is the electron–phonon energy-relaxation time, \(T_l\) is the lattice temperature (taken approximately constant over this window since typically \(C_l \gg C_e\)), and \(P(t)\) is the laser power deposited in the probed volume (units \si{W}).\\
 Because the instantaneous radiant exitance scales with \(T^4\) (Stefan–Boltzmann law), the emission is dominated by the high-temperature portion of \(T_e(t)\) immediately after excitation; the later, lower-temperature evolution contributes comparatively little. This justifies treating \(T_l\) as constant and using the simplified dynamics above when we are interested in the relative spectral shape rather than absolute irradiance.
 
 To map \(T_e(t)\) to the emitted spectrum we use Planck’s law. The blackbody spectral radiance is
@@ -124,12 +124,12 @@ For alignment and maximal throughput, the lens, sample, and fibre ferrule are mo
     \begin{tabular}{lllll}
         Parameter & Symbol & Value & \\
         \hline
-        Spot diameter on sample\footnote{State definition (FWHM or $1/\mathrm e^2$).} & $d_{\text{spot}}$ & $70^{+50}_{-0}$\;\si{\micro\metre}\\
-        Pulse duration & $\tau_\text{fwhm}$ & \SI{250(50)}{fs} & \\
-        Optical absorption depth & $d_{\text{abs}}$ & \SI{250(100)}{\nano\metre} &  &  \\
         Average laser power & $P_{\text{avg}}$ & \SI{300(5)}{mW} &  &  \\
         Repetition rate & $f_{\text{rep}}$ & \SI{40}{k\hertz} &  &  \\
-        Cooling time constant & $\tau_{\mathrm{ep}}$ & \SI{250(50)}{fs} & \cite{stange_hot_2015} &  \\
+        Pulse duration & $\tau_\text{fwhm}$ & \SI{250(50)}{fs}& \\
+        Spot diameter on sample\footnote{State definition (FWHM or $1/\mathrm e^2$).} & $d_{\text{spot}}$ & $70^{+50}_{-0}$\;\si{\micro\metre}\\
+        Optical absorption depth & $d_{\text{abs}}$ & \SI{200(100)}{\nano\metre} & \cite{smausz_determination_2017} &  \\
+        Cooling time constant & $g$ & \SI{250(50)}{fs} & \cite{stange_hot_2015} &  \\
         Electronic heat capacity & $C_e(T_e)$ & \si{\joule\per\metre\cubed\per\kelvin\squared} & \cite{nihira_temperature_2003} &  \\
         Lattice (ambient) temperature & $T_l$ & \SI{300}{\kelvin} & &  \\
     \end{tabular}
@@ -229,7 +229,7 @@ with \(G\) the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time,
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/model te.pdf}
-    \caption{Gaussian pump \(S\) and computed electron temperature \(T_e(t)\) from the lumped two-temperature model (parameters in \autoref{tab:parameters}). The fast rise is followed by electron–phonon cooling with time constant \(\tau_{\mathrm{ep}}\). The shaded band shows the \(1\sigma\) Monte Carlo uncertainty.}
+    \caption{Gaussian pump \(S\) and computed electron temperature \(T_e(t)\) from the lumped two-temperature model (parameters in \autoref{tab:parameters}). The fast rise is followed by electron–phonon cooling with time constant \(g\). The shaded band shows the \(1\sigma\) Monte Carlo uncertainty.}
     \label{fig:Te}
 \end{figure}
 \begin{figure}
@@ -246,7 +246,7 @@ with \(G\) the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time,
 \end{figure}
 
 The time evolution for the electron temperature \(T_e(t)\) according to the ODE in \autoref{eq:Te} with the parameters from \autoref{tab:parameters} is s shown in \autoref{fig:Te}.
-A Gaussian pump drives a rapid rise of \(T_e\) followed by cooling on the electron–phonon timescale \(\tau_{\mathrm{ep}}\). The shaded band indicates the propagated $1\sigma$ uncertainty; the inferred peak temperature is \SI{8500(2500)}{\kelvin}.
+A Gaussian pump drives a rapid rise of \(T_e\) followed by cooling on the electron–phonon timescale \(g\). The shaded band indicates the propagated $1\sigma$ uncertainty; the inferred peak temperature is \SI{8500(2500)}{\kelvin}.
 
 Using \(T_e(t)\) as input to Planck’s law (\autoref{eq:B}), the modelled spectral power density \(P_\text{model}(\lambda)\) is computed and compared with measured spectrum in \autoref{fig:spectra}. 
 The measured spectrum \(P_\text{measured}(\lambda)\) is a lot lower in absolute scale than the model, therefore the measurement in \autoref{fig:spectra} is scaled to match the model. The measured spectrum is noticeably narrower than the model, consistent with the finite sensitivity window set by the Si detector quantum efficiency and the blazed-grating envelope.
