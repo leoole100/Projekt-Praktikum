@@ -225,44 +225,49 @@ The corrected signal \(S(\lambda)\) in DN was converted to spectral power densit
 with \(G\) the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time, and \(\Delta\lambda\) the spectral bin width.  
 
 
-\section{Results}
+\section{Results and Discussion}
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/model te.pdf}
     \caption{Gaussian pump \(S\) and computed electron temperature \(T_e(t)\) from the lumped two-temperature model (parameters in \autoref{tab:parameters}). The fast rise is followed by electron–phonon cooling with time constant \(g\). The shaded band shows the \(1\sigma\) Monte Carlo uncertainty.}
     \label{fig:Te}
 \end{figure}
+The time evolution for the electron temperature \(T_e(t)\) according to the ODE in \autoref{eq:Te} with the parameters from \autoref{tab:parameters} is s shown in \autoref{fig:Te}.
+A Gaussian pump drives a rapid rise of \(T_e\) followed by cooling on the electron-phonon timescale \(g\). The shaded band indicates the propagated $1\sigma$ uncertainty; the inferred peak temperature is \SI{8500(2500)}{\kelvin}.
+
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/spectrum de.pdf}
     \caption{Measured spectral power density \(P_\text{measured}(\lambda)\) compared with the model spectrum obtained by applying Planck’s law to \(T_e(t)\). The measurement is scaled to match the model. The measured peak is narrower than the model, consistent with the instrument’s finite sensitivity window.}
     \label{fig:spectra}
 \end{figure}
+Using \(T_e(t)\) as input to Planck’s law (\autoref{eq:B}), the modelled spectral power density \(P_\text{model}(\lambda)\) is computed and compared with measured spectrum in \autoref{fig:spectra}. 
+The measured spectrum \(P_\text{measured}(\lambda)\) is a lot lower in absolute scale than the model, therefore the measurement in \autoref{fig:spectra} is scaled to match the model. The measured spectrum is noticeably narrower than the model, consistent with the finite sensitivity window set by the Si detector quantum efficiency and the blazed-grating envelope.
+
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/efficiency de.pdf}
     \caption{Effective spectrometer efficiency (peak-normalised) from \(P_{\text{meas}}(\lambda)/P_{\text{model}}(\lambda)\). The overlay shows the expected relative efficiency from component specifications (camera QE \(\times\) blazed-grating model). The shaded range reflects uncertainty in blaze parameters. The measured curve shows stronger roll-off at both band edges and oscillations over wavelength.}
     \label{fig:efficiency}
 \end{figure}
+An effective spectrometer efficiency is obtained by taking the wavelength-wise ratio \[\eta = P_{\text{meas}}(\lambda)/P_{\text{model}}(\lambda)\] and normalizing to its maximum, so the peak equals unity (\autoref{fig:efficiency}). The expected curve is calculated from the manufacturer’s QE data for the camera when new~\cite{andor_ixonem_nodate} multiplied by a blazed-grating efficiency model~\cite{barker_ripple_1984}; the shaded interval reflects uncertainty in the blaze parameters.
+The measured efficiency falls of quicker the expected in the UV region.
+This could be due to the aged and possibly partially deteriorated UV enhancing anti reflection coating on the CCD sensor.
+Though more likely due to a inaccuracy as of the, as the absorption spectrum of the material is not accounted for, and it has a steep increase in the UV region \cite{smausz_determination_2017}.
 
-The time evolution for the electron temperature \(T_e(t)\) according to the ODE in \autoref{eq:Te} with the parameters from \autoref{tab:parameters} is s shown in \autoref{fig:Te}.
-A Gaussian pump drives a rapid rise of \(T_e\) followed by cooling on the electron–phonon timescale \(g\). The shaded band indicates the propagated $1\sigma$ uncertainty; the inferred peak temperature is \SI{8500(2500)}{\kelvin}.
-
-Using \(T_e(t)\) as input to Planck’s law (\autoref{eq:B}), the modelled spectral power density \(P_\text{model}(\lambda)\) is computed and compared with measured spectrum in \autoref{fig:spectra}. 
-The measured spectrum \(P_\text{measured}(\lambda)\) is a lot lower in absolute scale than the model, therefore the measurement in \autoref{fig:spectra} is scaled to match the model. The measured spectrum is noticeably narrower than the model, consistent with the finite sensitivity window set by the Si detector quantum efficiency and the blazed-grating envelope.
-
-An effective spectrometer efficiency is obtained by taking the wavelength-wise ratio \[\eta = P_{\text{meas}}(\lambda)/P_{\text{model}}(\lambda)\] and normalizing to its maximum, so the peak equals unity (\autoref{fig:efficiency}). The expected curve is calculated from the manufacturer’s QE data for the camera when new~\cite{andor_ixonem_nodate} multiplied by a blazed-grating efficiency model~\cite{barker_ripple_1984}; the shaded interval reflects uncertainty in the blaze parameters. The measured efficiency falls off more steeply than expected at both short and long wavelengths, indicating additional wavelength-dependent loss not captured by the nominal QE\(\times\)blaze model. Moreover, the measured curve exhibits oscillations over wavelength, which may indicate interference effects or ripple in the grating efficiency.
-
-\section{Discussion}
-The earlier-than-expected roll-off at the short-wavelength edge of the effective efficiency (\autoref{fig:efficiency}) is plausibly due to degradation of the UV-enhancing coating on the detector, consistent with the instrument’s age. The long-wavelength roll-off may stem from reduced near-IR sensitivity of the EMCCD caused by ageing-related changes in the silicon surface passivation and anti-reflection coatings, compounded by increased absorption in optical coatings and possible fibre transmission losses.  
-
-The oscillatory structure superimposed on the efficiency curve is consistent with thin-film interference effects, likely arising from oxide layers on metallic mirrors and other coated optics. 
-Such features are stable over short time scales but depend on the exact thickness and refractive index of the oxidised layers.
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/sensitivity bars.pdf}
+    \caption{}
+    \label{fig:sensitivity}
+\end{figure}
+The uncertainty in the measured efficiency is heigh, due to high uncertainty in the modelled spectrum. To understand how the model uncertainty depends on the input parameters, the sensitivity of the model to the parameters is calculated.
+The unit less sensitivity of a function $f(a)$ to the parameter $a$ is defined as: \[\frac{\partial f(a)}{\partial a} \frac{a}{f(a)}\]
+This is done for each wavelength of $P(\lambda)$ and the root mean square is taken of the sensitivity. This is shown for various parameters in \autoref{fig:sensitivity}.
+This shows that the model is mainly sensitive to the the power input $P_\text{avg}$, the absorption depth $d_\text{abs}$ and the cooling constant $g$. The sensitivity on the lattice temperature $T_l$ is low, as expected.\\
+The average power and spot size of the excitation are easy to accurately measure, but the absorption depth and cooling constant are sample dependent and therefore the limiting factor of the calibration accuracy.
 
 \section{Conclusion}
-The present comparison between model and measurement is limited by the restricted sensitivity window of the existing optical path. A measurement with a calibrated, broadband setup is required to validate the model more rigorously. Furthermore, if the hot-electron emission mechanism is to be used for any serious calibration purpose, a more detailed physical model will be necessary to reduce uncertainty.  
-Nevertheless, the principle of using hot electrons remains one of the most straightforward ways to generate broadband, predictable UV emission.
-
 
 \clearpage
 \printbibliography
