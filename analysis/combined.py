@@ -66,6 +66,10 @@ def load_spectrum_data(filepath):
     counts /= 2  # Convert to counts/s
     counts *= 10  # Gain correction to photons
     
+    counts /= 0.6 # low pass filter efficiency
+    counts *= 8 # collection angle 4 f^2 / r^2
+
+
     # Convert to spectral density (counts/s/nm)
     spectral_counts = np.diff(wl) * counts[:-1]
     wl_centers = wl[:-1] + np.diff(wl)/2

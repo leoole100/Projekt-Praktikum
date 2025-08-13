@@ -38,7 +38,10 @@ def load_spectrum_data(filepath):
     # Convert to spectral density (counts/s/nm)
     spectral_counts = np.diff(wl) * counts[:-1]
     wl_centers = wl[:-1] + np.diff(wl)/2
-    
+
+    spectral_counts /= 0.6 # filter transmission
+    spectral_counts /= 0.5 # collection part r^2 / 2f^2 for half complete half sphere
+
     return wl_centers, spectral_counts
 
 def load_efficiency_curve(filepath, k=0.75):
@@ -102,7 +105,7 @@ def mask_harmonics(wavelength, power, harmonic_wavelengths, mask_width=6):
 
 # ===== MODEL CALCULATION =====
 
-mc_results = run_monte_carlo_simulation(sim_params=SimulationParameters(n_monte_carlo=10))
+mc_results = run_monte_carlo_simulation(sim_params=SimulationParameters(n_monte_carlo=50), seed=1)
 
 # ===== MEASUREMENT PROCESSING =====
 

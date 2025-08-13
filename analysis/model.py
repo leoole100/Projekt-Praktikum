@@ -29,8 +29,8 @@ class LaserParameters:
     f_rep_uncertainty: float = 0   # Frequency uncertainty (Hz)
     tau_fwhm: float = 250e-15       # FWHM pulse duration (s)
     tau_uncertainty: float = 50e-15  # Pulse duration uncertainty (s)
-    spot_diameter: float = 70e-6     # Laser spot diameter (m)
-    spot_uncertainty: float = 50e-6   # Spot size uncertainty (m)
+    spot_diameter: float = 50e-6     # Laser spot diameter (m)
+    spot_uncertainty: float = 20e-6   # Spot size uncertainty (m)
     
     @property
     def E_pulse(self) -> float:
@@ -311,7 +311,8 @@ def run_single_simulation(laser_params: LaserParameters,
 
 def run_monte_carlo_simulation(laser_params: LaserParameters = LaserParameters(),
                               material_params: MaterialParameters = MaterialParameters(),
-                              sim_params: SimulationParameters = SimulationParameters()) -> Dict[str, Any]:
+                              sim_params: SimulationParameters = SimulationParameters(),
+                              seed=0) -> Dict[str, Any]:
     """
     Run Monte Carlo simulation with parameter uncertainties
     
@@ -322,6 +323,9 @@ def run_monte_carlo_simulation(laser_params: LaserParameters = LaserParameters()
     temperature_evolutions = []
     spectra = []
     peak_temperatures = []
+
+    # reset seed
+    np.random.seed(seed)
     
     # Create base arrays
     t = np.linspace(sim_params.t_min, sim_params.t_max, sim_params.n_points)
@@ -369,7 +373,7 @@ if __name__ == "__main__":
     # Define parameters
     laser_params = LaserParameters()
     material_params = MaterialParameters()
-    sim_params = SimulationParameters(n_monte_carlo=100)
+    sim_params = SimulationParameters(n_monte_carlo=1000)
     
     # Run deterministic simulation
     t, T_e, spectrum = run_single_simulation(laser_params, material_params, sim_params)
@@ -396,7 +400,7 @@ if __name__ == "__main__":
     V = pi * laser_params.spot_radius**2 * material_params.d
     laser_pulse = laser_pulse * laser_params.E_pulse / (V * np.trapz(laser_pulse, mc_results['time']))
     ax1.plot(t_ps, laser_pulse * V, '-', label='Laser Power')
-    ax1.set_ylabel('Laser Power (W)')
+    ax1.set_ylabel('$S$ (W)')
     ax1.tick_params(axis='x', labelbottom=False)
     ax1.set_ylim(0, None)
     ax1.set_xlim(t_ps.min(), t_ps.max())
@@ -412,7 +416,8 @@ if __name__ == "__main__":
                     alpha=0.3, color=l.get_color())
     
     ax2.set_xlabel('Time (ps)')
-    ax2.set_ylabel('Temperature (K)')
+    ax2.set_ylabel('$T_e$ (K)')
+    ax2.set_ylim(0, None)
     
     plt.savefig("figures/model te.pdf")
     plt.show()

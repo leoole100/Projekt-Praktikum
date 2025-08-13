@@ -67,7 +67,7 @@ fig, axes = plt.subplots(1, 2, sharey=True)
 
 # Temperature sweep plot
 ax = axes[0]
-ax.set_ylabel(r"Dark noise std (e$^-$)")
+ax.set_ylabel(r"$N_{dark}$ (DN)")
 # ax.set_yscale("log")
 ax.set_xlabel("Temperature (°C)")
 ax.plot(temps, counts_temp, "o", label="Data")
