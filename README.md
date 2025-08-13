@@ -1,11 +1,7 @@
-# TODO
-- Zugang Dateiserver
-- Andor Camera interface
-- Monochromator
-- Andor Line binning
-- Calibration of pixel to offset from center wavelength
-- offset (black) measurement
-- intensity calibration to white light source measured with ocean optics
-- measure filter
+# Hot-Electron Emission for Spectral Calibration
+Leon Oleschko supervised by Peter Baum\
+Projekt Praktikum at the University Konstanz \
+2025
 
 
+Hot-electron thermal emission in graphite was studied as a broadband UV–VIS calibration source. Emission spectra under ultrafast excitation were compared to a two-temperature model with Planck’s law. Derived spectrometer efficiencies matched expectations apart from stronger UV roll-off, attributed to sample absorption. Sensitivity analysis identified absorption depth and cooling time as dominant uncertainties. Calibration with a traceable spectrometer is recommended to validate the models accuracy. And selection of a material with a flatter absorption curve to increase the models accuracy.
