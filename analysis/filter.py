@@ -55,9 +55,12 @@ np.save("expected_efficiency.npy",
 
 plt.plot(camera["wavelength"], camera/100*blaze(camera["wavelength"])*0.95, label="Spectrometer", color="k")
 
+kg3 = np.loadtxt("KG3.csv")
+plt.plot(kg3[:, 0], kg3[:, 1]**2*0.6, label="KG3 manufacturer")
+
 plt.xlabel("Wavelength (nm)")
 plt.ylabel("Efficiency")
 plt.ylim(0, 1)
-plt.legend(loc="upper left", frameon=True)
+plt.legend()
 plt.savefig("./figures/filter.pdf")
 plt.show()

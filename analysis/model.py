@@ -23,7 +23,7 @@ warnings.filterwarnings('ignore', category=RuntimeWarning)
 @dataclass
 class LaserParameters:
     """Laser pulse parameters with uncertainties"""
-    P_avg: float = 0.3              # Average power (W)
+    P_avg: float = 0.3/2              # Average power (W)
     P_avg_uncertainty: float = 0.05 # Power uncertainty (W)
     f_rep: float = 40e3             # Repetition rate (Hz)
     f_rep_uncertainty: float = 0   # Frequency uncertainty (Hz)
@@ -51,7 +51,7 @@ class LaserParameters:
 class MaterialParameters:
     """Material properties with uncertainties"""
     d: float = 200e-9               # Optical absorption depth (m)
-    d_uncertainty: float = 100e-9    # Depth uncertainty (m)
+    d_uncertainty: float = 10e-9    # Depth uncertainty (m)
     M: float = 0.012                # Molar mass (kg/mol)
     rho: float = 2260               # Density (kg/m³)
     rho_uncertainty: float = 100    # Density uncertainty (kg/m³)
@@ -373,7 +373,7 @@ if __name__ == "__main__":
     # Define parameters
     laser_params = LaserParameters()
     material_params = MaterialParameters()
-    sim_params = SimulationParameters(n_monte_carlo=1000)
+    sim_params = SimulationParameters(n_monte_carlo=50)
     
     # Run deterministic simulation
     t, T_e, spectrum = run_single_simulation(laser_params, material_params, sim_params)
@@ -390,17 +390,19 @@ if __name__ == "__main__":
     
     # Convert time to ps for plotting
     t_ps = mc_results['time'] / 1e-12
+
+     #%%
     
     # Temperature dynamics plot with uncertainty
     fig = plt.figure()
     
-    ax1 = plt.subplot(2, 1, 1)
+    ax1 = plt.subplot(2, 1,  1)
     # Laser pulse
     laser_pulse = gauss_pulse(mc_results['time'], laser_params.sigma)
     V = pi * laser_params.spot_radius**2 * material_params.d
     laser_pulse = laser_pulse * laser_params.E_pulse / (V * np.trapz(laser_pulse, mc_results['time']))
-    ax1.plot(t_ps, laser_pulse * V, '-', label='Laser Power')
-    ax1.set_ylabel('$S$ (W)')
+    ax1.plot(t_ps, laser_pulse * V / 1e6, '-', label='Laser Power')
+    ax1.set_ylabel('$S$ (MW)')
     ax1.tick_params(axis='x', labelbottom=False)
     ax1.set_ylim(0, None)
     ax1.set_xlim(t_ps.min(), t_ps.max())
