@@ -101,6 +101,7 @@ if __name__ == "__main__":
     plt.plot(sim.time / pico, sim.temperature())
     plt.xlabel("Time (ps)")
     plt.ylabel(r"$T_e$ (K)")
+    plt.ylim(0, None)
     plt.show()
 
 
@@ -112,6 +113,7 @@ if __name__ == "__main__":
     plt.gca().secondary_xaxis('top', functions=(ev_nm, ev_nm)).\
     set_xlabel("Photon Energy (eV)")
 
+    plt.ylim(0, None)
     plt.show()
 
 

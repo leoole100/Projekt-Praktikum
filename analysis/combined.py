@@ -13,11 +13,9 @@ from uncertainties import ufloat
 from uncertainties.unumpy import uarray
 import uncertainties.unumpy as unp
 
-from model import run_monte_carlo_simulation, SimulationParameters
+from model import HotElectronSim, planck
 
 import os
-
-# %%
 
 # Set working directory
 abspath = os.path.abspath(__file__)
@@ -26,14 +24,14 @@ os.chdir(dname)
 
 # ===== MEASUREMENT PROCESSING FUNCTIONS =====
 
-def load_spectrum_data(filepath):
+def spectrum_data(filepath):
     """Load and preprocess raw spectrum data"""
     data = np.loadtxt(filepath)
     wl = data[:, 0]
     counts = data[:, 1] - np.min(data[:, 1])  # Remove baseline
     
     counts *= 10  # Gain correction to photons
-    counts = uarray(counts, np.sqrt(counts))
+    # counts = uarray(counts, np.sqrt(counts))
 
     counts /= 2  # Convert to counts/s
     
@@ -46,9 +44,9 @@ def load_spectrum_data(filepath):
 
     return wl_centers, spectral_counts
 
-def load_efficiency_curve(filepath, k=0.75):
+def efficiency_curve(k=1.3):
     """Load and calculate combined system efficiency"""
-    camera_data = np.loadtxt(filepath)
+    camera_data = np.loadtxt("../measurement/2025-04-03/QEcurve.dat")
     wl_cam = camera_data[:, 0]
     qe_cam = camera_data[:, 1]
     
@@ -62,17 +60,15 @@ def load_efficiency_curve(filepath, k=0.75):
     combined_eff *= 0.6   # Low pass filter efficiency
     
     # Create interpolation function
-    efficiency_func = sp.interpolate.interp1d(wl_cam, combined_eff, 
-                                            bounds_error=False, fill_value=0)
+    efficiency_func = sp.interpolate.interp1d(
+        wl_cam, combined_eff,bounds_error=False, fill_value=0
+    )
     return efficiency_func
 
 def counts_to_power_density(wavelength, counts):
     # Convert to power (W/nm)
-    wavelength = wavelength * 1e-9  # Convert to meters
-    energy_per_photon = h * c / wavelength  # Joules per photon
-    power_spectrum = counts * energy_per_photon  # W/nm
-    
-    return power_spectrum
+    energy_per_photon = 1240 / wavelength  # Joules per photon
+    return counts * energy_per_photon  # W/nm
 
 def apply_efficiency_correction(wavelength, counts, efficiency_func):
     # Get efficiency values
@@ -105,118 +101,55 @@ def mask_harmonics(wavelength, power, harmonic_wavelengths, mask_width=6):
     
     return power_masked
 
-# ===== MODEL CALCULATION =====
-
-mc_results = run_monte_carlo_simulation(sim_params=SimulationParameters(n_monte_carlo=50), seed=1)
-
-# ===== MEASUREMENT PROCESSING =====
 
 # File paths
 data_files = sorted(glob("../measurement/2025-05-05/003 thermal*.asc"))
-efficiency_file = "../measurement/2025-04-03/QEcurve.dat"
 
-wavelength_meas, counts = load_spectrum_data(data_files[0])
-counts[wavelength_meas>900]=np.nan
-counts = mask_harmonics(wavelength_meas, counts, [1032/2, 1032* 2/3, 1032/3], mask_width=10)
-power_meas = counts_to_power_density(wavelength_meas, counts)
-
-# l = plt.plot(wavelength_meas, unp.nominal_values(counts))
-# plt.fill_between(wavelength_meas,
-#     (unp.nominal_values(counts) - unp.std_devs(counts)),
-#     (unp.nominal_values(counts) + unp.std_devs(counts)),
-#     color = l[0].get_color(), alpha=0.5
-# )
-# plt.show()
-
-# %%
-# ===== Efficiency =====
-def norm(x): return x/np.nanmax(x)
-
-# plot the model
-power_spectrum_model_nW = mc_results['spectrum_mean'] * 1e-9  # Convert to W/nm
-wavelength_model = mc_results['wavelength']
-
-
-l = plt.plot(wavelength_model, power_spectrum_model_nW, label="model")[0]
-    
-# Uncertainty bands
-plt.fill_between(wavelength_model,
-                mc_results['spectrum_percentiles'][0] * 1e-9,
-                mc_results['spectrum_percentiles'][1] * 1e-9,
-                alpha=0.3, color=l.get_color())
-
-model = interp1d(wavelength_model, power_spectrum_model_nW, bounds_error=False)
-mask = np.logical_and(wavelength_meas>500, wavelength_meas<700)
-# mask = wavelength_meas>500
-# scale = np.nanmedian(model(wavelength_meas[mask])/unp.nominal_values(power_meas[mask]))
-scale = 5e3
-
-plt.plot(wavelength_meas, 
-    unp.nominal_values(power_meas)*scale, 
-    label=fr"measurement"
+# ========= Raw ========= 
+wavelength_meas, raw_power = spectrum_data(data_files[0])
+raw_power = counts_to_power_density(wavelength_meas, raw_power)
+wavelength_meas = wavelength_meas[200:1800]
+raw_power = raw_power[200:1800]
+raw_power /= raw_power.max()
+plt.plot(
+    wavelength_meas, raw_power,
+    label="raw"
 )
 
-def efficiency(x, k=0.75):
-    return load_efficiency_curve(efficiency_file, k=k)(x)/100
-plt.fill_between(wavelength_meas,
-    unp.nominal_values(power_meas)/efficiency(wavelength_meas, k=0.5)*scale,
-    unp.nominal_values(power_meas)/efficiency(wavelength_meas, k=1)*scale,
-    color = "C2", alpha=0.5,
-    label="expected"
+# ====== Corrected ====== 
+power = raw_power/efficiency_curve()(wavelength_meas)
+power /= power[100:500].max()
+plt.plot(
+    wavelength_meas, power,
+    label="corrected"
 )
 
-plt.legend()
-plt.ylabel("Spectral Flux (AU)")
-plt.xlabel("Wavelength (nm)")
+# ========= Sim =========
+sim = HotElectronSim(
+    F_exc=400
+)
+sim_spec = sim.spectrum()
+sim_spec /= sim_spec.max()
+
+plt.plot(
+    sim.wavelength_nm, sim_spec,
+    label="sim"
+)
+
+# ==== Sim Corrected ====
+sim_corrected = sim_spec*efficiency_curve()(sim.wavelength_nm)
+sim_corrected /= sim_corrected.max()
+plt.plot(
+    sim.wavelength_nm, sim_corrected,
+    label="sim corr"
+)
+
+def ev_nm(x): return 1240/x
+plt.gca().secondary_xaxis('top', functions=(ev_nm, ev_nm)).\
+set_xlabel("Photon Energy (eV)")
+
 plt.ylim(0, None)
-plt.xlim(200, 1000)
 plt.yticks([0])
-# plt.yscale("log")
-
-plt.savefig("figures/spectrum de.pdf")
-plt.show()
- #%%
-
-def interp(x): return interp1d(wavelength_model, x * 1e-9, bounds_error=False)(wavelength_meas)
-
-eff_meas =  unp.nominal_values(power_meas) / interp(mc_results["spectrum_mean"])
-
-eff_meas_lower =  unp.nominal_values(power_meas) / interp(mc_results["spectrum_percentiles"][0])
-eff_meas_upper =  unp.nominal_values(power_meas) / interp(mc_results["spectrum_percentiles"][1])
-
-# scale the same
-eff_meas_lower /= np.nanmax(eff_meas)
-eff_meas_upper /= np.nanmax(eff_meas)
-eff_meas /= np.nanmax(eff_meas)
-
-# scale individually
-# eff_meas_lower /= np.nanmax(eff_meas_lower)
-# eff_meas_upper /= np.nanmax(eff_meas_upper)
-# eff_meas /= np.nanmax(eff_meas)
-
-l = plt.plot(wavelength_meas, eff_meas, label="measured", color="C1")
-plt.fill_between(wavelength_meas,
-    eff_meas_lower, eff_meas_upper,
-    color = l[0].get_color(), alpha=0.4
-)
-
-# expected curve
-# l = plt.plot(wavelength_model, norm(load_efficiency_curve(efficiency_file)(wavelength_model)), label="expected", color="C2")
-plt.fill_between(wavelength_model,
-    norm(load_efficiency_curve(efficiency_file, k=0.5)(wavelength_model)),    
-    norm(load_efficiency_curve(efficiency_file, k=1)(wavelength_model)),
-    # color = l[0].get_color(), 
-    alpha=0.5,
-    label="expected", color="C2"
-)
-
-
-plt.xlim(200, 1000)
-# plt.ylim(0, 1.2)
+plt.xlabel("wavelength (nm)")
 plt.legend()
-plt.xlabel("Wavelength (nm)")
-plt.ylabel("effective\n Efficiency")
-plt.savefig("figures/efficiency de.pdf")
 plt.show()
-# plt.yscale("log")
-# %%
