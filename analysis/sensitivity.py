@@ -58,18 +58,18 @@ for k, (obj, attr) in params.items():
 wavelength = np.linspace(sparam.wavelength_min, sparam.wavelength_max, sparam.n_wavelengths)
 
 # plot how the spectrum changes
-ax = plt.subplot(2, 1, 1)
+# ax = plt.subplot(2, 1, 1)
 plt.plot(wavelength, base_line[2], color="black")
 for k, v in results.items():
     plt.plot(wavelength, v[2], label=k)
-plt.legend(fontsize=8)
+plt.legend()
 # plt.xlabel("Wavelength (nm)")
 plt.ylabel("Power density\n(W/m)")
-ax.tick_params(labelbottom=False)
+# ax.tick_params(labelbottom=False)
 
-plt.subplot(2, 1, 2, sharex=ax)
-for k, v in results.items():
-    plt.plot(wavelength, (v[2]/base_line[2]-1)/change, label=k)
+# plt.subplot(2, 1, 2, sharex=ax)
+# for k, v in results.items():
+#     plt.plot(wavelength, (v[2]/base_line[2]-1)/change, label=k)
 # plt.legend()
 plt.xlabel("Wavelength (nm)")
 plt.ylabel("Sensitivity")
