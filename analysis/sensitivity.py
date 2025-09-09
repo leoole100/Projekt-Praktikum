@@ -21,7 +21,10 @@ def pretty_value(name: str, attr: str, value: float) -> str:
         return f"{value:.3g}"
 
 # ---------- Sweep setup ----------
-base = model.HotElectronSim()
+base = model.HotElectronSim(
+    wl_min_nm=100,
+    wl_max_nm=1600
+)
 
 # Values are chosen to span a sensible range around the defaults.
 # Feel free to tweak to match your experiment.
@@ -59,11 +62,13 @@ for idx, (title, (attr, unit, values)) in enumerate(sweep_plan.items()):
             color=c
         )
 
-    ax.legend(title=title, bbox_to_anchor=(1.0, 1), loc="upper left")
+    ax.legend(title=title)
+    ax.set_ylim(0, None)
+    ax.set_xlim(base.wavelength_nm.min(), base.wavelength_nm.max())
 
 
-fig.supxlabel("Photon energy (eV)", fontsize=10)
-fig.supylabel("Spectrum (J/m²/sr/nm)", fontsize=10)
+fig.supxlabel("Wavelength (nm)", fontsize=10)
+fig.supylabel("Spectrum (J/m³/sr)", fontsize=10)
 
 plt.savefig("figures/sensitivity.pdf")
 plt.show()

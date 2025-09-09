@@ -52,7 +52,7 @@ def planck(wavelength_nm: np.ndarray, T: np.ndarray) -> np.ndarray:
 @dataclass
 class HotElectronSim:
     # Practical inputs
-    F_exc: float = 385           # Excitation fluence per pulse [J·m^-2]
+    F_exc: float = 400           # Excitation fluence per pulse [J·m^-2]
     tau_fwhm: float = 250*femto  # Pulse FWHM [s]
     d_abs: float = 200*nano      # Effective absorption depth [m]
     tau_eph: float = 0.25*pico   # Electron-lattice equilibration time [s]

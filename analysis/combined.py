@@ -112,7 +112,8 @@ if __name__ == "__main__":
     secax = plt.gca().secondary_xaxis('top', functions=(lambda wl: 1240/wl, lambda ev: 1240/ev))
     secax.set_xlabel('Photon Energy (eV)')
     plt.ylim(0, None)
-    plt.legend()
+    plt.xlim(wavelength_meas.min(), wavelength_meas.max())
+    plt.legend(bbox_to_anchor=(1, 1), loc='upper left')
     plt.savefig("figures/combined.fit.pdf")
     plt.show()
 

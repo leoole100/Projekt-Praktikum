@@ -26,7 +26,7 @@ P_range = np.array([_P_range(s) for s in sims])
 
 def model(x, *p): return p[0] * x**p[1] 
 
-plt.plot(F, P, label="simulation")
+plt.plot(F, P, label="total")
 plt.plot(F, P_range, label=f"{wl.min():g}-{wl.max():g} nm")
 
 mask = F > 1e1
