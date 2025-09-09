@@ -7,4 +7,5 @@
 *.FCStd binary
 *.stl binary
 *.npy binary
+*.csv binary
 /data/** binary

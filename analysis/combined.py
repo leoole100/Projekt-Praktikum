@@ -1,155 +1,113 @@
 # %%
-import matplotlib.pyplot as plt
-plt.style.use("../style.mplstyle")
-from networkx import power
-import numpy as np
-from math import pi
-from scipy.constants import h, c, k
-from labellines import labelLines
-from glob import glob
-import scipy as sp
-from scipy.interpolate import interp1d
-from uncertainties import ufloat
-from uncertainties.unumpy import uarray
-import uncertainties.unumpy as unp
-
-from model import HotElectronSim, planck
-
 import os
+import numpy as np
+import matplotlib.pyplot as plt
+from glob import glob
+from scipy.constants import *
+from scipy.interpolate import interp1d
+from scipy.optimize import minimize
+import scipy as sp
+from model import HotElectronSim
 
-# Set working directory
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
+# Set working directory to script location
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-# ===== MEASUREMENT PROCESSING FUNCTIONS =====
+plt.style.use("style.mplstyle")
 
-def spectrum_data(filepath):
-    """Load and preprocess raw spectrum data"""
+def spectrum_data(filepath, exposure_time=2):
     data = np.loadtxt(filepath)
     wl = data[:, 0]
-    counts = data[:, 1] - np.min(data[:, 1])  # Remove baseline
-    
-    counts *= 10  # Gain correction to photons
-    # counts = uarray(counts, np.sqrt(counts))
-
-    counts /= 2  # Convert to counts/s
-    
-    # Convert to spectral density (counts/s/nm)
-    spectral_counts = np.diff(wl) * counts[:-1]
-    wl_centers = wl[:-1] + np.diff(wl)/2
-
-    spectral_counts /= 0.6 # filter transmission
-    spectral_counts /= 0.5 # collection part r^2 / 2f^2 for half complete half sphere
-
+    # Remove baseline, apply gain and exposure correction
+    counts = (data[:, 1] - np.min(data[:, 1])) * 10 / exposure_time
+    # Convert to spectral counts (counts/s/nm) while applying filters
+    wl_centers = wl[:-1] + np.diff(wl) / 2
+    spectral_counts = counts[:-1] * np.diff(wl) / (0.6 * 0.5)
     return wl_centers, spectral_counts
 
-def efficiency_curve(k=1.3):
-    """Load and calculate combined system efficiency"""
+def efficiency_curve(k=1.18):
     camera_data = np.loadtxt("../measurement/2025-04-03/QEcurve.dat")
     wl_cam = camera_data[:, 0]
-    qe_cam = camera_data[:, 1]
-    
-    def blaze_function(wavelength, center=500, k=k):
-        """Grating blaze function"""
-        return np.sin(np.pi*k*(1-center/wavelength))**2 / (np.pi*k*(1-center/wavelength))**2
-    
-    # Calculate combined efficiency
-    blaze_eff = blaze_function(wl_cam)
-    combined_eff = blaze_eff * qe_cam
-    combined_eff *= 0.6   # Low pass filter efficiency
-    
-    # Create interpolation function
-    efficiency_func = sp.interpolate.interp1d(
-        wl_cam, combined_eff,bounds_error=False, fill_value=0
+    qe_cam = camera_data[:, 1] / 100
+    # Blaze function: simplified version using np.sinc for illustration
+    blaze_eff = (np.sinc(k * (1 - 500 / wl_cam)))**2
+    combined_eff = blaze_eff * qe_cam * 0.6
+    mirrors = np.loadtxt("mirrors.csv", delimiter=",")
+    mirror_func = interp1d(
+        mirrors[:, 0]*1000, (mirrors[:, 1]/100)**2, 
+        kind="cubic", fill_value="extrapolate"
     )
-    return efficiency_func
+    # combined_eff *= mirror_func(wl_cam)
+    return sp.interpolate.interp1d(wl_cam, combined_eff, bounds_error=False, fill_value=0)
 
 def counts_to_power_density(wavelength, counts):
-    # Convert to power (W/nm)
-    energy_per_photon = 1240 / wavelength  # Joules per photon
-    return counts * energy_per_photon  # W/nm
+    energy_per_photon = 1240 / wavelength  # Joules per photon conversion (in W/nm)
+    power_density = counts * energy_per_photon
+    solid_angle = pi / 4
+    f_rep = 40 * kilo
+    area = pi * (50 * micro)**2
+    emittance = power_density / (solid_angle * f_rep * area) / nano
+    return emittance
 
-def apply_efficiency_correction(wavelength, counts, efficiency_func):
-    # Get efficiency values
-    efficiency = efficiency_func(wavelength)
-    
-    # Create mask for reliable efficiency data
-    eff_mask = efficiency > 0.3 * np.max(efficiency)
-    wl_masked = wavelength[eff_mask]
-    counts_masked = counts[eff_mask]
-    eff_masked = efficiency[eff_mask]
-    
-    # Correct for efficiency
-    corrected_counts = counts_masked / (eff_masked / 100)
-    
-    # Convert to power (W/nm)
-    wl_m = wl_masked * 1e-9  # Convert to meters
-    energy_per_photon = h * c / wl_m  # Joules per photon
-    power_spectrum = corrected_counts * energy_per_photon  # W/nm
-    
-    return wl_masked, power_spectrum
+if __name__ == "__main__":
 
-def mask_harmonics(wavelength, power, harmonic_wavelengths, mask_width=6):
-    """Mask out harmonic peaks"""
-    power_masked = power.copy()
-    
-    for harmonic_wl in harmonic_wavelengths:
-        harmonic_mask = (wavelength < harmonic_wl - mask_width) | \
-                       (wavelength > harmonic_wl + mask_width)
-        power_masked = np.where(harmonic_mask, power_masked, np.nan)
-    
-    return power_masked
+    # Load and process measurement data
+    data_files = sorted(glob("../measurement/2025-05-05/003 thermal*.asc"))
+    wavelength_meas, raw_power = spectrum_data(data_files[0])
+    raw_power = counts_to_power_density(wavelength_meas, raw_power)
+    wl_range = slice(200, 1800)
+    wavelength_meas, raw_power = wavelength_meas[wl_range], raw_power[wl_range]
+    raw_power /= raw_power.max()
+
+    # Apply efficiency correction to measurement data
+    eff_func = efficiency_curve()
+    power_corr = raw_power / eff_func(wavelength_meas)
+
+    # Simulation results (uncorrected and corrected)
+    sim = HotElectronSim(F_exc=385)
+    sim_spec = sim.spectrum()
+    sim_corr = sim_spec * eff_func(sim.wavelength_nm)
+
+    # === Model fitting ===
+    def model(x):
+        F_exc, k, s = x
+        sim_data = HotElectronSim(F_exc=F_exc)
+        sim_corr = sim_data.spectrum() * efficiency_curve(k=k)(sim_data.wavelength_nm)
+        mdl = interp1d(sim_data.wavelength_nm, sim_corr, bounds_error=False, fill_value="extrapolate")(wavelength_meas)
+        return mdl * s
+
+    def loss(x):
+        return np.mean((model(x) - raw_power)**2) * 1e4
+
+    x0 = [385, 1.18, 1e-3]
+    opt = minimize(loss, x0, bounds=([200, 900], [0.1, 2], [0, np.inf]))
+
+    print(f"F exc.:\t{opt.x[0]:.3g} J/m²")
+    print(f"k.:\t{opt.x[1]:.3g}")
+    print(f"scale:\t{opt.x[2]:.2g}")
+
+    # Plot model fit and residuals
+    fig, (ax1, ax2) = plt.subplots(2, 1, gridspec_kw={'height_ratios': [3, 1]}, sharex=True)
+
+    ax1.plot(wavelength_meas, raw_power, label="raw", color="gray")
+    ax1.plot(wavelength_meas, 
+        raw_power / efficiency_curve(k=opt.x[1])(wavelength_meas),
+        label="corrected"
+    )
+    sim_fit = HotElectronSim(F_exc=opt.x[0], wl_min_nm=350, wl_max_nm=980)
+    ax1.plot(sim_fit.wavelength_nm, sim_fit.spectrum()*opt.x[2], label="model")
+    ax1.set_ylabel("Spectral Radiance\n(J/m³/sr)")
+    ax1.set_ylim(0, None)
+    ax1.legend(fontsize=8)
+
+    residual = (raw_power - model(opt.x)) / (efficiency_curve(k=opt.x[1])(wavelength_meas))
+    print(f"res:\t{np.std(residual):g}")
+    ax2.plot(wavelength_meas, residual, label="Residual")
+    ax2.set_xlabel("Wavelength (nm)")
+    ax2.set_ylabel("Residual")
+    ax2.set_ylim(-1, 1)
+    plt.tight_layout()
+    plt.savefig("figures/combined.fit.pdf")
+    plt.show()
 
 
-# File paths
-data_files = sorted(glob("../measurement/2025-05-05/003 thermal*.asc"))
-
-# ========= Raw ========= 
-wavelength_meas, raw_power = spectrum_data(data_files[0])
-raw_power = counts_to_power_density(wavelength_meas, raw_power)
-wavelength_meas = wavelength_meas[200:1800]
-raw_power = raw_power[200:1800]
-raw_power /= raw_power.max()
-plt.plot(
-    wavelength_meas, raw_power,
-    label="raw"
-)
-
-# ====== Corrected ====== 
-power = raw_power/efficiency_curve()(wavelength_meas)
-power /= power[100:500].max()
-plt.plot(
-    wavelength_meas, power,
-    label="corrected"
-)
-
-# ========= Sim =========
-sim = HotElectronSim(
-    F_exc=400
-)
-sim_spec = sim.spectrum()
-sim_spec /= sim_spec.max()
-
-plt.plot(
-    sim.wavelength_nm, sim_spec,
-    label="sim"
-)
-
-# ==== Sim Corrected ====
-sim_corrected = sim_spec*efficiency_curve()(sim.wavelength_nm)
-sim_corrected /= sim_corrected.max()
-plt.plot(
-    sim.wavelength_nm, sim_corrected,
-    label="sim corr"
-)
-
-def ev_nm(x): return 1240/x
-plt.gca().secondary_xaxis('top', functions=(ev_nm, ev_nm)).\
-set_xlabel("Photon Energy (eV)")
-
-plt.ylim(0, None)
-plt.yticks([0])
-plt.xlabel("wavelength (nm)")
-plt.legend()
-plt.show()
+# %%

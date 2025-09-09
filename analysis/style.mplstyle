@@ -17,7 +17,7 @@ figure.subplot.hspace: 0.05
 figure.subplot.wspace: 0.05
 
 figure.figsize: 5, 3
-figure.constrained_layout.use: True
+# figure.constrained_layout.use: True
 
 # image.cmap: inferno
 

@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.constants import *
 from math import pi
+plt.style.use("style.mplstyle")
 
 # --------- Utility functions (kept simple) ---------
 def pulse(t: np.ndarray, sigma: float, t0: float = 0.0) -> np.ndarray:
@@ -40,7 +41,7 @@ def planck(wavelength_nm: np.ndarray, T: np.ndarray) -> np.ndarray:
 @dataclass
 class HotElectronSim:
     # Practical inputs
-    F_exc: float = 600           # Excitation fluence per pulse [J·m^-2]
+    F_exc: float = 385           # Excitation fluence per pulse [J·m^-2]
     tau_fwhm: float = 250*femto  # Pulse FWHM [s]
     d_abs: float = 200*nano      # Effective absorption depth [m]
     tau_eph: float = 0.25*pico   # Electron-lattice equilibration time [s]
@@ -95,25 +96,46 @@ class HotElectronSim:
 if __name__ == "__main__":
     sim = HotElectronSim()
     sim.spectrum()
+# %%
+    # Plot electron temperature
+    fig, axs = plt.subplots(3, 1, sharex=True)
 
-    # ---- Plots (per pulse, per area) ----
-    plt.plot()
-    plt.plot(sim.time / pico, sim.temperature())
-    plt.xlabel("Time (ps)")
-    plt.ylabel(r"$T_e$ (K)")
-    plt.ylim(0, None)
+    # Excitation pulse profile
+    axs[0].plot(sim.time / pico, pulse(sim.time, sim.sigma) / tera, label="excitation (TW/m²)")
+    axs[0].set_ylabel("Excitation\n(TW/m²)")
+    axs[0].legend()
+    axs[0].set_ylim(0, None)
+
+
+    # Electron temperature
+    axs[1].plot(sim.time / pico, sim.temperature(), label=r'$T_e$ (K)')
+    axs[1].set_ylabel(r"$T_e$ (K)")
+    axs[1].legend()
+    axs[1].set_ylim(0, None)
+
+    # Emitted power based on T^4
+    axs[2].plot(sim.time / pico, sim.temperature()**4 * Stefan_Boltzmann / mega, label=r'$P$ (MW/m²)')
+    axs[2].set_ylabel("$P$\n(MW/m²)")
+    axs[2].set_ylim(0, None)
+    axs[2].legend()
+
+    axs[2].set_xlabel("Time (ps)")
+    plt.savefig("figures/model.time_evolution.pdf")
     plt.show()
 
+# %%
 
+    # plot the expected spectrum
     plt.plot(sim.wavelength_nm, sim.spectrum())
     plt.xlabel("Wavelength (nm)")
-    plt.ylabel(r"$E_\lambda$ (J/m³/sr)")
+    plt.ylabel(r"$E / \epsilon$ (J/m³/sr)")
 
     ev_nm = lambda x:1240/x
     plt.gca().secondary_xaxis('top', functions=(ev_nm, ev_nm)).\
     set_xlabel("Photon Energy (eV)")
 
     plt.ylim(0, None)
+    plt.savefig("figures/model.spectrum.pdf")
     plt.show()
 
 
