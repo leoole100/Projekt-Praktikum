@@ -52,9 +52,8 @@ def planck(wavelength_nm: np.ndarray, T: np.ndarray) -> np.ndarray:
 @dataclass
 class HotElectronSim:
     # Practical inputs
-    F_exc: float = 400           # Excitation fluence per pulse [J·m^-2]
+    P_exc: float = 2e9           # Excitation fluence per pulse [J·m^-3]
     tau_fwhm: float = 250*femto  # Pulse FWHM [s]
-    d_abs: float = 200*nano      # Effective absorption depth [m]
     tau_eph: float = 0.25*pico   # Electron-lattice equilibration time [s]
     T_room: float = 300          # Initial / lattice temperature [K]
 
@@ -89,8 +88,7 @@ class HotElectronSim:
         t = self.time
         dt = t[1] - t[0]
 
-        U = self.F_exc / self.d_abs  # energy density deposited per volume
-        S = pulse(t, self.sigma) * U
+        S = pulse(t, self.sigma) * self.P_exc
 
         T = np.full_like(t, self.T_room, dtype=float)
 
@@ -115,20 +113,25 @@ if __name__ == "__main__":
     fig, axs = plt.subplots(3, 1, sharex=True)
 
     # Excitation pulse profile
-    axs[0].plot(sim.time / pico, pulse(sim.time, sim.sigma) / tera, label="excitation (TW/m²)")
-    axs[0].set_ylabel("Excitation\n(TW/m²)")
+    axs[0].plot(
+        sim.time / pico, pulse(sim.time, sim.sigma)*sim.P_exc / 1e22, 
+        label=r"Excitation Power Density"
+    )
+    axs[0].set_ylabel("P\n(10$^{22}$TW/m²)")
     axs[0].legend()
     axs[0].set_ylim(0, None)
 
 
     # Electron temperature
-    axs[1].plot(sim.time / pico, sim.temperature(), label=r'$T_e$ (K)')
+    axs[1].plot(sim.time / pico, sim.temperature(), 
+        label=r'Electron Temperature'
+    )
     axs[1].set_ylabel(r"$T_e$ (K)")
     axs[1].legend()
     axs[1].set_ylim(0, None)
 
     # Radiance
-    axs[2].plot(sim.time / pico, sim.temperature()**4 * Stefan_Boltzmann / pi / mega, label="total")
+    axs[2].plot(sim.time / pico, sim.temperature()**4 * Stefan_Boltzmann / pi / mega, label="Total Photoluminescence")
 
     wl = np.linspace(400, 900, 100)
     T = sim.temperature()

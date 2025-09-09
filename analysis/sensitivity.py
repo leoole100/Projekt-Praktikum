@@ -15,8 +15,10 @@ def pretty_value(name: str, attr: str, value: float) -> str:
         return f"{value/femto:.3g} fs"
     elif attr == "d_abs":                        # convert m → nm
         return f"{value/nano:.3g} nm"
-    elif attr == "F_exc":
-        return f"{value:.3g} J/m²"
+    elif attr == "P_exc":
+        return f"{value/giga:.3g} GJ/m³"
+    elif attr == "T_room":
+        return f"{value:.3g} K"
     else:
         return f"{value:.3g}"
 
@@ -31,10 +33,10 @@ base = model.HotElectronSim(
 # TODO: change to reflect names from calculations
 sweep_plan = {
     # name: (attr, unit, iterable of absolute values)
-    "Fluence": ("F_exc", "J/m²", [0.5*base.F_exc, base.F_exc, 2.0*base.F_exc]),
+    "Power Density": ("P_exc", "J/m³", [0.5*base.P_exc, base.P_exc, 2.0*base.P_exc]),
     "Pulse FWHM": ("tau_fwhm", "s", [0.5*base.tau_fwhm, 1*base.tau_fwhm, 2.0*base.tau_fwhm]),
-    "Absorption depth": ("d_abs", "m", [0.5*base.d_abs, base.d_abs, 2.0*base.d_abs]),
     "e‑ph equil. time": ("tau_eph", "s", [0.5*base.tau_eph, base.tau_eph, 2.0*base.tau_eph]),
+    "Lattice Temperature": ("T_room", "L", [0.5*base.T_room, base.T_room, 2.0*base.T_room]),
 }
 
 # ---------- Plotting ----------

@@ -62,15 +62,10 @@ if __name__ == "__main__":
     eff_func = efficiency_curve()
     power_corr = raw_power / eff_func(wavelength_meas)
 
-    # Simulation results (uncorrected and corrected)
-    sim = HotElectronSim(F_exc=385)
-    sim_spec = sim.spectrum()
-    sim_corr = sim_spec * eff_func(sim.wavelength_nm)
-
     # === Model fitting ===
     def model(x):
-        F_exc, k, s = x
-        sim_data = HotElectronSim(F_exc=F_exc)
+        P_exc, k, s = x
+        sim_data = HotElectronSim(P_exc=P_exc)
         sim_corr = sim_data.spectrum() * efficiency_curve(k=k)(sim_data.wavelength_nm)
         mdl = interp1d(sim_data.wavelength_nm, sim_corr, bounds_error=False, fill_value="extrapolate")(wavelength_meas)
         return mdl * s
@@ -78,8 +73,8 @@ if __name__ == "__main__":
     def loss(x):
         return np.mean((model(x) - raw_power)**2) * 1e4
 
-    x0 = [385, 1.18, 1e-3]
-    opt = minimize(loss, x0, bounds=([200, 900], [0.1, 2], [0, np.inf]))
+    x0 = [2e9, 1.18, 1e-3]
+    opt = minimize(loss, x0, bounds=([0, np.inf], [0.1, 2], [0, np.inf]))
 
     print(f"F exc.:\t{opt.x[0]:.3g} J/m²")
     print(f"k.:\t{opt.x[1]:.3g}")
@@ -97,7 +92,7 @@ if __name__ == "__main__":
     plt.plot(wavelength_meas, corrected, label="Corrected")
 
     # Plot fitted simulation model
-    sim_fit = HotElectronSim(F_exc=opt.x[0], wl_min_nm=350, wl_max_nm=980)
+    sim_fit = HotElectronSim(P_exc=opt.x[0], wl_min_nm=350, wl_max_nm=980)
     plt.plot(sim_fit.wavelength_nm, sim_fit.spectrum() * opt.x[2], label="Model")
 
     plt.xlabel("Wavelength (nm)")
