@@ -6,11 +6,10 @@ import numpy as np
 from scipy.constants import *
 from scipy.optimize import curve_fit
 
-# F = np.linspace(0, 1000, 100)
-F = np.geomspace(1e-1, 1e4, 100)
+F = np.geomspace(1e3, 1e11, 100)
 
 sims = [HotElectronSim(
-    F_exc=f,
+    P_exc=f,
     T_room=300
 ) for f in F]
 
@@ -29,15 +28,15 @@ def model(x, *p): return p[0] * x**p[1]
 plt.plot(F, P, label="total")
 plt.plot(F, P_range, label=f"{wl.min():g}-{wl.max():g} nm")
 
-mask = F > 1e1
+mask = F > 1e9
 popt, pcov = curve_fit(model, F[mask], P[mask], p0=[1e-8, 1.])
 plt.plot(F, model(F, *popt),"--", color="gray", 
-    label=r"F$^{" + f"{popt[1]:.2f}" + r"}$"
+    label=r"$\propto U^{" + f"{popt[1]:.2f}" + r"}$"
 )
 plt.xscale("log")
 plt.yscale("log")
 plt.ylabel("Radiant Fluence (J/m²/sr)")
-plt.xlabel("Absorbed Fluence (J/m²)")
+plt.xlabel("Absorbed Power Density (J/m³)")
 plt.ylim(1e-10, None)
 plt.legend()
 

@@ -7,6 +7,7 @@ from scipy.constants import *
 
 # Local module
 import model
+from matplotlib.ticker import MaxNLocator
 
 # ---------- Helpers ----------
 def pretty_value(name: str, attr: str, value: float) -> str:
@@ -33,10 +34,10 @@ base = model.HotElectronSim(
 # TODO: change to reflect names from calculations
 sweep_plan = {
     # name: (attr, unit, iterable of absolute values)
-    "Power Density": ("P_exc", "J/m³", [0.5*base.P_exc, base.P_exc, 2.0*base.P_exc]),
-    "Pulse FWHM": ("tau_fwhm", "s", [0.5*base.tau_fwhm, 1*base.tau_fwhm, 2.0*base.tau_fwhm]),
-    "e‑ph equil. time": ("tau_eph", "s", [0.5*base.tau_eph, base.tau_eph, 2.0*base.tau_eph]),
-    "Lattice Temperature": ("T_room", "L", [0.5*base.T_room, base.T_room, 2.0*base.T_room]),
+    "$U_{abs}$": ("P_exc", "J/m³", [0.5*base.P_exc, base.P_exc, 2.0*base.P_exc]),
+    "$t$": ("tau_fwhm", "s", [0.5*base.tau_fwhm, 1*base.tau_fwhm, 2.0*base.tau_fwhm]),
+    r"$\tau$": ("tau_eph", "s", [0.5*base.tau_eph, base.tau_eph, 2.0*base.tau_eph]),
+    "$T_l$": ("T_room", "L", [0.5*base.T_room, base.T_room, 2.0*base.T_room]),
 }
 
 # ---------- Plotting ----------
@@ -68,8 +69,21 @@ for idx, (title, (attr, unit, values)) in enumerate(sweep_plan.items()):
     ax.set_ylim(0, None)
     ax.set_xlim(base.wavelength_nm.min(), base.wavelength_nm.max())
 
+def nm_eV(x): return 1240 / x
 
-fig.supxlabel("Wavelength (nm)", fontsize=10)
+# add top axis only for bottom-row subplots so it appears once per column
+for i, ax in enumerate(axes):
+    if not ax.get_visible():
+        continue
+    sec = ax.secondary_xaxis('top', functions=(nm_eV, nm_eV))
+    if i < ncols:  # top row
+        sec.set_xlabel("Energy (eV)")
+        sec.set_ticks([1, 2, 3, 4, 5])
+    else:  # bottom row
+        sec.set_ticks([1, 2, 3, 4, 5])
+        sec.tick_params(labeltop=False)
+        ax.set_xlabel("Wavelength (nm)")
+
 fig.supylabel("Spectrum (J/m³/sr)", fontsize=10)
 
 plt.savefig("figures/sensitivity.pdf")

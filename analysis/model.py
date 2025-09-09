@@ -115,9 +115,9 @@ if __name__ == "__main__":
     # Excitation pulse profile
     axs[0].plot(
         sim.time / pico, pulse(sim.time, sim.sigma)*sim.P_exc / 1e22, 
-        label=r"Excitation Power Density"
+        label=r"Absorbed Power Density"
     )
-    axs[0].set_ylabel("P\n(10$^{22}$TW/m²)")
+    axs[0].set_ylabel("$P_V$\n(10$^{22}$W/m³)")
     axs[0].legend()
     axs[0].set_ylim(0, None)
 
@@ -131,7 +131,7 @@ if __name__ == "__main__":
     axs[1].set_ylim(0, None)
 
     # Radiance
-    axs[2].plot(sim.time / pico, sim.temperature()**4 * Stefan_Boltzmann / pi / mega, label="Total Photoluminescence")
+    axs[2].plot(sim.time / pico, sim.temperature()**4 * Stefan_Boltzmann / pi / mega, label="Total Radiance")
 
     wl = np.linspace(400, 900, 100)
     T = sim.temperature()
@@ -142,7 +142,7 @@ if __name__ == "__main__":
         label=f"{wl.min():g}-{wl.max():g} nm"
     )
 
-    axs[2].set_ylabel(r'$P$ (MW/m²/sr)')
+    axs[2].set_ylabel(r'$L$ (MW/m²/sr)')
     axs[2].set_ylim(0, None)
     axs[2].legend()
 
@@ -154,15 +154,15 @@ if __name__ == "__main__":
     plt.figure(figsize=(6, 3))
 
     plt.subplot(1, 2, 1)
-    plt.plot(*convert_spectrum_to_ev(sim.wavelength_nm, sim.spectrum()))
-    plt.xlabel("Photon Energy (eV)")
-    plt.ylabel(r"Spectrum (J/m²/sr/eV)")
+    plt.plot(sim.wavelength_nm, sim.spectrum())
+    plt.xlabel("Wavelength (nm)")
+    plt.ylabel(r"$H_\lambda$ (J/m³/sr)")
     plt.ylim(0, None)
 
     plt.subplot(1, 2, 2)
-    plt.plot(sim.wavelength_nm, sim.spectrum())
-    plt.xlabel("Wavelength (nm)")
-    plt.ylabel(r"$E / \epsilon$ (J/m³/sr)")
+    plt.plot(*convert_spectrum_to_ev(sim.wavelength_nm, sim.spectrum()))
+    plt.xlabel("Photon Energy (eV)")
+    plt.ylabel(r"$H_E$ (J/m²/sr/eV)")
     plt.ylim(0, None)
 
     plt.tight_layout()

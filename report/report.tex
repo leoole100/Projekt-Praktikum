@@ -54,58 +54,75 @@
 
 \clearpage
 \section{Model}
-% To obtain the spectral shape, the ultrafast absorption and subsequent thermal emission is modelled with a zero-dimensional (lumped) two-temperature picture for the probed volume. The probed volume is approximated as the excited spot area times the optical absorption depth, \(V_{\text{probe}} \approx A_{\text{spot}}\,d_{\text{abs}}\). A short laser pulse deposits power \(P(t)\) into the electronic system, which rapidly thermalizes; electron–phonon coupling then cools the electrons toward the lattice temperature \(T_l\)~\cite{kampfrathStronglyCoupledOptical2005}. Neglecting transport and other slow losses on the picosecond timescale, the electron temperature \(T_e(t)\) obeys
-\begin{equation}
-    \frac{\mathrm d T_e(t)}{\mathrm d t}
-    \;=\;
-    -\,\frac{T_e - T_l}{g}
-    \;+\;
-    \frac{P(t)}{C_e(T_e)}.
-    \label{eq:Te}
-\end{equation}
-% Here \(C_e(T_e)\) is the electronic heat capacity of the probed volume (units \si{J\per K}), \(g\) is the electron–phonon energy-relaxation time, \(T_l\) is the lattice temperature (taken approximately constant over this window since typically \(C_l \gg C_e\)), and \(P(t)\) is the laser power deposited in the probed volume (units \si{W}).\\
-% Because the instantaneous radiant exitance scales with \(T^4\) (Stefan–Boltzmann law), the emission is dominated by the high-temperature portion of \(T_e(t)\) immediately after excitation; the later, lower-temperature evolution contributes comparatively little. This justifies treating \(T_l\) as constant and using the simplified dynamics above when we are interested in the relative spectral shape rather than absolute irradiance. \cite{roobThermalRadiationUltrafast2025}
-
-% To map \(T_e(t)\) to the emitted spectrum we use Planck’s law. The blackbody spectral radiance is
-% \begin{equation}
-%     B(\lambda,T)
-%     = \frac{2hc^{2}}{\lambda^{5}}
-%       \frac{1}{\exp\bigl(\tfrac{hc}{\lambda k_{\mathrm B}T}\bigr)-1}.
-%     \label{eq:B}
-% \end{equation}
-% Here \(B\) has the units \si{\watt\per\metre\squared\per\steradian\per\nano\metre}. The emissivity is assumed to be unity, as is commonly done for the material used here \cite{sapritskyBlackbodyRadiometry1995}.\\
-% The quantity compared to the measurement is the spectral power density \(P(\lambda)\) in \si{\watt\per\nano\metre}. We obtain it from radiance by multiplying with the illuminated spot area \(A_{\text{spot}}\) and the collection solid angle \(\Omega_{\text{coll}}\) (emission approximated as constant within the collection cone) and integrating over the exposure window:
-% \begin{equation}
-%       P(\lambda) = A_{\text{spot}}\,\Omega_{\text{coll}}
-%       \int B\bigl(\lambda, T_e(t)\bigr)\,\mathrm dt.
-%       \label{eq:P}
-% \end{equation}
-
-\begin{figure}[h]
+\begin{figure}[b]
     \centering
     \includegraphics{../analysis/figures/model.time_evolution.pdf}
+    \caption{}
     \label{fig:timeevolution}
-    \caption{}
-\end{figure}
-\begin{figure}[h]
-    \centering
-    \includegraphics{../analysis/figures/model.spectrum.pdf}
-    \label{fig:model_spectrum}
-    \caption{}
-\end{figure}
-\begin{figure}[h]
-    \centering
-    \includegraphics{../analysis/figures/sensitivity.pdf}
-    \label{fig:sensitivity}
-    \caption{}
-\end{figure}
-\begin{figure}[h]
-    \centering
-    \includegraphics{../analysis/figures/powerscaling.pdf}
-    \label{fig:powerscaling}
-    \caption{}
 \end{figure}
 
+The dynamics the ultrafast Photoluminescence can be modelled using a simplified two temperature model. 
+A excitation pulse with a absorbed power density $P_V(t) = P_\text{exc}(t) / V$ is absorbed by the material in a volume $V$.
+This raises the electron temperature $T_e$ according to the electronic heat capacity $T_e(t)$. 
+Then the electrons are cooled by coupling with a electron–phonon relaxation time $\tau$ to lattice at a constant temperature $T_l$.
+This is described by the ordinary differential equation
+\begin{equation}
+    \frac{\mathrm d T_e(t)}{\mathrm d t}
+    =
+    \frac{P_V(t)}{C_e(T_e)}
+    -\frac{T_e(t) - T_l}{\tau}.
+    \label{eq:Te}
+\end{equation}
+
+This is solved in \autoref{fig:timeevolution} with realistic excitation values of a absorbed power density of $U_\text{abs} = \SI{2e9}{J/m^3}$ spread in a gaussian pulse with a full width half maximum (FWHM) of $t=\SI{250}{fs}$ and the electronic heat capacity \cite{nihiraTemperatureDependenceLattice2003} and the coupling time $\tau=\SI{250}{fs}$ \cite{stangeHotElectronCooling2015} of graphite.
+
+
+
+The emitted spectral radiance $L_\lambda$ can be calculated using Plank's law
+\begin{equation}
+    L_\lambda(\lambda,T)
+    = \epsilon(\lambda) \frac{2hc^{2}}{\lambda^{5}}
+      \frac{1}{\exp\bigl(hc / \lambda k_{\mathrm B}T\bigr)-1}.
+\end{equation}
+
+The emissivity $\epsilon$ is assumed to be unity \cite{sapritskyBlackbodyRadiometry1995}.
+
+The time evolution of the total radiance $L$ and the radiance visible by common detectors is also shown in \autoref{fig:timeevolution}.
+
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/model.spectrum.pdf}
+    \caption{}
+    \label{fig:model_spectrum}
+\end{figure}
+
+We define the spectrum $H_\lambda(\lambda)$ as the spectral radiant energy density, i.e. the spectral radiance $L_\lambda(\lambda, T)$ integrated over the pulse duration
+\begin{equation}
+      H_\lambda(\lambda) = 
+      \int L_\lambda\bigl(\lambda, T_e(t)\bigr)\,\mathrm dt.
+\end{equation}
+This is shown in \autoref{fig:model_spectrum}.
+Note, that this can also be visualized over the photon energy $E = h c / \lambda$. In this report we choose to use the wavelength representation to aid in comparing to direct measurements.
+
+
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/sensitivity.pdf}
+    \caption{}
+    \label{fig:sensitivity}
+\end{figure}
+This model can be used to study how sensitive the spectrum to changes in the parameters. For this the spectrum is shown as before and with each parameter doubled and halved in \autoref{fig:sensitivity}.
+The spectrum changes considerably with changes in the absorbed energy density $U_\text{abs}$ and the electron-phonon coupling time $\tau$. Changes in the excitation pulse time $\tau$ and the lattice temperature $T_l$ don't change the spectrum significantly.
+
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/powerscaling.pdf}
+    \caption{}
+    \label{fig:powerscaling}
+\end{figure}
+The dependence of the integrated spectrum $H$ on the absorbed power density is shown in more detail in \autoref{fig:powerscaling}.
+When considering the total emitted power, it scales with absorbed energy. The flattening for low energies is due to the thermal radiation of the low lattice temperature $T_l$ becoming relevant.
+We also show the emission detectable by a common detector.
 
 \clearpage
 \section{Experimental Setup}
@@ -129,7 +146,7 @@ The experimental setup, originally developed by Leon Roob~\cite{roobThermalRadia
 
 The excitation source is a PHAROS PH1-20 (Light Conversion) at a centre wavelength of \SI{1030}{\nano\metre}, with pulse duration \SI{250}{\femto\second} (FWHM) and repetition rate \SI{40}{\kilo\hertz}. The pulse energy is \SI{7.5}{\micro\joule} (average power \SI{300}{\milli\watt}). The beam is stabilised in four axes and expanded to a diameter of $D=\SI{5}{\milli\metre}$ before entering the chamber.
 
-Inside the chamber, a plano-convex lens with focal length \(f=\SI{200}{\milli\metre}\) focuses the beam onto the sample. Using the standard diffraction estimate \(d \approx 4\lambda f / \pi D\), the expected spot diameter is \(\gtrsim\SI{50}{\micro\metre}\).
+Inside the chamber, a plano-convex lens with focal length \(f=\SI{200}{\milli\metre}\) focuses the beam onto the sample. Using the standard diffraction estimate \(d \approx 4\lambda f / \pi D\), the spot diameter is \(\SI{50}{\micro\metre}\).
 
 The target is a graphite sample mounted on a three-axis translation stage. Thermal emission from the irradiated spot is collected by two off-axis parabolic mirrors (UV-enhanced aluminium). The first mirror (PM1, \(f=\SI{50}{\milli\metre}\)) collimates the emission; the second (PM2, \(f=\SI{101}{\milli\metre}\)) focuses it onto a band-pass filter and into a multimode fibre with a \SI{200}{\micro\metre} core (Ocean Optics QP200-2-SR-BX). The magnification is \(M = f_{\mathrm{PM2}}/f_{\mathrm{PM1}} \approx 2\), yielding an image spot of \(\sim\SI{100}{\micro\metre}\) at the fibre entrance, comfortably within the core.
 
@@ -224,9 +241,21 @@ with \(G\) the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time,
 \begin{figure}[h]
     \centering
     \includegraphics{../analysis/figures/combined.fit.pdf}
-    \label{fig:fit}
     \caption{}
+    \label{fig:fit}
 \end{figure}
+Before comparing the model with the measurement, the raw measurement (shown in \autoref{fig:fit}) has to be corrected with the instruments calibration curve.
+This contains the manufacturer supplied efficiency of the camera \cite{andorIXonEM897Manual} and the efficiency curve of the monochromator.
+This is modelled using \autocite{barkerRippleCorrectionHighdispersion1984} and the unknown model parameter $k=1.18$ fitted by minimizing the error between the corrected spectrum and the model.
+The model and the fitted corrected spectrum is also shown in \autoref{fig:fit}.
+The model was scaled by $0.2$ and the absorbed energy density $U_\text{abs} = \SI{1.93e9}{J/m^3}$ fitted to the measurement.
+
+It is not surprising that the model has a higher scale than the measurement, as some losses (e.g. fiber coupling) are not accounted for.
+The incident energy density $U_\text{inc} = P_\text{avg} \; / \; f_\text{rep} \pi r_\text{spot}^2 d = \SI{4.8e9}{J/m^3}$ with the average Power $P_\text{avg}=\SI{300}{mW}$, the repetition rate $f_\text{rep}=\SI{40}{kHz}$, the spot size $r_\text{spot}=\SI{50}{\micro m}$ and the absorption depth $d=\SI{200}{nm}$ \cite{smauszDeterminationUVVisible2017} is more due to some light being reflected and scattered. It correspondence with a incident fluence of \SI{950}{J/m^2}. 
+
+The light around \SI{900}{nm} and the peak at peak at \SI{688}{nm} in the corrected spectrum may be due to the laser light not being filtered before reaching the sample.
+
+\section{Discussion and Conclusion}
 
 \clearpage
 \printbibliography

@@ -65,7 +65,7 @@ if __name__ == "__main__":
     # === Model fitting ===
     def model(x):
         P_exc, k, s = x
-        sim_data = HotElectronSim(P_exc=P_exc)
+        sim_data = HotElectronSim(P_exc=P_exc*1e9)
         sim_corr = sim_data.spectrum() * efficiency_curve(k=k)(sim_data.wavelength_nm)
         mdl = interp1d(sim_data.wavelength_nm, sim_corr, bounds_error=False, fill_value="extrapolate")(wavelength_meas)
         return mdl * s
@@ -73,10 +73,11 @@ if __name__ == "__main__":
     def loss(x):
         return np.mean((model(x) - raw_power)**2) * 1e4
 
-    x0 = [2e9, 1.18, 1e-3]
+    x0 = [2, 1.18, 1e-3]
     opt = minimize(loss, x0, bounds=([0, np.inf], [0.1, 2], [0, np.inf]))
+    opt.x[0] *= 1e9
 
-    print(f"F exc.:\t{opt.x[0]:.3g} J/m²")
+    print(f"F exc.:\t{opt.x[0]:.3g} J/m³")
     print(f"k.:\t{opt.x[1]:.3g}")
     print(f"scale:\t{opt.x[2]:.2g}")
 
@@ -96,7 +97,7 @@ if __name__ == "__main__":
     plt.plot(sim_fit.wavelength_nm, sim_fit.spectrum() * opt.x[2], label="Model")
 
     plt.xlabel("Wavelength (nm)")
-    plt.ylabel("Spectral Radiance (J/m³/sr)")
+    plt.ylabel("Spectrum (J/m³/sr)")
 
     # Compute and plot residuals
     residual = (raw_power - model(opt.x)) / efficiency_curve(k=opt.x[1])(wavelength_meas)
