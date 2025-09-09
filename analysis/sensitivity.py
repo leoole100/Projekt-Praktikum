@@ -1,91 +1,69 @@
-# Sensitivity: $\partial f(p) / \partial p  * p/P(p) = lim s->0: (P(p+sp)/P(p) - 1)/s$
-# %%
-from curses import noqiflush
-import matplotlib.pyplot as plt
-
-plt.style.use("../style.mplstyle")
-from networkx import power
-import numpy as np
-from math import pi
-from scipy.constants import h, c, k
-from labellines import labelLines
-from glob import glob
-import scipy as sp
-from scipy.interpolate import interp1d
-from uncertainties import ufloat
-from uncertainties.unumpy import uarray
-import uncertainties.unumpy as unp
-
-from model import run_monte_carlo_simulation, LaserParameters, MaterialParameters, SimulationParameters, run_single_simulation
-
+#%%
+from dataclasses import replace
 import os
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.constants import *
 
-# %%
+# Local module
+import model
 
-lparam = LaserParameters(
-    P_avg_uncertainty=0,
-    tau_uncertainty=0,
-    spot_uncertainty=0
-)
+# ---------- Helpers ----------
+def pretty_value(name: str, attr: str, value: float) -> str:
+    """Return a nice string with proper unit prefix depending on attr."""
+    if attr in ("tau_fwhm", "tau_eph"):          # convert s → ps
+        return f"{value/femto:.3g} fs"
+    elif attr == "d_abs":                        # convert m → nm
+        return f"{value/nano:.3g} nm"
+    elif attr == "F_exc":
+        return f"{value:.3g} J/m²"
+    else:
+        return f"{value:.3g}"
 
-mparam = MaterialParameters(
-    d_uncertainty = 0,
-    rho_uncertainty = 0,
-    g_uncertainty = 0
-)
+# ---------- Sweep setup ----------
+base = model.HotElectronSim()
 
-sparam = SimulationParameters()
-
-params = {
-    r"$P_{avg}$":   (lparam, "P_avg"),
-    r"$\tau_{fwhm}$": (lparam, "tau_fwhm"),
-    r"$d_{spot}$": (lparam, "spot_diameter"),
-    r"$d_{abs}$":   (mparam, "d"),
-    r"$g$":   (mparam, "g"),
-    r"$T_l$":   (mparam, "T_room"),
+# Values are chosen to span a sensible range around the defaults.
+# Feel free to tweak to match your experiment.
+# TODO: change to reflect names from calculations
+sweep_plan = {
+    # name: (attr, unit, iterable of absolute values)
+    "Fluence": ("F_exc", "J/m²", [0.5*base.F_exc, base.F_exc, 2.0*base.F_exc]),
+    "Pulse FWHM": ("tau_fwhm", "s", [0.5*base.tau_fwhm, 1*base.tau_fwhm, 2.0*base.tau_fwhm]),
+    "Absorption depth": ("d_abs", "m", [0.5*base.d_abs, base.d_abs, 2.0*base.d_abs]),
+    "e‑ph equil. time": ("tau_eph", "s", [0.5*base.tau_eph, base.tau_eph, 2.0*base.tau_eph]),
 }
 
-base_line = run_single_simulation(lparam, mparam, sparam)
+# ---------- Plotting ----------
+plt.style.use("style.mplstyle") if os.path.exists("style.mplstyle") else None
 
-change = 0.10
-results = {}
-for k, (obj, attr) in params.items():
-    orig = getattr(obj, attr)
-    v = setattr(obj, attr, orig * (1+change))
-    results[k] = run_single_simulation(lparam, mparam, sparam)
-    v =  setattr(obj, attr, orig)  
+nrows = 2
+ncols = 2
+fig, axes = plt.subplots(nrows, ncols, constrained_layout=True, sharex=True, sharey=True, figsize=(6,3))
+axes = axes.ravel()
 
-wavelength = np.linspace(sparam.wavelength_min, sparam.wavelength_max, sparam.n_wavelengths)
+colors = [plt.get_cmap("viridis")(i) for i in np.linspace(0, 1, 3)]
 
-# plot how the spectrum changes
-# ax = plt.subplot(2, 1, 1)
-plt.plot(wavelength, base_line[2], color="black")
-for k, v in results.items():
-    plt.plot(wavelength, v[2], label=k)
-plt.legend()
-# plt.xlabel("Wavelength (nm)")
-plt.ylabel("Power density\n(W/m)")
-# ax.tick_params(labelbottom=False)
+for ax in axes:
+    ax.set_visible(False)
 
-# plt.subplot(2, 1, 2, sharex=ax)
-# for k, v in results.items():
-#     plt.plot(wavelength, (v[2]/base_line[2]-1)/change, label=k)
-# plt.legend()
-plt.xlabel("Wavelength (nm)")
-plt.ylabel("Sensitivity")
-plt.savefig("figures/sensitivity spectrum.pdf")
+for idx, (title, (attr, unit, values)) in enumerate(sweep_plan.items()):
+    ax = axes[idx]
+    ax.set_visible(True)
+
+    for v,c,s  in zip(values, colors, ["-", "--", "-"]):
+        sim_new = replace(base, **{attr: float(v)})
+        ax.plot(
+            sim_new.wavelength_nm, sim_new.spectrum(), s, 
+            label=pretty_value(title, attr, v),
+            color=c
+        )
+
+    ax.legend(title=title, bbox_to_anchor=(1.0, 1), loc="upper left")
+
+
+fig.supxlabel("Photon energy (eV)", fontsize=10)
+fig.supylabel("Spectrum (J/m²/sr/nm)", fontsize=10)
+
+plt.savefig("figures/sensitivity.pdf")
 plt.show()
-
-# get the relative change
-realtive_change = {
-    k: (np.sqrt(np.mean((v[2]/base_line[2] - 1)**2)))/change 
-    for k, v in results.items()
-}
-plt.bar(realtive_change.keys(), realtive_change.values(), color=["C0", "C1", "C2", "C3", "C4", "C5"])
-plt.grid(False)
-plt.ylabel("RMS Sensitivity")
-plt.savefig("figures/sensitivity bars.pdf")
-plt.show()
-
-
-# %%

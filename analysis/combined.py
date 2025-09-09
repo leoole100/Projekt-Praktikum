@@ -86,26 +86,33 @@ if __name__ == "__main__":
     print(f"scale:\t{opt.x[2]:.2g}")
 
     # Plot model fit and residuals
-    fig, (ax1, ax2) = plt.subplots(2, 1, gridspec_kw={'height_ratios': [3, 1]}, sharex=True)
 
-    ax1.plot(wavelength_meas, raw_power, label="raw", color="gray")
-    ax1.plot(wavelength_meas, 
-        raw_power / efficiency_curve(k=opt.x[1])(wavelength_meas),
-        label="corrected"
-    )
+    plt.figure()
+
+    # Plot raw measurement data
+    plt.plot(wavelength_meas, raw_power, label="Raw", color="gray")
+
+    # Compute and plot efficiency-corrected measurement data
+    corrected = raw_power / efficiency_curve(k=opt.x[1])(wavelength_meas)
+    plt.plot(wavelength_meas, corrected, label="Corrected")
+
+    # Plot fitted simulation model
     sim_fit = HotElectronSim(F_exc=opt.x[0], wl_min_nm=350, wl_max_nm=980)
-    ax1.plot(sim_fit.wavelength_nm, sim_fit.spectrum()*opt.x[2], label="model")
-    ax1.set_ylabel("Spectral Radiance\n(J/m³/sr)")
-    ax1.set_ylim(0, None)
-    ax1.legend(fontsize=8)
+    plt.plot(sim_fit.wavelength_nm, sim_fit.spectrum() * opt.x[2], label="Model")
 
-    residual = (raw_power - model(opt.x)) / (efficiency_curve(k=opt.x[1])(wavelength_meas))
+    plt.xlabel("Wavelength (nm)")
+    plt.ylabel("Spectral Radiance (J/m³/sr)")
+
+    # Compute and plot residuals
+    residual = (raw_power - model(opt.x)) / efficiency_curve(k=opt.x[1])(wavelength_meas)
     print(f"res:\t{np.std(residual):g}")
-    ax2.plot(wavelength_meas, residual, label="Residual")
-    ax2.set_xlabel("Wavelength (nm)")
-    ax2.set_ylabel("Residual")
-    ax2.set_ylim(-1, 1)
-    plt.tight_layout()
+    # plt.plot(wavelength_meas, residual, label="Residual")
+    # plt.axhline(0, color="k")
+
+    secax = plt.gca().secondary_xaxis('top', functions=(lambda wl: 1240/wl, lambda ev: 1240/ev))
+    secax.set_xlabel('Photon Energy (eV)')
+    plt.ylim(0, None)
+    plt.legend()
     plt.savefig("figures/combined.fit.pdf")
     plt.show()
 
