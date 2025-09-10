@@ -1,5 +1,5 @@
 \documentclass[
-	parskip=half,
+	% parskip=half,
 	a4paper,
 ]{scrarticle}
 
@@ -7,7 +7,6 @@
 \addbibresource{../literature.bib}
 \begin{document}
 
-\title{Ultrafast Photoluminescence}
 \author{Leon Oleschko}
 \date{\dotdate\today}
 
@@ -16,7 +15,8 @@
     \vspace*{3cm}
     {
         \fontsize{32}{32}
-        \markieren{}{}{Ultrafast}{Photoluminescence}
+        \markieren{Ultrafast}{Photoluminescence}{from Thermal}{Radiation}
+        % \title{Ultrafast Photoluminescence}
     }
     \vspace{.25cm}\\
     {
@@ -60,10 +60,9 @@
     \caption{}
     \label{fig:timeevolution}
 \end{figure}
-
-The dynamics the ultrafast Photoluminescence can be modelled using a simplified two temperature model. 
-A excitation pulse with a absorbed power density $P_V(t) = P_\text{exc}(t) / V$ is absorbed by the material in a volume $V$.
-This raises the electron temperature $T_e$ according to the electronic heat capacity $T_e(t)$. 
+The dynamics of ultrafast photoluminescence can be modelled using a simplified two temperature model. 
+A excitation pulse $P_\text{exc}(t)$ with a absorbed power density $P_V(t) = P_\text{exc}(t) / V$ is absorbed by the material in a volume $V$.
+This raises the electron temperature $T_e$ according to the electronic heat capacity $C_e(T)$. 
 Then the electrons are cooled by coupling with a electron–phonon relaxation time $\tau$ to lattice at a constant temperature $T_l$.
 This is described by the ordinary differential equation
 \begin{equation}
@@ -82,12 +81,11 @@ The emitted spectral radiance $L_\lambda$ can be calculated using Plank's law
 \begin{equation}
     L_\lambda(\lambda,T)
     = \epsilon(\lambda) \frac{2hc^{2}}{\lambda^{5}}
-      \frac{1}{\exp\bigl(hc / \lambda k_{\mathrm B}T\bigr)-1}.
+    \frac{1}{\exp\bigl(hc / \lambda k_{\mathrm B}T\bigr)-1}.
 \end{equation}
+The emissivity $\epsilon$ for the electron gas is assumed to be unity as is commonly done for graphite \cite{sapritskyBlackbodyRadiometry1995}.
 
-The emissivity $\epsilon$ is assumed to be unity \cite{sapritskyBlackbodyRadiometry1995}.
-
-The time evolution of the total radiance $L$ and the radiance visible by common detectors is also shown in \autoref{fig:timeevolution}.
+The time evolution of the total radiance $L$ and the radiance in a spectral range visible by common detectors is also shown in \autoref{fig:timeevolution}.
 
 \begin{figure}
     \centering
@@ -102,7 +100,7 @@ We define the spectrum $H_\lambda(\lambda)$ as the spectral radiant energy densi
       \int L_\lambda\bigl(\lambda, T_e(t)\bigr)\,\mathrm dt.
 \end{equation}
 This is shown in \autoref{fig:model_spectrum}.
-Note, that this can also be visualized over the photon energy $E = h c / \lambda$. In this report we choose to use the wavelength representation to aid in comparing to direct measurements.
+Note, that this can also be visualized over the photon energy $E = h c / \lambda$. In this report we choose to use the wavelength representation to aid in comparing to unprocessed spectrometer output.
 
 
 \begin{figure}
@@ -111,7 +109,7 @@ Note, that this can also be visualized over the photon energy $E = h c / \lambda
     \caption{}
     \label{fig:sensitivity}
 \end{figure}
-This model can be used to study how sensitive the spectrum to changes in the parameters. For this the spectrum is shown as before and with each parameter doubled and halved in \autoref{fig:sensitivity}.
+This model can be used to study the sensitivity of the spectrum to changes in the parameters. For this the spectrum is shown with each parameter doubled and halved in \autoref{fig:sensitivity}.
 The spectrum changes considerably with changes in the absorbed energy density $U_\text{abs}$ and the electron-phonon coupling time $\tau$. Changes in the excitation pulse time $\tau$ and the lattice temperature $T_l$ don't change the spectrum significantly.
 
 \begin{figure}
@@ -122,7 +120,8 @@ The spectrum changes considerably with changes in the absorbed energy density $U
 \end{figure}
 The dependence of the integrated spectrum $H$ on the absorbed power density is shown in more detail in \autoref{fig:powerscaling}.
 When considering the total emitted power, it scales with absorbed energy. The flattening for low energies is due to the thermal radiation of the low lattice temperature $T_l$ becoming relevant.
-We also show the emission detectable by a common detector.
+We also show the emission in a wavelength range detectable by a common detector.
+\textbf{TODO}: check if that is a artefact of the simulation not allowing enough time to cool down.
 
 \clearpage
 \section{Experimental Setup}
@@ -246,9 +245,9 @@ with \(G\) the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time,
 \end{figure}
 Before comparing the model with the measurement, the raw measurement (shown in \autoref{fig:fit}) has to be corrected with the instruments calibration curve.
 This contains the manufacturer supplied efficiency of the camera \cite{andorIXonEM897Manual} and the efficiency curve of the monochromator.
-This is modelled using \autocite{barkerRippleCorrectionHighdispersion1984} and the unknown model parameter $k=1.18$ fitted by minimizing the error between the corrected spectrum and the model.
+This is modelled using \autocite{barkerRippleCorrectionHighdispersion1984} and the unknown model parameter $k=1.18$ is fitted by minimizing the error between the corrected spectrum and the model.
 The model and the fitted corrected spectrum is also shown in \autoref{fig:fit}.
-The model was scaled by $0.2$ and the absorbed energy density $U_\text{abs} = \SI{1.93e9}{J/m^3}$ fitted to the measurement.
+The model is scaled by $0.2$ and the absorbed energy density $U_\text{abs} = \SI{1.93e9}{J/m^3}$ fitted to the measurement.
 
 It is not surprising that the model has a higher scale than the measurement, as some losses (e.g. fiber coupling) are not accounted for.
 The incident energy density $U_\text{inc} = P_\text{avg} \; / \; f_\text{rep} \pi r_\text{spot}^2 d = \SI{4.8e9}{J/m^3}$ with the average Power $P_\text{avg}=\SI{300}{mW}$, the repetition rate $f_\text{rep}=\SI{40}{kHz}$, the spot size $r_\text{spot}=\SI{50}{\micro m}$ and the absorption depth $d=\SI{200}{nm}$ \cite{smauszDeterminationUVVisible2017} is more due to some light being reflected and scattered. It correspondence with a incident fluence of \SI{950}{J/m^2}. 

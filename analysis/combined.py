@@ -17,50 +17,49 @@ plt.style.use("style.mplstyle")
 def spectrum_data(filepath, exposure_time=2):
     data = np.loadtxt(filepath)
     wl = data[:, 0]
+    wl_centers_nm = wl[:-1] + np.diff(wl) / 2
+    dwl = np.diff(wl)*nano # m/bin
+    
     # Remove baseline, apply gain and exposure correction
-    counts = (data[:, 1] - np.min(data[:, 1])) * 10 / exposure_time
-    # Convert to spectral counts (counts/s/nm) while applying filters
-    wl_centers = wl[:-1] + np.diff(wl) / 2
-    spectral_counts = counts[:-1] * np.diff(wl) / (0.6 * 0.5)
-    return wl_centers, spectral_counts
+    baseline = np.min(data[:, 1])
+    photons = (data[:, 1] - baseline) / 10 
+    photons_per_s = photons / exposure_time
+    
+    photons_per_s_m = photons_per_s[:-1] / dwl
+    return wl_centers_nm, photons_per_s_m
 
 def efficiency_curve(k=1.18):
     camera_data = np.loadtxt("../measurement/2025-04-03/QEcurve.dat")
-    wl_cam = camera_data[:, 0]
+    wl_nm = camera_data[:, 0]
     qe_cam = camera_data[:, 1] / 100
     # Blaze function: simplified version using np.sinc for illustration
-    blaze_eff = (np.sinc(k * (1 - 500 / wl_cam)))**2
-    combined_eff = blaze_eff * qe_cam * 0.6
+    blaze_eff = (np.sinc(k * (1 - 500 / wl_nm)))**2 * 0.7
+    combined_eff = blaze_eff * qe_cam * 0.6 # 0.6 is the HR filter
     mirrors = np.loadtxt("mirrors.csv", delimiter=",")
     mirror_func = interp1d(
         mirrors[:, 0]*1000, (mirrors[:, 1]/100)**2, 
         kind="cubic", fill_value="extrapolate"
     )
-    # combined_eff *= mirror_func(wl_cam)
-    return sp.interpolate.interp1d(wl_cam, combined_eff, bounds_error=False, fill_value=0)
+    combined_eff *= mirror_func(wl_nm)
+    return sp.interpolate.interp1d(wl_nm, combined_eff, bounds_error=False, fill_value=0)
 
-def counts_to_power_density(wavelength, counts):
-    energy_per_photon = 1240 / wavelength  # Joules per photon conversion (in W/nm)
-    power_density = counts * energy_per_photon
-    solid_angle = pi / 4
+def counts_to_power_density(wavelength_nm, counts_per_s_m):
+    energy_per_photon = h*c / (wavelength_nm*nano)  # J per photon
+    power_density = counts_per_s_m * energy_per_photon # J/s/m
+    solid_angle = pi*1**2 / 2**2 # 1 inch radius at 2 inch focal length
     f_rep = 40 * kilo
-    area = pi * (50 * micro)**2
-    emittance = power_density / (solid_angle * f_rep * area) / nano
-    return emittance
+    area = pi * (25 * micro)**2
+    emittance = power_density / solid_angle / area / f_rep * 1000 # where does this factor come from?
+    return emittance # J/m³/sr
 
 if __name__ == "__main__":
-
     # Load and process measurement data
     data_files = sorted(glob("../measurement/2025-05-05/003 thermal*.asc"))
-    wavelength_meas, raw_power = spectrum_data(data_files[0])
-    raw_power = counts_to_power_density(wavelength_meas, raw_power)
-    wl_range = slice(200, 1800)
-    wavelength_meas, raw_power = wavelength_meas[wl_range], raw_power[wl_range]
-    raw_power /= raw_power.max()
+    wavelength_meas, counts_per_m_s = spectrum_data(data_files[0])
+    emittance = counts_to_power_density(wavelength_meas, counts_per_m_s)
+    mask = (wavelength_meas >= 375) & (wavelength_meas <= 930)
+    wavelength_meas, emittance = wavelength_meas[mask], emittance[mask]
 
-    # Apply efficiency correction to measurement data
-    eff_func = efficiency_curve()
-    power_corr = raw_power / eff_func(wavelength_meas)
 
     # === Model fitting ===
     def model(x):
@@ -71,9 +70,9 @@ if __name__ == "__main__":
         return mdl * s
 
     def loss(x):
-        return np.mean((model(x) - raw_power)**2) * 1e4
+        return np.mean((model(x) - emittance)**2) * 1e4
 
-    x0 = [2, 1.18, 1e-3]
+    x0 = [2, 1.14, 0.1]
     opt = minimize(loss, x0, bounds=([0, np.inf], [0.1, 2], [0, np.inf]))
     opt.x[0] *= 1e9
 
@@ -81,15 +80,14 @@ if __name__ == "__main__":
     print(f"k.:\t{opt.x[1]:.3g}")
     print(f"scale:\t{opt.x[2]:.2g}")
 
-    # Plot model fit and residuals
-
+    # ############## Plot model fit and residuals ##############
     plt.figure()
 
     # Plot raw measurement data
-    plt.plot(wavelength_meas, raw_power, label="Raw", color="gray")
+    plt.plot(wavelength_meas, emittance, label="Raw", color="gray")
 
     # Compute and plot efficiency-corrected measurement data
-    corrected = raw_power / efficiency_curve(k=opt.x[1])(wavelength_meas)
+    corrected = emittance / efficiency_curve(k=opt.x[1])(wavelength_meas)
     plt.plot(wavelength_meas, corrected, label="Corrected")
 
     # Plot fitted simulation model
@@ -100,18 +98,40 @@ if __name__ == "__main__":
     plt.ylabel("Spectrum (J/m³/sr)")
 
     # Compute and plot residuals
-    residual = (raw_power - model(opt.x)) / efficiency_curve(k=opt.x[1])(wavelength_meas)
+    residual = (emittance - model(opt.x)) / efficiency_curve(k=opt.x[1])(wavelength_meas)
     print(f"res:\t{np.std(residual):g}")
-    # plt.plot(wavelength_meas, residual, label="Residual")
-    # plt.axhline(0, color="k")
 
-    secax = plt.gca().secondary_xaxis('top', functions=(lambda wl: 1240/wl, lambda ev: 1240/ev))
-    secax.set_xlabel('Photon Energy (eV)')
+    # secax = plt.gca().secondary_xaxis('top', functions=(lambda wl: 1240/wl, lambda ev: 1240/ev))
+    # secax.set_xlabel('Photon Energy (eV)')
     plt.ylim(0, None)
     plt.xlim(wavelength_meas.min(), wavelength_meas.max())
     plt.legend(bbox_to_anchor=(1, 1), loc='upper left')
     plt.savefig("figures/combined.fit.pdf")
     plt.show()
 
+    # ################# Plot the efficiency   ##################
+    
+    camera_data = np.loadtxt("../measurement/2025-04-03/QEcurve.dat")
+    camera_data = camera_data[camera_data[:, 0].argsort()]  # Sort by wavelength
+    wl_nm = camera_data[:, 0]
+    qe_cam = camera_data[:, 1]
+    plt.plot(wl_nm, qe_cam, label="camera")
 
+    mirror = np.loadtxt("mirrors.csv", delimiter=",")
+    mask = mirror[:,0]*1000<1000
+    plt.plot(mirror[mask,0]*1000, (mirror[mask,1]/100)**2 * 100, label="mirrors")
+
+    blaze_eff = (np.sinc(opt.x[1] * (1 - 500 / wl_nm)))**2 * .7
+    plt.plot(wl_nm, blaze_eff*100, label="grating")
+
+    plt.plot(wl_nm, efficiency_curve(k=opt.x[1])(wl_nm) * 100, label="combined", color="k")
+
+    plt.plot(wl_nm, efficiency_curve(k=opt.x[1])(wl_nm) * 100 * opt.x[2], label="unaccounted", color="gray")
+
+    plt.legend()
+    plt.ylim(0, 100)
+    plt.xlabel("Wavelength (nm)")
+    plt.ylabel("Efficiency (%)")
+    plt.savefig("figures/combined.efficiency.pdf")
+    plt.show()
 # %%
