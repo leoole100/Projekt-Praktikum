@@ -73,19 +73,18 @@ This is described by the ordinary differential equation
     \label{eq:Te}
 \end{equation}
 
-This is solved in \autoref{fig:timeevolution} with realistic excitation values of a absorbed power density of $U_\text{abs} = \SI{2e9}{J/m^3}$ spread in a gaussian pulse with a full width half maximum (FWHM) of $t=\SI{250}{fs}$ and the electronic heat capacity \cite{nihiraTemperatureDependenceLattice2003} and the coupling time $\tau=\SI{250}{fs}$ \cite{stangeHotElectronCooling2015} of graphite.
+A solution with realistic excitation values of a absorbed power density of $U_\text{abs} = \SI{2e9}{J/m^3}$ spread in a gaussian pulse with a full width half maximum (FWHM) of $t=\SI{250}{fs}$ and the electronic heat capacity from \cite{nihiraTemperatureDependenceLattice2003} and the coupling time $\tau=\SI{250}{fs}$ \cite{stangeHotElectronCooling2015} of graphite is shown in \autoref{fig:timeevolution}.
 
 
 
-The emitted spectral radiance $L_\lambda$ can be calculated using Plank's law
+The at each time step emitted spectral radiance $L_\lambda$ can be calculated using Plank's law
 \begin{equation}
     L_\lambda(\lambda,T)
     = \epsilon(\lambda) \frac{2hc^{2}}{\lambda^{5}}
     \frac{1}{\exp\bigl(hc / \lambda k_{\mathrm B}T\bigr)-1}.
 \end{equation}
 The emissivity $\epsilon$ for the electron gas is assumed to be unity as is commonly done for graphite \cite{sapritskyBlackbodyRadiometry1995}.
-
-The time evolution of the total radiance $L$ and the radiance in a spectral range visible by common detectors is also shown in \autoref{fig:timeevolution}.
+The time evolution of the total radiance $L=\int L_\lambda(\lambda, T) d\lambda$ and the radiance in a spectral range visible by common detectors is also shown in \autoref{fig:timeevolution}.
 
 \begin{figure}
     \centering
@@ -100,7 +99,7 @@ We define the spectrum $H_\lambda(\lambda)$ as the spectral radiant energy densi
       \int L_\lambda\bigl(\lambda, T_e(t)\bigr)\,\mathrm dt.
 \end{equation}
 This is shown in \autoref{fig:model_spectrum}.
-Note, that this can also be visualized over the photon energy $E = h c / \lambda$. In this report we choose to use the wavelength representation to aid in comparing to unprocessed spectrometer output.
+Note, that this can also be visualized over the photon energy $E = h c / \lambda$. In this report we choose to use the wavelength representation to aid in comparing to the direct spectrometer output.
 
 
 \begin{figure}

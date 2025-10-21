@@ -6,7 +6,8 @@ import numpy as np
 from scipy.constants import *
 from scipy.optimize import curve_fit
 
-F = np.geomspace(1e3, 1e11, 100)
+# F = np.geomspace(1e3, 1e11, 100)
+F = np.geomspace(1e7, 1e10, 100)
 
 sims = [HotElectronSim(
     P_exc=f,
@@ -23,7 +24,7 @@ def _P_range(s:HotElectronSim):
 
 P_range = np.array([_P_range(s) for s in sims])
 
-def model(x, *p): return p[0] * x**p[1] 
+def model(x, *p): return p[0] * x**p[1 ] 
 
 plt.plot(F, P, label="total")
 plt.plot(F, P_range, label=f"{wl.min():g}-{wl.max():g} nm")

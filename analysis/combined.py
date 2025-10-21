@@ -14,6 +14,10 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 plt.style.use("style.mplstyle")
 
+def solid_angle_from_aperture(aperture_radius, focal_length):
+    theta = np.arctan2(aperture_radius, focal_length)
+    return 2 * pi * (1 - np.cos(theta))
+
 def spectrum_data(filepath, exposure_time=2):
     data = np.loadtxt(filepath)
     wl = data[:, 0]
@@ -22,11 +26,21 @@ def spectrum_data(filepath, exposure_time=2):
     
     # Remove baseline, apply gain and exposure correction
     baseline = np.min(data[:, 1])
-    photons = (data[:, 1] - baseline) / 10 
+    gain = 10
+    photons = (data[:, 1] - baseline) / gain
     photons_per_s = photons / exposure_time
     
     photons_per_s_m = photons_per_s[:-1] / dwl
     return wl_centers_nm, photons_per_s_m
+
+def counts_to_power_density(wavelength_nm, counts_per_s_m):
+    energy_per_photon = h*c / (wavelength_nm*nano)  # J per photon
+    power_density = counts_per_s_m * energy_per_photon # J/s/m
+    solid_angle = solid_angle_from_aperture(1, 2)
+    f_rep = 40 * kilo
+    area = pi * (25 * micro)**2
+    emittance = power_density / solid_angle / area / f_rep
+    return emittance # J/m³/sr
 
 def efficiency_curve(k=1.18):
     camera_data = np.loadtxt("../measurement/2025-04-03/QEcurve.dat")
@@ -41,16 +55,8 @@ def efficiency_curve(k=1.18):
         kind="cubic", fill_value="extrapolate"
     )
     combined_eff *= mirror_func(wl_nm)
+    combined_eff /= 10000
     return sp.interpolate.interp1d(wl_nm, combined_eff, bounds_error=False, fill_value=0)
-
-def counts_to_power_density(wavelength_nm, counts_per_s_m):
-    energy_per_photon = h*c / (wavelength_nm*nano)  # J per photon
-    power_density = counts_per_s_m * energy_per_photon # J/s/m
-    solid_angle = pi*1**2 / 2**2 # 1 inch radius at 2 inch focal length
-    f_rep = 40 * kilo
-    area = pi * (25 * micro)**2
-    emittance = power_density / solid_angle / area / f_rep * 1000 # where does this factor come from?
-    return emittance # J/m³/sr
 
 if __name__ == "__main__":
     # Load and process measurement data
@@ -72,7 +78,7 @@ if __name__ == "__main__":
     def loss(x):
         return np.mean((model(x) - emittance)**2) * 1e4
 
-    x0 = [2, 1.14, 0.1]
+    x0 = [15, 1.0, 0.1]
     opt = minimize(loss, x0, bounds=([0, np.inf], [0.1, 2], [0, np.inf]))
     opt.x[0] *= 1e9
 
@@ -105,33 +111,38 @@ if __name__ == "__main__":
     # secax.set_xlabel('Photon Energy (eV)')
     plt.ylim(0, None)
     plt.xlim(wavelength_meas.min(), wavelength_meas.max())
-    plt.legend(bbox_to_anchor=(1, 1), loc='upper left')
+    plt.legend()
     plt.savefig("figures/combined.fit.pdf")
     plt.show()
 
     # ################# Plot the efficiency   ##################
     
+    # %%
+
     camera_data = np.loadtxt("../measurement/2025-04-03/QEcurve.dat")
     camera_data = camera_data[camera_data[:, 0].argsort()]  # Sort by wavelength
     wl_nm = camera_data[:, 0]
     qe_cam = camera_data[:, 1]
-    plt.plot(wl_nm, qe_cam, label="camera")
+    plt.plot(wl_nm, qe_cam/100, label="camera")
 
     mirror = np.loadtxt("mirrors.csv", delimiter=",")
     mask = mirror[:,0]*1000<1000
-    plt.plot(mirror[mask,0]*1000, (mirror[mask,1]/100)**2 * 100, label="mirrors")
+    plt.plot(mirror[mask,0]*1000, (mirror[mask,1]/100)**2, label="mirrors")
 
     blaze_eff = (np.sinc(opt.x[1] * (1 - 500 / wl_nm)))**2 * .7
-    plt.plot(wl_nm, blaze_eff*100, label="grating")
+    plt.plot(wl_nm, blaze_eff, label="grating")
 
-    plt.plot(wl_nm, efficiency_curve(k=opt.x[1])(wl_nm) * 100, label="combined", color="k")
+    plt.plot(wl_nm, efficiency_curve(k=opt.x[1])(wl_nm), label="combined", color="k")
 
-    plt.plot(wl_nm, efficiency_curve(k=opt.x[1])(wl_nm) * 100 * opt.x[2], label="unaccounted", color="gray")
+    np.save("expected_efficiency.npy", 
+        np.array([wl_nm, efficiency_curve(k=opt.x[1])(wl_nm)])
+    )
 
     plt.legend()
-    plt.ylim(0, 100)
+    plt.yscale("log"); plt.ylim(1e-2, 1)
+    plt.xlim(300, 1100)
     plt.xlabel("Wavelength (nm)")
-    plt.ylabel("Efficiency (%)")
+    plt.ylabel("Efficiency")
     plt.savefig("figures/combined.efficiency.pdf")
     plt.show()
 # %%

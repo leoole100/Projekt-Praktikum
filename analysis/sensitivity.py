@@ -29,15 +29,15 @@ base = model.HotElectronSim(
     wl_max_nm=1600
 )
 
+scale = np.array([0.5, 1, 1.5])
+
 # Values are chosen to span a sensible range around the defaults.
-# Feel free to tweak to match your experiment.
-# TODO: change to reflect names from calculations
 sweep_plan = {
     # name: (attr, unit, iterable of absolute values)
-    "$U_{abs}$": ("P_exc", "J/m³", [0.5*base.P_exc, base.P_exc, 2.0*base.P_exc]),
-    "$t$": ("tau_fwhm", "s", [0.5*base.tau_fwhm, 1*base.tau_fwhm, 2.0*base.tau_fwhm]),
-    r"$\tau$": ("tau_eph", "s", [0.5*base.tau_eph, base.tau_eph, 2.0*base.tau_eph]),
-    "$T_l$": ("T_room", "L", [0.5*base.T_room, base.T_room, 2.0*base.T_room]),
+    "$P_V$": ("P_exc", "J/m³", scale*base.P_exc),
+    "$t$": ("tau_fwhm", "s", scale*base.tau_fwhm),
+    r"$\tau$": ("tau_eph", "s", scale*base.tau_eph),
+    "$T_l$": ("T_room", "L", scale*base.T_room),
 }
 
 # ---------- Plotting ----------
