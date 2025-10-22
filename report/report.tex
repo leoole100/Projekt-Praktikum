@@ -136,95 +136,96 @@ Crucially, the scaling is not described by a simple power law. This non-trivial 
     \label{fig:setup}
 \end{figure}
 
-The experimental setup, originally developed by Leon Roob~\cite{roobThermalRadiationUltrafast2025}, is shown in \autoref{fig:setup}. It is designed to measure broadband thermal emission from hot electrons in graphite using reflective collection optics and a fibre-coupled spectrometer.
+The experimental setup, originally developed by Leon Roob~\cite{roobThermalRadiationUltrafast2025}, is presented in \autoref{fig:setup}. It is designed to measure broadband thermal emission from hot electrons in graphite using reflective collection optics and a fibre-coupled spectrometer.
 
-The excitation source is a PHAROS PH1-20 (Light Conversion) at a centre wavelength of \SI{1030}{\nano\metre}, with pulse duration \SI{250}{\femto\second} (FWHM) and repetition rate \SI{40}{\kilo\hertz}. The pulse energy is \SI{7.5}{\micro\joule} (average power \SI{300}{\milli\watt}). The beam is stabilised in four axes and expanded to a diameter of $D=\SI{5}{\milli\metre}$ before entering the chamber.
+The excitation source is a Light Conversion PHAROS PH1-20 at a centre wavelength of \SI{1030}{\nano\metre}, with pulse duration \SI{250}{\femto\second} (FWHM) and repetition rate \SI{40}{\kilo\hertz}. The pulse energy is \SI{7.5}{\micro\joule} (average power \SI{300}{\milli\watt}). The beam is stabilised in four axes and expanded to a diameter of $D=\SI{5}{\milli\metre}$ prior to entering the chamber.
 
-Inside the chamber, a plano-convex lens with focal length \(f=\SI{200}{\milli\metre}\) focuses the beam onto the sample. Using the standard diffraction estimate \(d \approx 4\lambda f / \pi D\), the spot diameter is \(\SI{50}{\micro\metre}\).
+Inside the chamber, a plano-convex lens with focal length \(f=\SI{200}{\milli\metre}\) focuses the beam onto the sample. The resulting spot diameter is estimated using the standard diffraction approximation \(d \approx 4\lambda f / \pi D\) to be \(\sim\SI{50}{\micro\metre}\).
 
-The target is a graphite sample mounted on a three-axis translation stage. Thermal emission from the irradiated spot is collected by two off-axis parabolic mirrors (UV-enhanced aluminium). The first mirror (PM1, \(f=\SI{50}{\milli\metre}\)) collimates the emission; the second (PM2, \(f=\SI{101}{\milli\metre}\)) focuses it onto a band-pass filter and into a multimode fibre with a \SI{200}{\micro\metre} core (Ocean Optics QP200-2-SR-BX). The magnification is \(M = f_{\mathrm{PM2}}/f_{\mathrm{PM1}} \approx 2\), yielding an image spot of \(\sim\SI{100}{\micro\metre}\) at the fibre entrance, comfortably within the core.
+The target is a graphite sample mounted on a three-axis translation stage. Thermal emission from the irradiated spot is collected by two off-axis parabolic mirrors (UV-enhanced aluminium). The first mirror (PM1, \(f=\SI{50}{\milli\metre}\)) collimates the emission; the second (PM2, \(f=\SI{101}{\milli\metre}\)) focuses it onto a band-pass filter and into a multimode fibre with a \SI{200}{\micro\metre} core (Ocean Optics QP200-2-SR-BX). The magnification is \(M = f_{\mathrm{PM2}}/f_{\mathrm{PM1}} \approx 2\), yielding an image spot of \(\sim\SI{100}{\micro\metre}\) at the fibre entrance, comfortably within the core, ensuring maximum signal collection.
 
-The fibre feeds an Acton SpectraPro 300i monochromator equipped with a 150\,lines\,mm\(^{-1}\) grating blazed at \SI{500}{\nano\metre}. The dispersed spectrum is detected by an Andor iXon\textsuperscript{EM}+ 897 EMCCD operated in vertical binning mode, effectively serving as a 1D line detector.
-Wavelength calibration (performed once following the manufacturer’s procedure~\cite{roobThermalRadiationUltrafast2025}) was stable throughout the measurements.
+The fibre feeds an Acton SpectraPro 300i monochromator equipped with a 150\,lines\,mm\(^{-1}\) grating blazed at \SI{500}{\nano\metre}. The dispersed spectrum is detected by an Andor iXon\textsuperscript{EM}+ 897 EMCCD operated in vertical binning mode, effectively acting as a high-sensitivity 1D line detector.
+Wavelength calibration, performed once following the manufacturer’s procedure~\cite{roobThermalRadiationUltrafast2025}, remained stable throughout the measurements.
 
-For alignment and maximal throughput, the lens, sample, and fibre ferrule are mounted on independent precision translation stages, while PM1 and PM2 are fixed on the common optical axis. 
+For optimal alignment and maximal throughput, the lens, sample, and fibre ferrule are mounted on independent precision translation stages, while PM1 and PM2 are fixed on the common optical axis.
 
 \subsection{Noise and detector considerations}
-Detecting the weak thermal radiation from hot electrons requires careful optimisation of the signal-to-noise ratio (SNR). In this setup the dominant noise sources originate from the detector; laser power fluctuations and mechanical variations are treated as negligible. The EMCCD mechanisms are well documented by Andor~\cite{dr.jowaltersSensitivityNoiseCCD2023,andorEstablishingSensitivityScientifica} and standards \cite{europeanmachinevisionassociationStandardCharacterizationImage2010}.
+Detecting the weak thermal radiation from hot electrons requires careful optimization of the signal-to-noise ratio (SNR). In this setup, detector-related phenomena constitute the dominant noise sources, while laser power fluctuations and mechanical variations are empirically treated as negligible. The underlying EMCCD noise mechanisms are well documented by Andor~\cite{dr.jowaltersSensitivityNoiseCCD2023,andorEstablishingSensitivityScientifica} and standards \cite{europeanmachinevisionassociationStandardCharacterizationImage2010}.
 
-\textbf{Readout noise.}
+\paragraph{Readout Noise ($\sigma_{\text{read}}$)}
 This is the fundamental noise from charge transfer and A/D conversion. For the present camera, the fit in \autoref{fig:dark_noise} yields a constant read noise of
 \(\sigma_{\text{read}}=\SI{0.81(12)}{DN}\), consistent with the manufacturer’s specification~\cite{andorIXonEM897Manual}.
-Because read noise is applied per read out bin, hardware binning (1D line-detector mode) reduces its impact by summing signal prior to the single read.
+Because read noise is applied per readout cycle, utilizing hardware binning (1D line-detector mode) critically minimizes its impact by consolidating signal prior to the single read.
 
-\textbf{Dark current noise.}
+\paragraph{Dark Current Noise ($N_{\text{dark}}$)}
 Thermally generated charge scales with temperature and time,
 \(N_\text{dark}\propto \exp(-E/kT)\,t_\text{exp}\).
 \autoref{fig:dark_noise} shows the measured dependence; fitting gives an effective activation energy \(E=\SI{0.597(4)}{eV}\).
-With the sensor cooled to \SI{-80}{\degreeCelsius}, the dark contribution is negligible at the exposure times used.
+Consequently, with the sensor cooled to \SI{-80}{\degreeCelsius}, the dark contribution is confirmed to be negligible for the utilized exposure times.
 
 \begin{figure}[h]
     \centering
     \includegraphics{../analysis/figures/dark_noise.pdf}
-    \caption{Dark noise vs.\ sensor temperature and exposure time. Fit yields \(E=\SI{0.597(4)}{eV}\) and \(\sigma_{\text{read}}=\SI{0.81(12)}{e^{-}}\).}
+    \caption{Noise characterization of the EMCCD detector. The plot shows the measured noise versus sensor temperature and exposure time. The fit confirms the read noise $\sigma_{\text{read}}=\SI{0.81(12)}{e^{-}}$ and provides the effective activation energy $E=\SI{0.597(4)}{eV}$ for dark current, confirming its negligible impact at the operating temperature of \SI{-80}{\degreeCelsius}.}
     \label{fig:dark_noise}
 \end{figure}
 
-\textbf{Clock-induced charge (CIC).}
+\paragraph{Clock-Induced Charge (CIC)}
 CIC is created during high-speed clocking.
-Its apparent contribution grows with electron multiplication gain, so \emph{EM gain is disabled} in this work (signal levels are well above the read-noise floor), which keeps CIC negligible~\cite{andorEstablishingSensitivityScientifica}.
+Its contribution scales with the electron multiplication gain; therefore, the \emph{EM gain is disabled} in this work (signal levels are well above the read-noise floor), which keeps CIC negligible~\cite{andorEstablishingSensitivityScientifica}.
 
-\textbf{Shot noise and photon-transfer method.}
-Under these optimised conditions the dominant term is shot noise.
+\paragraph{Shot Noise and System Gain ($G$)}
+Under these optimized conditions (negligible $\sigma_{\text{read}}$ and $N_{\text{dark}}$), the dominant noise term is shot noise.
 Incident photons create photoelectrons with quantum efficiency \(\eta\), so \(N_e=\eta\,N_{\text{photons}}\) and, for Poisson statistics, \(\operatorname{var}(N_e)=N_e\)~\cite{europeanmachinevisionassociationStandardCharacterizationImage2010}.
 Let \(G\) denote the system conversion gain (DN per electron). The measured signal in data numbers (DN) is \(S = G\,N_e\), and the measured variance becomes \(\sigma^2_{\text{meas}} \;=\; \sigma_{\text{read}}^2 \;+\; G\,S\).
-Thus a plot of variance vs.\ mean (photon-transfer curve) is linear in the shot-noise regime with slope \(G\).
+Therefore, a plot of variance vs.\ mean (the photon-transfer curve) exhibits linearity in the shot-noise regime with a slope equal to $G$.
 \autoref{fig:shotnoise} shows this behaviour; from the slope \(G \approx 10~\text{DN}/e^{-}\) can be measured.
-Note that this procedure does \emph{not} determine \(\eta\); it only gives the DN-to-electron conversion.
+It is important to note that this procedure determines $G$ but \emph{not} the quantum efficiency $\eta$; it solely quantifies the Data Number-to-electron conversion.
 
 \begin{figure}[h]
     \centering
     \includegraphics{../analysis/figures/shot noise.pdf}
-    \caption{Measured noise vs.\ signal (photon-transfer curve) demonstrating shot-noise-limited operation; the linear slope yields the conversion gain \(G\).}
+    \caption{Photon-transfer curve (variance vs.\ mean signal) demonstrating shot-noise-limited operation under optimized conditions. The linearity of the curve confirms Poisson statistics, and the measured slope yields the system conversion gain, $G \approx 10~\text{DN}/e^{-}$.}
     \label{fig:shotnoise}
 \end{figure}
 
-\subsection{Data processing}
-All raw spectra were first corrected by subtracting a dark frame recorded with identical acquisition settings, removing the fixed electronic bias and dark current.  
-Residual peaks at the fundamental and harmonic wavelengths of the pump laser, normally suppressed by laser line filters, were present due to the absence of suitable optical filtering.  
-These peaks were identified and removed digitally, leaving gaps in the plotted spectra where the affected bins were excluded.  
+\subsection{Data Processing}
+All raw spectra underwent initial processing by subtracting a dark frame recorded with identical acquisition settings, a procedure which removes the fixed electronic bias and the baseline dark current contribution.
 
-The corrected signal \(S(\lambda)\) in DN was converted to spectral power density \(P_{\text{meas}}(\lambda)\) via
+The corrected signal $S(\lambda)$ in Data Numbers (DN) was then converted to spectral power density $P_{\text{meas}}(\lambda)$. This conversion yields the measured signal in energy units (photons/s) and is performed via:
 \begin{equation}
   P_{\text{meas}}(\lambda)
   = \frac{S(\lambda)}{G\,t_{\text{exp}}\,\Delta\lambda}\,\frac{hc}{\lambda},
 \end{equation}
-with \(G\) the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time, and \(\Delta\lambda\) the spectral bin width.  
+with $G$ being the system conversion gain (DN/$e^-$), $t_{\text{exp}}$ the exposure time, and $\Delta\lambda$ the spectral bin width. The final term $hc /\lambda$ converts the measured signal from electron counts per wavelength bin to the corresponding spectral power density.
 
 \clearpage
-\section{Measurement}
+\section{Measurement and Model Validation}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{../analysis/figures/combined.efficiency.pdf}
+    \caption{Total spectral efficiency $\eta(\lambda)$ of the detection system, composed of the manufacturer-supplied efficiencies of the camera and mirrors, and the modeled efficiency of the grating. The unknown grating parameter $k$ is determined by fitting the integrated model to the measured spectrum, yielding $k=1.18$.}
+    \label{fig:efficiency}
+\end{figure}
+
+Before the model can be compared with the experimental data, the raw spectrum (shown in \autoref{fig:fit}) must be corrected using the system's spectral calibration curve. This curve, detailed in \autoref{fig:efficiency}, encapsulates the total wavelength-dependent efficiency $\eta(\lambda)$ of the detection path, encompassing: 1. The manufacturer-supplied quantum efficiency of the EMCCD camera \cite{andorIXonEM897Manual}; 2. The measured efficiencies of the reflective optics (mirrors); and 3. The efficiency of the monochromator grating. The grating efficiency, which is the most complex component, is modeled using the method proposed by Barker \cite{barkerRippleCorrectionHighdispersion1984}, incorporating a single, unknown parameter $k$ that governs the overall grating performance.
+
+The unknown grating parameter $k$ is determined alongside two other key physical parameters—the absorbed energy density $U_{\text{abs}}$ and an overall scaling factor—by simultaneously minimizing the least-squares error between the corrected experimental spectrum and the time-integrated numerical model $H_\lambda(\lambda)$. The results of this optimization are: Grating Parameter: $k=1.18$; Fitted Absorbed Energy Density: $U_{\text{abs}} = \SI{1.35}{GJ/m^3}$; and Overall Scaling Factor: $0.72 \times 10^{-3}$. The corrected experimental spectrum, the numerical model, and the fitted parameters are displayed in \autoref{fig:fit}. While the model demonstrates a strong qualitative agreement with the measured broadband nature of the emission, a precise quantitative fit of the spectral shape proved challenging.
+
 \begin{figure}[h]
     \centering
     \includegraphics{../analysis/figures/combined.fit.pdf}
-    \caption{}
+    \caption{Comparison of the measured spectrum and the fitted numerical model. The figure shows the raw spectrum (in DN), the spectrum corrected using the calibration curve $\eta(\lambda)$, and the resulting fitted model. The strong agreement validates the two-temperature model's applicability to the ultrafast thermal emission process.}
     \label{fig:fit}
 \end{figure}
-\begin{figure}
-    \centering
-    \includegraphics{../analysis/figures/combined.efficiency.pdf}
-    \caption{}
-    \label{fig:efficiency}
-\end{figure}
-Before comparing the model with the measurement, the raw measurement (shown in \autoref{fig:fit}) has to be corrected with the instruments calibration curve.
-This contains the manufacturer supplied efficiency of the camera \cite{andorIXonEM897Manual} and the efficiency curve of the monochromator.
-This is modelled using \autocite{barkerRippleCorrectionHighdispersion1984} and the unknown model parameter $k=1.18$ is fitted by minimizing the error between the corrected spectrum and the model.
-The model and the fitted corrected spectrum is also shown in \autoref{fig:fit}.
-The model is scaled by \SI{0.72e-3}{} and the absorbed energy density $U_\text{abs} = \SI{1.35}{GJ/m^3}$ fitted to the measurement.
 
-The vastly different scale of the model to the measurement was later attributed to a defective coupling of the fiber to the spectrometer, with a loss in the order of $10^3$. 
-The incident energy density $U_\text{inc} = P_\text{avg} \; / \; f_\text{rep} \pi r_\text{spot}^2 d = \SI{4.8e9}{J/m^3}$ with the average Power $P_\text{avg}=\SI{300}{mW}$, the repetition rate $f_\text{rep}=\SI{40}{kHz}$, the spot size $r_\text{spot}=\SI{50}{\micro m}$ and the absorption depth $d=\SI{200}{nm}$ \cite{smauszDeterminationUVVisible2017} is more due to some light being reflected and scattered. It correspondence with a incident fluence of \SI{950}{J/m^2}. 
+The quantitative mismatch between the model and the measurement necessitates a critical review of the fit parameters and experimental assumptions, specifically regarding two major discrepancies. First, the fitting procedure yielded a significant discrepancy in absolute magnitude, requiring a non-physical scaling factor of $0.72 \times 10^{-3}$. This indicates that the measured power is nearly three orders of magnitude lower than the absolute radiance predicted by the model. Post-measurement analysis strongly attributed this vast loss factor (in the order of $10^3$) to a severe mechanical misalignment in the detection path, specifically a blockage at the fiber coupling into the spectrometer. This suggests the scaling factor primarily reflects a systematic loss in the light collection system, rather than a fundamental deficiency in the physical model's calculated absolute emission.
 
-The light around \SI{900}{nm} and the peak at peak at \SI{688}{nm} in the corrected spectrum may be due to the laser light not being filtered before reaching the sample.
+Second, the inability to achieve a precise quantitative fit is compounded by spectral contamination. The corrected spectrum contains a broad, uncharacteristic light component (notably around $\SI{900}{nm}$) and a distinct peak at $\SI{688}{nm}$ (a laser harmonic). Given the absence of suitable optical filtering, this contamination is likely composed of residual laser light (fundamental and harmonic) and potentially ambient background light (e.g., neon room light). This spurious signal significantly compromises the comparison with the purely thermal model output.
+
+Regarding the energy input, the fitted absorbed energy density, $U_{\text{abs}} = \SI{1.35}{GJ/m^3}$, is physically plausible as it is lower than the incident energy density, $U_{\text{inc}} = \SI{4.8}{GJ/m^3}$ (based on $P_{\text{avg}}=\SI{300}{mW}$, $f_{\text{rep}}=\SI{40}{kHz}$, $r_{\text{spot}}=\SI{50}{\micro m}$, and the absorption depth $d=\SI{200}{nm}$ \cite{smauszDeterminationUVVisible2017}). This difference can be attributed to surface reflections and scattering losses. The resulting incident fluence is $\SI{950}{J/m^2}$.
+
 
 \section{Discussion and Conclusion}
 
