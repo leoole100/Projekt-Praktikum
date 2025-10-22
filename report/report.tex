@@ -15,8 +15,8 @@
     \vspace*{3cm}
     {
         \fontsize{32}{32}
-        \markieren{Ultrafast}{Photoluminescence}{from Thermal}{Radiation}
-        % \title{Ultrafast Photoluminescence}
+        \markieren{}{Ultrafast}{Hot Electron}{Themal Emission}
+        \title{Ultrafast Hot Electron Thremal Emission}
     }
     \vspace{.25cm}\\
     {
@@ -34,6 +34,10 @@
     \vfill
     {
         \normalfont\normalsize
+        This report details the experimental investigation of ultrafast hot electron thermal emission from graphite using a time-integrated EMCCD spectrometer. The measured spectral radiance was compared to predictions from the two-temperature model. It showed qualitative agreement with the broadband spectral shape, validating the framework in the $\SI{100}{fs}$ regime. 
+        However, quantitative analysis revealed severe limitations: A required non-physical scaling factor indicated a systematic loss primarily attributed to a loss at the fiber coupling. 
+        Furthermore, the spectral fit quality was compromised by unfiltered spurious light components. 
+        Achieving high-precision absolute spectral power requires immediate rectification of these collection losses and the implementation of a dedicated, traceable system calibration.
     }
     \vfill
     \begin{flushright}
@@ -50,9 +54,17 @@
 \clearpage
 
 \section{Introduction}
+The study of ultrafast thermal dynamics in materials is a cornerstone of condensed matter physics, crucial for applications ranging from high-speed electronics to energy harvesting and material processing \cite{kampfrathStronglyCoupledOptical2005,vicarelliGrapheneFieldeffectTransistors2012,tangPlasmonicHotElectrons2020,konigHotCarrierSolar2010}. 
+
+When materials like graphite are exposed to femtosecond laser pulses, the absorbed energy is initially coupled almost exclusively to the electron gas, leading to a state where the electron temperature ($T_e$) transiently exceeds the lattice temperature ($T_l$) by several thousand Kelvin. Understanding the subsequent processes of energy transfer and thermal relaxation is essential for predicting material response at these extreme non-equilibrium conditions.
+
+This dynamic is commonly described by the two-temperature model (2TM). The 2TM treats the electrons and the lattice as two distinct subsystems characterized by their own temperatures, coupled by an electron-phonon relaxation time ($\tau$). While simple, this model has proven highly effective in describing the subsequent relaxation of the hot electron gas on the picosecond timescale \cite{stangeHotElectronCooling2015}. Crucially, the extreme electron temperatures reached lead to broadband blackbody-like emission, or hot electron thermal radiation, which serves as a direct experimental probe for $T_e$.
+
+The objective of this project was twofold: first, to establish a robust experimental platform for measuring this ultrafast hot electron thermal radiation from highly-excited graphite; and second, to validate the predictions of the numerical two-temperature model against the time-integrated spectral measurements. The report details the construction of the measurement setup, the required high-sensitivity detector characterization, and the methodology used to compare the observed spectrum with the simulated model output.
+
+This work validates the 2TM as a predictive tool in the $\SI{100}{fs}$ regime.
 
 
-\clearpage
 \section{Numerical Model}
 
 \begin{figure}[b]
@@ -228,6 +240,13 @@ Regarding the energy input, the fitted absorbed energy density, $U_{\text{abs}} 
 
 
 \section{Discussion and Conclusion}
+The current work successfully applied the two-temperature model to describe the ultrafast thermal emission from hot electrons in graphite. While the qualitative agreement in the broadband spectral shape validates the general applicability of the model and its underlying physical assumptions, the analysis simultaneously revealed critical experimental and modeling limitations essential for future work. 
+
+Quantitatively, the procedure was severely hampered by the necessity of introducing a non-physical scaling factor, which indicates a systematic loss of nearly three orders of magnitude in measured power compared to the model's absolute prediction. Post-measurement analysis strongly attributes this vast discrepancy to a mechanical blockage at the spectrometer's fiber coupling, underscoring a critical systematic failure in light collection that must be fully rectified for subsequent absolute measurements. 
+
+Furthermore, the spectral fit quality was compromised by broad, uncharacteristic light components and peaks at laser harmonics. These spurious signals, likely originating from unfiltered residual laser and ambient light sources, suggest a critical deficiency in the optical filtering of the setup. 
+
+In conclusion, this study validates the two-temperature model as a robust framework in the $\SI{100}{fs}$ time regime. However, to achieve publishable results and high-precision absolute spectral power, future efforts must prioritize the rectification of the systematic collection losses and the implementation of a dedicated, traceable system calibration (e.g., using a calibration lamp).
 
 \clearpage
 \printbibliography
