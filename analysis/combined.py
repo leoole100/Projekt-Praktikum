@@ -55,7 +55,6 @@ def efficiency_curve(k=1.18):
         kind="cubic", fill_value="extrapolate"
     )
     combined_eff *= mirror_func(wl_nm)
-    combined_eff /= 10000
     return sp.interpolate.interp1d(wl_nm, combined_eff, bounds_error=False, fill_value=0)
 
 if __name__ == "__main__":
