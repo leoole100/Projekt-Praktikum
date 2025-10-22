@@ -6,7 +6,7 @@ import numpy as np
 from scipy.constants import *
 from scipy.optimize import curve_fit
 
-F = np.geomspace(1e7, 2e9, 20)
+F = np.linspace(1e7, 2e9, 50)
 
 sims = [HotElectronSim(
     P_exc=f,
@@ -42,14 +42,16 @@ yscale = 1e-6
 
 plt.plot(F/xscale, P/yscale, label="total")
 plt.plot(F/xscale, P_range/yscale, label=f"{wl.min():g}-{wl.max():g} nm")
-
-
-plt.xlabel(r"$P_V$ (GJ/m³)")
-plt.ylabel(r"$H_\lambda$ (uJ/m²/sr)")
+plt.xlabel(r"$U_{abs}$ (GJ/m³)")
+plt.ylabel(r"Thermal emission (uJ/m²/sr)")
 plt.xlim(0, None); plt.ylim(0, None)
-# plt.xscale("log"); plt.yscale("log")
 plt.legend()
-plt.savefig("figures/powerscaling.pdf")
-plt.show()
 
-print(f"exponents:\t{popt_tot[1]:.3g}, {popt_rng[1]:.3g}")
+# ax2 = plt.gca().twinx()
+# ax2.plot(F/xscale, Tmax, color="C2")
+# ax2.set_ylabel("$T_{max}$ (K)", color="C2")
+# ax2.tick_params(axis="y", colors="C2")
+# plt.ylim(0, None)
+
+plt.savefig("figures/powerscaling.pdf")
+# plt.show()

@@ -53,18 +53,18 @@
 
 
 \clearpage
-\section{Model}
+\section{Numerical Model}
+
 \begin{figure}[b]
     \centering
     \includegraphics{../analysis/figures/model.time_evolution.pdf}
-    \caption{}
+    \caption{Time evolution of the absorbed power density $P_V(t)$, the electron temperature $T_e(t)$ and the total integrated radiance $L(t)$, calculated using the two-temperature model (Eq. \ref{eq:Te}). The calculation assumes an absorbed energy density of $U_{\text{abs}} = \SI{2e9}{J/m^3}$ over a FWHM pulse with $t=\SI{250}{fs}$ and an electron-phonon coupling time of $\tau=\SI{250}{fs}$ (for graphite). The rapid temperature rise and subsequent decay illustrate the ultra-fast nature of the thermal dynamics.}
     \label{fig:timeevolution}
 \end{figure}
-The dynamics of ultrafast photoluminescence can be modelled using a simplified two temperature model. 
-A excitation pulse $P_\text{exc}(t)$ with a absorbed power density $P_V(t) = P_\text{exc}(t) / V$ is absorbed by the material in a volume $V$.
-This raises the electron temperature $T_e$ according to the electronic heat capacity $C_e(T)$. 
-Then the electrons are cooled by coupling with a electron–phonon relaxation time $\tau$ to lattice at a constant temperature $T_l$.
-This is described by the ordinary differential equation
+
+The ultrafast thermal dynamics are modeled using a simplified two-temperature approach. An excitation pulse $P_{\text{exc}}(t)$ generates an absorbed power density $P_V(t) = P_{\text{exc}}(t) / V$ over the material's volume $V$. This input energy raises the electron temperature $T_e$, governed by the electronic heat capacity $C_e(T_e)$. Subsequently, the electrons cool via electron-phonon coupling with a relaxation time $\tau$ to the lattice at a constant temperature $T_l$.
+
+This process is described by the ordinary differential equation:
 \begin{equation}
     \frac{\mathrm d T_e(t)}{\mathrm d t}
     =
@@ -72,54 +72,51 @@ This is described by the ordinary differential equation
     -\frac{T_e(t) - T_l}{\tau}.
     \label{eq:Te}
 \end{equation}
+A numerical solution based on used excitation parameters (an absorbed energy density of $U_{\text{abs}} = \SI{2}{GJ/m^3}$ spread in a Gaussian pulse with a full width at half maximum (FWHM) of $\SI{250}{fs}$) is provided. We utilize the electronic heat capacity function from \cite{nihiraTemperatureDependenceLattice2003} and the $\tau=\SI{250}{fs}$ coupling time for graphite \cite{stangeHotElectronCooling2015}. The resulting time evolution is shown in \autoref{fig:timeevolution}.
 
-A solution with realistic excitation values of a absorbed power density of $U_\text{abs} = \SI{2e9}{J/m^3}$ spread in a gaussian pulse with a full width half maximum (FWHM) of $t=\SI{250}{fs}$ and the electronic heat capacity from \cite{nihiraTemperatureDependenceLattice2003} and the coupling time $\tau=\SI{250}{fs}$ \cite{stangeHotElectronCooling2015} of graphite is shown in \autoref{fig:timeevolution}.
-
-
-
-The at each time step emitted spectral radiance $L_\lambda$ can be calculated using Plank's law
+The spectral radiance $L_\lambda$ emitted at each time step can be calculated using Planck's law:
 \begin{equation}
     L_\lambda(\lambda,T)
     = \epsilon(\lambda) \frac{2hc^{2}}{\lambda^{5}}
     \frac{1}{\exp\bigl(hc / \lambda k_{\mathrm B}T\bigr)-1}.
 \end{equation}
-The emissivity $\epsilon$ for the electron gas is assumed to be unity as is commonly done for graphite \cite{sapritskyBlackbodyRadiometry1995}.
-The time evolution of the total radiance $L=\int L_\lambda(\lambda, T) d\lambda$ and the radiance in a spectral range visible by common detectors is also shown in \autoref{fig:timeevolution}.
+The electron gas emissivity $\epsilon$ is assumed to be unity, a common approximation for graphite \cite{sapritskyBlackbodyRadiometry1995}. The resulting time evolution of the total radiance $L=\int L_\lambda(\lambda, T) d\lambda$ and the radiance in a spectral range relevant for common detectors are also presented in \autoref{fig:timeevolution}.
 
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/model.spectrum.pdf}
-    \caption{}
+    \caption{Model spectrum $H_\lambda(\lambda)$ (time-integrated spectral radiance) calculated from the time evolution shown in Figure \ref{fig:timeevolution}. The spectrum represents the total signal expected to be recorded by a time-integrating detector. Both shown over the wavelength and the photon energy.}
     \label{fig:model_spectrum}
 \end{figure}
 
-We define the spectrum $H_\lambda(\lambda)$ as the spectral radiant energy density, i.e. the spectral radiance $L_\lambda(\lambda, T)$ integrated over the pulse duration
+The experimentally measurable spectrum, $H_\lambda(\lambda)$, is defined as the time-integrated spectral radiance:
 \begin{equation}
       H_\lambda(\lambda) = 
       \int L_\lambda\bigl(\lambda, T_e(t)\bigr)\,\mathrm dt.
 \end{equation}
-This is shown in \autoref{fig:model_spectrum}.
-Note, that this can also be visualized over the photon energy $E = h c / \lambda$. In this report we choose to use the wavelength representation to aid in comparing to the direct spectrometer output.
+This is shown in \autoref{fig:model_spectrum}. It is noted that this spectrum can alternatively be visualized as a function of photon energy $E = h c / \lambda$. For direct comparison with the spectrometer output, however, we opt for the wavelength representation in this report.
 
+\subsection{Sensitivity}
 
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/sensitivity.pdf}
-    \caption{}
+    \caption{Sensitivity analysis of the calculated spectrum $H_\lambda(\lambda)$ to changes in key model parameters. The results demonstrate that the absorbed energy density $U_{\text{abs}}$ and the electron-phonon coupling time $\tau$ are the dominant factors influencing the spectral shape and total emission. Conversely, variations in the pulse duration $t$ and the lattice temperature $T_l$ show only marginal impact.}
     \label{fig:sensitivity}
 \end{figure}
-This model can be used to study the sensitivity of the spectrum to changes in the parameters. For this the spectrum is shown with each parameter doubled and halved in \autoref{fig:sensitivity}.
-The spectrum changes considerably with changes in the absorbed energy density $U_\text{abs}$ and the electron-phonon coupling time $\tau$. Changes in the excitation pulse time $\tau$ and the lattice temperature $T_l$ don't change the spectrum significantly.
+This model is employed to study the sensitivity of the resulting spectrum to changes in the defining physical and experimental parameters. The spectrum is calculated while systematically sweeping each parameter, as detailed in \autoref{fig:sensitivity}.
+
+The analysis reveals that the spectrum changes considerably with variations in the absorbed energy density $U_{\text{abs}}$ and the electron-phonon coupling time $\tau$. This high sensitivity emphasizes the critical importance of precisely controlling these two parameters. In contrast, changes in the excitation pulse duration $t$ and the lattice temperature $T_l$ do not significantly alter the resulting spectrum.
 
 \begin{figure}
     \centering
     \includegraphics{../analysis/figures/powerscaling.pdf}
-    \caption{Scaling of the emitted hot electron thermal radiation over the absorbed power. For the entire spectrum and the detector range. Numerical Model with power law (dashed). Exponents are 1.11 and 0.999 respectively.}
+    \caption{Scaling behavior of the emitted thermal radiation as a function of the absorbed energy density $U_{\text{abs}}$. The scaling is shown for both the total integrated spectrum ($\int H_\lambda d\lambda$) and the radiance within the detector's spectral region. Note the non-power-law dependence, which stems from the temperature-dependent electronic heat capacity $C_e(T_e)$.}
     \label{fig:powerscaling}
 \end{figure}
-The dependence of the integrated spectrum $H$ on the absorbed power density is shown in more detail in \autoref{fig:powerscaling}.
-When considering the total emitted power, it scales with absorbed energy. The flattening for low energies is due to the thermal radiation of the low lattice temperature $T_l$ becoming relevant.
-We also show the emission in a wavelength range detectable by a common detector.
+The dependence of the total emitted power $\int H_\lambda(\lambda) d\lambda$ on the absorbed energy density is shown in more detail in \autoref{fig:powerscaling} for both the total emission and the spectral range relevant for the detector.
+
+Crucially, the scaling is not described by a simple power law. This non-trivial behavior is a direct consequence of the changing electronic heat capacity $C_e(T_e)$ at high temperatures.
 
 \clearpage
 \section{Experimental Setup}
@@ -192,35 +189,6 @@ Note that this procedure does \emph{not} determine \(\eta\); it only gives the D
     \label{fig:shotnoise}
 \end{figure}
 
-\textbf{Practical settings for reproducibility.}
-(1) Keep the camera at \(\leq\)\SI{-80}{\degreeCelsius}; (2) use vertical binning to treat the EMCCD as a 1D detector; (3) disable EM gain to avoid CIC and excess-noise-factor penalties; (4) fix slit width and exposure during noise characterisation; (5) verify the shot-noise regime by measuring \(\sigma^2\) vs.\ \(S\) and confirming linearity and slope \(G\)
-
-\subsection{Focusing and Alignment}
-The aim is to image the excited spot on the sample onto the spectrometer fibre with maximal throughput. Parabolic mirrors (PM1/PM2) remain fixed once set; all focusing is done with the lamp, fibre/spectrometer port, and sample stages.
-
-\begin{enumerate}
-  \item \textbf{Initial setup with a fiber coupled lamp.}  
-  Remove the sample and place a fiber-coupled lamp at the sample position. This will help align and focus the optics using visible light.
-
-  \item \textbf{Align the beam.}  
-  Adjust the lamp position and the parabolic mirrors so that the beam appears circular and sharply focused at the spectrometer fiber port. This ensures the optics are approximately aligned.
-
-  \item \textbf{Connect and optimize with spectrometer.}  
-  Connect the spectrometer to the spectrometer port and move the holder to maximize the signal roughly. Use the micrometer screws on the sample stage for fine adjustments.
-
-  \item \textbf{Swap back in the sample.}  
-  Replace the lamp with the sample at the same position. Connect the lamp output to the spectrometer port to illuminate the sample.
-
-  \item \textbf{Fine-focus the sample.}  
-  Adjust the sample position to minimize the size of the visible spot on the sample.
-
-  \item \textbf{Focus the infrared laser.}  
-  Turn on the infrared laser and use an IR detection card to locate and focus the beam onto the sample. The white light and the IR be collinear.
-
-  \item \textbf{Optimize laser alignment.}  
-  Replace the lamp with the spectrometer and monitor the reflected laser signal on the spectrometer. Fine-tune the laser focus to maximize this signal.
-\end{enumerate}
-
 \subsection{Data processing}
 All raw spectra were first corrected by subtracting a dark frame recorded with identical acquisition settings, removing the fixed electronic bias and dark current.  
 Residual peaks at the fundamental and harmonic wavelengths of the pump laser, normally suppressed by laser line filters, were present due to the absence of suitable optical filtering.  
@@ -241,13 +209,19 @@ with \(G\) the DN/\(e^-\) conversion gain, \(t_{\text{exp}}\) the exposure time,
     \caption{}
     \label{fig:fit}
 \end{figure}
+\begin{figure}
+    \centering
+    \includegraphics{../analysis/figures/combined.efficiency.pdf}
+    \caption{}
+    \label{fig:efficiency}
+\end{figure}
 Before comparing the model with the measurement, the raw measurement (shown in \autoref{fig:fit}) has to be corrected with the instruments calibration curve.
 This contains the manufacturer supplied efficiency of the camera \cite{andorIXonEM897Manual} and the efficiency curve of the monochromator.
 This is modelled using \autocite{barkerRippleCorrectionHighdispersion1984} and the unknown model parameter $k=1.18$ is fitted by minimizing the error between the corrected spectrum and the model.
 The model and the fitted corrected spectrum is also shown in \autoref{fig:fit}.
 The model is scaled by \SI{0.72e-3}{} and the absorbed energy density $U_\text{abs} = \SI{1.35}{GJ/m^3}$ fitted to the measurement.
 
-It is not surprising that the model has a higher scale than the measurement, as some losses (e.g. fiber coupling) are not accounted for.
+The vastly different scale of the model to the measurement was later attributed to a defective coupling of the fiber to the spectrometer, with a loss in the order of $10^3$. 
 The incident energy density $U_\text{inc} = P_\text{avg} \; / \; f_\text{rep} \pi r_\text{spot}^2 d = \SI{4.8e9}{J/m^3}$ with the average Power $P_\text{avg}=\SI{300}{mW}$, the repetition rate $f_\text{rep}=\SI{40}{kHz}$, the spot size $r_\text{spot}=\SI{50}{\micro m}$ and the absorption depth $d=\SI{200}{nm}$ \cite{smauszDeterminationUVVisible2017} is more due to some light being reflected and scattered. It correspondence with a incident fluence of \SI{950}{J/m^2}. 
 
 The light around \SI{900}{nm} and the peak at peak at \SI{688}{nm} in the corrected spectrum may be due to the laser light not being filtered before reaching the sample.

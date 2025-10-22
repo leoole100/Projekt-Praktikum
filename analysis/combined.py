@@ -128,17 +128,18 @@ if __name__ == "__main__":
     mask = mirror[:,0]*1000<1000
     plt.plot(mirror[mask,0]*1000, (mirror[mask,1]/100)**2, label="mirrors")
 
-    blaze_eff = (np.sinc(opt.x[1] * (1 - 500 / wl_nm)))**2 * .7
+    blaze_eff = (np.sinc(opt.x[1] * (1 - 500 / wl_nm)))**2 * 0.8
     plt.plot(wl_nm, blaze_eff, label="grating")
 
-    plt.plot(wl_nm, efficiency_curve(k=opt.x[1])(wl_nm), label="combined", color="k")
+    plt.plot(wl_nm, efficiency_curve(k=opt.x[1])(wl_nm)/0.6, label="combined", color="k")
 
     np.save("expected_efficiency.npy", 
         np.array([wl_nm, efficiency_curve(k=opt.x[1])(wl_nm)])
     )
 
-    plt.legend()
-    plt.yscale("log"); plt.ylim(1e-2, 1)
+    plt.legend(frameon=True)
+    # plt.yscale("log"); plt.ylim(1e-2, 1)
+    plt.ylim(0, 1)
     plt.xlim(300, 1100)
     plt.xlabel("Wavelength (nm)")
     plt.ylabel("Efficiency")

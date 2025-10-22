@@ -34,9 +34,9 @@ scale = np.array([0.5, 1, 1.5])
 # Values are chosen to span a sensible range around the defaults.
 sweep_plan = {
     # name: (attr, unit, iterable of absolute values)
-    "$P_V$": ("P_exc", "J/m³", scale*base.P_exc),
-    "$t$": ("tau_fwhm", "s", scale*base.tau_fwhm),
+    "$U_{abs}$": ("P_exc", "J/m³", scale*base.P_exc),
     r"$\tau$": ("tau_eph", "s", scale*base.tau_eph),
+    "$t$": ("tau_fwhm", "s", scale*base.tau_fwhm),
     "$T_l$": ("T_room", "L", scale*base.T_room),
 }
 
@@ -57,7 +57,7 @@ for idx, (title, (attr, unit, values)) in enumerate(sweep_plan.items()):
     ax = axes[idx]
     ax.set_visible(True)
 
-    for v,c,s  in zip(values, colors, ["-", "--", "-"]):
+    for v,c,s  in zip(values, colors, ["-", "-", "-"]):
         sim_new = replace(base, **{attr: float(v)})
         ax.plot(
             sim_new.wavelength_nm, sim_new.spectrum(), s, 
@@ -65,7 +65,7 @@ for idx, (title, (attr, unit, values)) in enumerate(sweep_plan.items()):
             color=c
         )
 
-    ax.legend(title=title)
+    ax.legend(title=title, fontsize=8, loc="upper right")
     ax.set_ylim(0, None)
     ax.set_xlim(base.wavelength_nm.min(), base.wavelength_nm.max())
 
