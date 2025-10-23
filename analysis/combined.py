@@ -9,6 +9,7 @@ from scipy.optimize import minimize
 import scipy as sp
 from model import HotElectronSim
 
+
 # Set working directory to script location
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

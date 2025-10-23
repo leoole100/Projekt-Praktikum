@@ -5,6 +5,6 @@ Projekt Praktikum at the University Konstanz \
 # TODO
 - figure placement
 - quellen prüfen
-- zeitformen
 - better define DN
-- figures _\text
+- add pump probe source
+- discuss photon-transfer curve

@@ -100,6 +100,9 @@ class HotElectronSim:
         return T
 
     def spectrum(self) -> np.ndarray:
+        """
+        Spectrum H_λ(T) [J·m^-3·sr^-1]
+        """
         T_t = self.temperature()
         dt = self.time[1] - self.time[0]
         E_lambda = np.sum(planck(self.wavelength_nm, T_t)*dt, axis=0)

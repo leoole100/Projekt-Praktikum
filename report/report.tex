@@ -34,10 +34,8 @@
     \vfill
     {
         \normalfont\normalsize
-        This report details the experimental investigation of ultrafast hot electron thermal emission from graphite using a time-integrated EMCCD spectrometer. The measured spectral radiance was compared to predictions from the two-temperature model. It showed qualitative agreement with the broadband spectral shape, validating the framework in the $\SI{100}{fs}$ regime. 
-        However, quantitative analysis revealed severe limitations: A required scaling factor indicated a systematic loss primarily attributed to a loss at the fiber coupling. 
-        Furthermore, the spectral fit was compromised by unfiltered spurious light components. 
-        Achieving high-precision absolute spectral power requires immediate rectification of these collection losses and the implementation of a dedicated, traceable system calibration.
+        This report details the experimental investigation of ultrafast hot electron thermal emission from graphite using a time-integrated EMCCD spectrometer. The measured spectral radiance is compared to predictions from the two-temperature model (2TM). Resulting in strong qualitative agreement with the broadband spectral shape, validating the 2TM framework in the $\SI{100}{fs}$ regime. 
+        However, quantitative analysis revealed severe experimental limitations : A scaling factor indicated a systematic power loss of three orders of magnitude, primarily attributed to bad fiber coupling. Furthermore, the spectral fit was compromised by unfiltered spurious light components. Achieving high-precision absolute spectral power requires the rectification of the power loss and the implementation of a dedicated, traceable system calibration.
     }
     \vfill
     \begin{flushright}
@@ -54,17 +52,17 @@
 \clearpage
 
 \section{Introduction}
-The study of ultrafast thermal dynamics in materials is a cornerstone of condensed matter physics, crucial for applications ranging from high-speed electronics to energy harvesting and material processing \cite{kampfrathStronglyCoupledOptical2005,vicarelliGrapheneFieldeffectTransistors2012,tangPlasmonicHotElectrons2020,konigHotCarrierSolar2010}. 
+The study of ultrafast thermal dynamics in materials is a cornerstone of condensed matter physics, crucial for applications ranging from high-speed electronics to energy harvesting and material processing \cite{tangPlasmonicHotElectrons2020,konigHotCarrierSolar2010}. 
 
 When materials like graphite are exposed to femtosecond laser pulses, the absorbed energy couples initially and almost exclusively to the electron gas, leading to a state where the electron temperature ($T_e$) transiently exceeds the lattice temperature ($T_l$) by several thousand Kelvin. Understanding the subsequent processes of energy transfer and thermal relaxation is essential for predicting material response at these extreme non-equilibrium conditions.
 
 This dynamic is commonly described by the two-temperature model (2TM). The 2TM treats the electrons and the lattice as two distinct subsystems characterized by their own temperatures, coupled by an electron-phonon relaxation time ($\tau$). While simple, this model has proven highly effective in describing the subsequent relaxation of the hot electron gas on the picosecond timescale \cite{stangeHotElectronCooling2015}. Crucially, the extreme electron temperatures reached lead to broadband blackbody-like emission, or hot electron thermal radiation, which serves as a direct experimental probe for $T_e$.
+This is sometimes also called ultrafast photoluminescence \cite{luiUltrafastPhotoluminescenceGraphene2010}.
 
 The objective of this project was twofold: first, to establish a robust experimental platform for measuring this ultrafast hot electron thermal radiation from highly-excited graphite; and second, to validate the predictions of the numerical two-temperature model against the time-integrated spectral measurements. This report details the optimization of the measurement setup, the required high-sensitivity detector characterization, and the methodology used to compare the observed spectrum with the simulated model output.
 
 This work validates the 2TM as a predictive tool in the $\SI{100}{fs}$ regime.
 
-\clearpage
 \section{Numerical Model}
 
 \begin{figure}[b]
@@ -227,7 +225,7 @@ The unknown grating parameter $k$ was determined alongside two other key physica
 \begin{figure}[h]
     \centering
     \includegraphics{../analysis/figures/combined.fit.pdf}
-    \caption{Comparison of the measured spectrum and the fitted numerical model. The figure shows the raw spectrum (in DN), the spectrum corrected using the calibration curve $\eta(\lambda)$, and the resulting fitted model. The strong agreement validates the two-temperature model's applicability to the ultrafast thermal emission process.}
+    \caption{Comparison of the measured spectrum and the fitted numerical model. The figure shows the raw spectrum, the spectrum corrected using the calibration curve $\eta(\lambda)$, and the resulting fitted model. The strong agreement validates the two-temperature model's applicability to the ultrafast thermal emission process.}
     \label{fig:fit}
 \end{figure}
 
