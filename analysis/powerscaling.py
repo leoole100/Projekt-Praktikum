@@ -42,7 +42,7 @@ yscale = 1e-6
 
 plt.plot(F/xscale, P/yscale, label="total")
 plt.plot(F/xscale, P_range/yscale, label=f"{wl.min():g}-{wl.max():g} nm")
-plt.xlabel(r"$U_{abs}$ (GJ/m³)")
+plt.xlabel(r"$U_\text{abs}$ (GJ/m³)")
 plt.ylabel(r"Thermal emission (uJ/m²/sr)")
 plt.xlim(0, None); plt.ylim(0, None)
 plt.legend()

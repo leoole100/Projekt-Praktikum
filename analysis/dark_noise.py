@@ -1,7 +1,7 @@
 #%%
 import numpy as np
 import matplotlib.pyplot as plt
-plt.style.use("../style.mplstyle")
+plt.style.use("style.mplstyle")
 import xarray as xr
 from glob import glob
 import yaml
@@ -67,7 +67,7 @@ fig, axes = plt.subplots(1, 2, sharey=True)
 
 # Temperature sweep plot
 ax = axes[0]
-ax.set_ylabel(r"$N_{dark}$ (DN)")
+ax.set_ylabel(r"$\sigma_\text{dark}$ (DN)")
 # ax.set_yscale("log")
 ax.set_xlabel("Temperature (°C)")
 ax.plot(temps, counts_temp, "o", label="Data")
@@ -90,7 +90,7 @@ counts_model_exp = dark_noise_model(temperature_exp, t_plot, I0_fit, E_fit, B_fi
 ax.plot(t_plot, counts_model_exp, "-", label="Fit", color="gray")
 # ax.set_xscale("log")
 ax.axvline(exposure_temp, color="k", linestyle="--", linewidth=1, label="Cross Section")
-ax.axhline(B_fit, color="k", linewidth=1, label=r"$\sigma_{read}$")
+ax.axhline(B_fit, color="k", linewidth=1, label=r"$\sigma_\text{read}$")
 ax.legend()
 
 # plt.ylim(1e0, 1e2)
@@ -122,3 +122,5 @@ ax.legend()
 
 plt.tight_layout()
 plt.show()
+
+# %%

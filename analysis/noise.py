@@ -1,7 +1,7 @@
 # %%
 import numpy as np
 import matplotlib.pyplot as plt
-plt.style.use("../style.mplstyle")
+plt.style.use("style.mplstyle")
 import xarray as xr
 from glob import glob
 import yaml
@@ -114,8 +114,10 @@ plt.plot(bin_signal_mean, 0.1*bin_signal_mean, label="Shot noise (G=10)", color=
 # plt.xscale("log")
 # plt.yscale("log")
 plt.xlabel("Signal (DN)")
-plt.ylabel("Variance")
+plt.ylabel("Variance (DN²)")
 plt.legend()
 plt.tight_layout()
 plt.savefig("figures/shot noise.pdf")
 plt.show()
+
+# %%
